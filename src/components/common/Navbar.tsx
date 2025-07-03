@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { User } from '../../types';
+import LanguageSwitcher from '../ui/LanguageSwitcher';
 import './Navbar.css';
 
 interface NavbarProps {
@@ -61,6 +62,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser, onLogout }) => {
           </div>
 
           <div className="navbar-user">
+            <LanguageSwitcher />
             <div className="user-dropdown">
               <button className="user-button">
                 <div className="user-avatar">

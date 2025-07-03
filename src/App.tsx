@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ResumeProvider } from './contexts/ResumeContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { FieldConfig, Template, User, UserRole } from './types';
 import { resumeTemplates } from './data/templates';
 import { defaultFieldConfigs } from './data/fieldConfigs';
@@ -135,8 +136,9 @@ const App: React.FC = () => {
   }
 
   return (
-    <ResumeProvider>
-      <Router>
+    <LanguageProvider>
+      <ResumeProvider>
+        <Router>
         <div className={`app ${isWeChat ? 'wechat-env' : ''} ${isMiniProgram ? 'wechat-miniprogram' : ''} ${deviceInfo.isMobile ? 'mobile-env' : ''}`}>
           {/* Network status indicator for mobile */}
           {deviceInfo.isMobile && !isOnline && (
@@ -273,8 +275,9 @@ const App: React.FC = () => {
             </footer>
           )}
         </div>
-      </Router>
-    </ResumeProvider>
+        </Router>
+      </ResumeProvider>
+    </LanguageProvider>
   );
 };
 

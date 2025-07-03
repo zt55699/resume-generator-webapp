@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useResumeContext } from '../../contexts/ResumeContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { FieldConfig, ResumeData } from '../../types';
 import DynamicForm from '../forms/DynamicForm';
+import { translateFieldConfigs } from '../../utils/fieldTranslations';
 import './ResumeForm.css';
 
 interface ResumeFormProps {
@@ -12,14 +14,15 @@ interface ResumeFormProps {
 const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
   const navigate = useNavigate();
   const { state, dispatch } = useResumeContext();
+  const { t } = useLanguage();
   const [selectedSection, setSelectedSection] = useState('personalInfo');
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   const sections = [
-    { id: 'personalInfo', name: 'Personal Info', icon: '👤', description: 'Basic contact information' },
-    { id: 'experience', name: 'Experience', icon: '💼', description: 'Work history and achievements' },
-    { id: 'education', name: 'Education', icon: '🎓', description: 'Academic background' },
+    { id: 'personalInfo', name: t('section.personalInfo'), icon: '👤', description: t('section.personalInfo.desc') },
+    { id: 'experience', name: t('section.experience'), icon: '💼', description: t('section.experience.desc') },
+    { id: 'education', name: t('section.education'), icon: '🎓', description: t('section.education.desc') },
   ];
 
   const handleManualSave = async () => {
@@ -76,7 +79,7 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
   // Remove field-level auto-updating to prevent infinite loops
   // Data will only be saved when user clicks "Save Section"
 
-  const handleFormSubmit = (data: Record<string, any>) => {
+  const handleFormSubmit = async (data: Record<string, any>) => {
     if (selectedSection === 'personalInfo') {
       dispatch({ 
         type: 'UPDATE_PERSONAL_INFO', 
@@ -94,15 +97,38 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
       });
     }
     console.log(`Saving ${selectedSection} data:`, data);
-    handleManualSave();
+    
+    // Save data first
+    await handleManualSave();
+    
+    // Auto-advance to next section
+    advanceToNextSection();
+  };
+
+  const advanceToNextSection = () => {
+    const currentIndex = sections.findIndex(s => s.id === selectedSection);
+    
+    if (currentIndex < sections.length - 1) {
+      // Move to next section
+      const nextSection = sections[currentIndex + 1];
+      setSelectedSection(nextSection.id);
+      
+      // Show success message
+      setTimeout(() => {
+        console.log(`Advanced to ${nextSection.name} section`);
+      }, 100);
+    } else {
+      // Last section - go to preview
+      handleContinueToPreview();
+    }
   };
 
   return (
     <div className="resume-form">
       <div className="form-header">
         <div className="header-info">
-          <h1 className="form-title">Resume Information</h1>
-          <p className="form-subtitle">Fill out your information step by step</p>
+          <h1 className="form-title">{t('resume.title')}</h1>
+          <p className="form-subtitle">{t('resume.subtitle')}</p>
           <div className="progress-info">
             <div className="progress-bar">
               <div 
@@ -110,18 +136,20 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
                 style={{ width: `${progressPercentage}%` }}
               ></div>
             </div>
-            <span className="progress-text">{progressPercentage}% Complete</span>
+            <span className="progress-text">
+              {progressPercentage}% {t('progress.complete')} • {t('section.number')} {sections.findIndex(s => s.id === selectedSection) + 1} {t('section.of')} {sections.length}
+            </span>
           </div>
         </div>
         
         <div className="header-actions">
           <div className="save-status">
             {isSaving ? (
-              <span className="saving">💾 Saving...</span>
+              <span className="saving">💾 {t('status.saving')}</span>
             ) : lastSaved ? (
-              <span className="saved">✅ Saved {lastSaved.toLocaleTimeString()}</span>
+              <span className="saved">✅ {t('status.saved')} {lastSaved.toLocaleTimeString()}</span>
             ) : (
-              <span className="unsaved">⚠️ Unsaved changes</span>
+              <span className="unsaved">⚠️ {t('status.unsaved')}</span>
             )}
           </div>
           
@@ -131,7 +159,7 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
               onClick={handleContinueToPreview}
               disabled={progressPercentage < 20}
             >
-              👁️ Preview & Templates
+              👁️ {t('button.preview')}
             </button>
           </div>
         </div>
@@ -140,7 +168,7 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
       <div className="form-content">
         <div className="form-sidebar">
           <div className="section-navigation">
-            <h3 className="nav-title">Resume Sections</h3>
+            <h3 className="nav-title">{t('resume.title')} {t('section.number')}</h3>
             <div className="section-list">
               {sections.map(section => {
                 const isCompleted = completedSections.some(s => s.id === section.id);
@@ -163,13 +191,13 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
           </div>
 
           <div className="form-tips">
-            <h4>💡 Pro Tips</h4>
+            <h4>💡 {t('tips.title')}</h4>
             <ul>
-              <li>Fill out your personal info first</li>
-              <li>Use action verbs in experience descriptions</li>
-              <li>Quantify achievements with numbers</li>
-              <li>Keep descriptions concise and relevant</li>
-              <li>Save frequently to avoid losing work</li>
+              <li>{t('tips.personal')}</li>
+              <li>{t('tips.verbs')}</li>
+              <li>{t('tips.numbers')}</li>
+              <li>{t('tips.concise')}</li>
+              <li>{t('tips.save')}</li>
             </ul>
           </div>
         </div>
@@ -188,10 +216,17 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
             
             <div className="section-content">
               <DynamicForm
-                fields={fieldConfigs.filter(f => f.section === selectedSection)}
+                fields={translateFieldConfigs(
+                  fieldConfigs.filter(f => f.section === selectedSection),
+                  t
+                )}
                 data={getSectionData(selectedSection)}
                 onSubmit={handleFormSubmit}
-                submitButtonText="Save Section"
+                submitButtonText={
+                  selectedSection === sections[sections.length - 1]?.id 
+                    ? t('button.save.preview')
+                    : t('button.save.continue')
+                }
               />
             </div>
           </div>
@@ -200,18 +235,18 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
 
       <div className="form-footer">
         <div className="footer-info">
-          <span>Resume Form • Click 'Save Section' to save your changes</span>
+          <span>{t('footer.info')}</span>
         </div>
         <div className="footer-actions">
           <button onClick={() => navigate('/my-resumes')} className="my-resumes-link">
-            📁 My Resumes
+            📁 {t('button.my.resumes')}
           </button>
           <button 
             className="continue-button"
             onClick={handleContinueToPreview}
             disabled={progressPercentage < 20}
           >
-            Continue to Preview →
+            {t('button.continue.preview')} →
           </button>
         </div>
       </div>
