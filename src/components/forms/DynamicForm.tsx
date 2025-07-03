@@ -3,7 +3,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FieldConfig, FormValidation } from '../../types';
-import { getFieldValidationSchema } from '../../utils/validationUtils';
+import { getFieldValidationSchema, getNameValidationSchema } from '../../utils/validationUtils';
+import { useLanguage } from '../../contexts/LanguageContext';
 import TextInput from './fields/TextInput';
 import TextareaInput from './fields/TextareaInput';
 import EmailInput from './fields/EmailInput';
@@ -42,6 +43,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   className = '',
   disabled = false,
 }) => {
+  const { language } = useLanguage();
   const [validationSchema, setValidationSchema] = useState<yup.ObjectSchema<any>>();
 
   useEffect(() => {
@@ -50,10 +52,16 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     fields.forEach(field => {
       if (!field.visible) return;
       
-      let fieldSchema = getFieldValidationSchema(field.type);
-      
-      if (field.required) {
-        fieldSchema = fieldSchema.required(`${field.label} is required`);
+      // Use language-specific validation for name fields
+      let fieldSchema: yup.AnySchema;
+      if (field.name === 'firstName' || field.name === 'lastName') {
+        fieldSchema = getNameValidationSchema(language, field.name as 'firstName' | 'lastName');
+      } else {
+        fieldSchema = getFieldValidationSchema(field.type);
+        
+        if (field.required) {
+          fieldSchema = fieldSchema.required(`${field.label} is required`);
+        }
       }
       
       if (field.validation) {
@@ -78,7 +86,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     });
     
     setValidationSchema(yup.object(schemaFields));
-  }, [fields]);
+  }, [fields, language]);
 
   const {
     control,

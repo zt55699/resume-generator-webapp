@@ -1,11 +1,35 @@
 import * as yup from 'yup';
 import { ResumeData } from '../types';
+import { Language } from '../contexts/LanguageContext';
+
+// Language-specific name validation functions
+export const validateChineseName = (name: string): boolean => {
+  const chineseNameRegex = /^[\u4e00-\u9fa5]{1,4}$/;
+  return chineseNameRegex.test(name);
+};
+
+export const validateEnglishName = (name: string): boolean => {
+  const englishNameRegex = /^[a-zA-Z\s-]{2,50}$/;
+  return englishNameRegex.test(name);
+};
+
+export const getNameValidationSchema = (language: Language, fieldName: 'firstName' | 'lastName') => {
+  if (language === 'zh') {
+    return yup.string()
+      .required(`${fieldName === 'firstName' ? '名字' : '姓氏'}是必填的`)
+      .test('chinese-name', `${fieldName === 'firstName' ? '名字' : '姓氏'}必须是1-4个中文字符`, validateChineseName);
+  } else {
+    return yup.string()
+      .required(`${fieldName === 'firstName' ? 'First name' : 'Last name'} is required`)
+      .test('english-name', `${fieldName === 'firstName' ? 'First name' : 'Last name'} must be 2-50 letters, spaces, or hyphens`, validateEnglishName);
+  }
+};
 
 export const personalInfoSchema = yup.object({
   firstName: yup.string().required('First name is required').max(50, 'First name must be less than 50 characters'),
   lastName: yup.string().required('Last name is required').max(50, 'Last name must be less than 50 characters'),
   email: yup.string().email('Invalid email format').required('Email is required'),
-  phone: yup.string().matches(/^[\+]?[1-9][\d]{0,15}$/, 'Invalid phone number format').required('Phone is required'),
+  phone: yup.string().optional(), // No validation for phone
   address: yup.string().required('Address is required').max(100, 'Address must be less than 100 characters'),
   city: yup.string().required('City is required').max(50, 'City must be less than 50 characters'),
   state: yup.string().required('State is required').max(50, 'State must be less than 50 characters'),
@@ -90,7 +114,7 @@ export const referenceSchema = yup.object({
   position: yup.string().required('Position is required').max(100, 'Position must be less than 100 characters'),
   company: yup.string().required('Company is required').max(100, 'Company must be less than 100 characters'),
   email: yup.string().email('Invalid email format').required('Email is required'),
-  phone: yup.string().matches(/^[\+]?[1-9][\d]{0,15}$/, 'Invalid phone number format').required('Phone is required'),
+  phone: yup.string().optional(), // No validation for phone
   relationship: yup.string().required('Relationship is required').max(100, 'Relationship must be less than 100 characters'),
 });
 
@@ -157,8 +181,8 @@ export const validateEmail = (email: string): boolean => {
 };
 
 export const validatePhone = (phone: string): boolean => {
-  const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-  return phoneRegex.test(phone);
+  // No phone validation required - accept any input
+  return true;
 };
 
 export const validateUrl = (url: string): boolean => {
@@ -186,7 +210,7 @@ export const getFieldValidationSchema = (fieldType: string): yup.AnySchema => {
     case 'email':
       return yup.string().email('Invalid email format');
     case 'phone':
-      return yup.string().matches(/^[\+]?[1-9][\d]{0,15}$/, 'Invalid phone number format');
+      return yup.string(); // No validation for phone numbers
     case 'url':
       return yup.string().url('Invalid URL format');
     case 'date':

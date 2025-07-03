@@ -220,9 +220,9 @@ const translations = {
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
-    // Load language from localStorage or default to English
+    // Load language from localStorage or default to Chinese
     const saved = localStorage.getItem('resume-language');
-    return (saved as Language) || 'en';
+    return (saved as Language) || 'zh';
   });
 
   useEffect(() => {

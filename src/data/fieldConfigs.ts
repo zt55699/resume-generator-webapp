@@ -52,7 +52,7 @@ export const defaultFieldConfigs: FieldConfig[] = [
     type: 'phone',
     label: 'Phone Number',
     placeholder: '(555) 123-4567',
-    required: true,
+    required: false, // No validation for phone
     section: 'personalInfo',
     order: 4,
     visible: true,
