@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useResumeContext } from '../../contexts/ResumeContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { Template } from '../../types';
 import ExportManager from '../export/ExportManager';
 import ResumeRenderer from '../templates/ResumeRenderer';
@@ -12,6 +13,7 @@ interface ExportPageProps {
 
 const ExportPage: React.FC<ExportPageProps> = ({ templates }) => {
   const { state } = useResumeContext();
+  const { t } = useLanguage();
   const [selectedTemplate, setSelectedTemplate] = useState<Template>(resumeTemplates[0]);
   const [exportFormat, setExportFormat] = useState<'pdf' | 'docx' | 'html'>('pdf');
   const [isExporting, setIsExporting] = useState(false);
@@ -136,10 +138,9 @@ const ExportPage: React.FC<ExportPageProps> = ({ templates }) => {
     <div className="export-page">
       <div className="export-header">
         <div className="header-content">
-          <h1 className="page-title">Export Resume</h1>
+          <h1 className="page-title">{t('export.title')}</h1>
           <p className="page-description">
-            Preview your resume and export it in your preferred format. 
-            Choose from PDF, Word Document, or standalone HTML.
+            {t('export.subtitle')}
           </p>
         </div>
       </div>

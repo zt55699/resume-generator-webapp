@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../../contexts/LanguageContext';
 import './HomePage.css';
 
 const HomePage: React.FC = () => {
+  const { t } = useLanguage();
   const features = [
     {
       icon: '📝',
@@ -75,21 +77,18 @@ const HomePage: React.FC = () => {
         <div className="hero-container">
           <div className="hero-content">
             <h1 className="hero-title">
-              Create Professional Resumes
-              <span className="hero-highlight"> in Minutes</span>
+              {t('home.title')}
             </h1>
             <p className="hero-description">
-              Build stunning, ATS-friendly resumes with our intelligent form system, 
-              professional templates, and powerful export options. Perfect for job seekers, 
-              career changers, and professionals at any level.
+              {t('home.subtitle')}
             </p>
             <div className="hero-actions">
               <Link to="/builder" className="cta-button primary">
-                Start Building
+                {t('home.cta.start')}
                 <span className="button-icon">🚀</span>
               </Link>
               <Link to="/templates" className="cta-button secondary">
-                Browse Templates
+                {t('home.cta.templates')}
                 <span className="button-icon">👀</span>
               </Link>
             </div>
@@ -142,9 +141,9 @@ const HomePage: React.FC = () => {
       <section className="features-section">
         <div className="section-container">
           <div className="section-header">
-            <h2 className="section-title">Why Choose Our Resume Generator?</h2>
+            <h2 className="section-title">{t('home.features.title')}</h2>
             <p className="section-description">
-              Everything you need to create professional resumes that get noticed by employers and ATS systems.
+              {t('home.subtitle')}
             </p>
           </div>
           <div className="features-grid">

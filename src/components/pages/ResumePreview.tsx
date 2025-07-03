@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useResumeContext } from '../../contexts/ResumeContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { Template } from '../../types';
 import ResumeRenderer from '../templates/ResumeRenderer';
 import { resumeTemplates } from '../../data/templates';
@@ -13,6 +14,7 @@ interface ResumePreviewProps {
 const ResumePreview: React.FC<ResumePreviewProps> = ({ templates }) => {
   const navigate = useNavigate();
   const { state, dispatch } = useResumeContext();
+  const { t } = useLanguage();
   const [currentTemplate, setCurrentTemplate] = useState<Template>(resumeTemplates[0]);
   const [showTemplateGallery, setShowTemplateGallery] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -79,18 +81,18 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ templates }) => {
     <div className="resume-preview">
       <div className="preview-header">
         <div className="header-info">
-          <h1 className="preview-title">Resume Preview</h1>
-          <p className="preview-subtitle">Preview your resume and select a template</p>
+          <h1 className="preview-title">{t('preview.title')}</h1>
+          <p className="preview-subtitle">{t('templates.subtitle')}</p>
         </div>
         
         <div className="header-actions">
           <div className="save-status">
             {isSaving ? (
-              <span className="saving">💾 Saving...</span>
+              <span className="saving">💾 {t('status.saving')}</span>
             ) : lastSaved ? (
-              <span className="saved">✅ Saved {lastSaved.toLocaleTimeString()}</span>
+              <span className="saved">✅ {t('status.saved')} {lastSaved.toLocaleTimeString()}</span>
             ) : (
-              <span className="unsaved">⚠️ Unsaved changes</span>
+              <span className="unsaved">⚠️ {t('status.unsaved')}</span>
             )}
           </div>
           
@@ -99,18 +101,18 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ templates }) => {
               className="back-button"
               onClick={handleBackToForm}
             >
-              ← Back to Form
+              ← {t('preview.backtoform')}
             </button>
             
             <button 
               className="template-button"
               onClick={() => setShowTemplateGallery(!showTemplateGallery)}
             >
-              🎨 Templates
+              🎨 {t('nav.templates')}
             </button>
             
             <button className="export-button" onClick={handleExport}>
-              📤 Export
+              📤 {t('nav.export')}
             </button>
             
             <button 
@@ -118,7 +120,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ templates }) => {
               onClick={handlePublish}
               disabled={!state.resumeData.personalInfo.firstName || !state.resumeData.personalInfo.lastName}
             >
-              🚀 Publish
+              🚀 {t('preview.publish')}
             </button>
           </div>
         </div>

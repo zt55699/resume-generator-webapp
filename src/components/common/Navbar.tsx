@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { User } from '../../types';
+import { useLanguage } from '../../contexts/LanguageContext';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
 import './Navbar.css';
 
@@ -11,16 +12,17 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ currentUser, onLogout }) => {
   const location = useLocation();
+  const { t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
 
   const navigation = [
-    { name: 'Home', href: '/', icon: '🏠' },
-    { name: 'Templates', href: '/templates', icon: '📄' },
-    { name: 'Builder', href: '/builder', icon: '✏️' },
-    { name: 'My Resumes', href: '/my-resumes', icon: '📁' },
-    { name: 'Export', href: '/export', icon: '📤' },
+    { name: t('nav.home'), href: '/', icon: '🏠' },
+    { name: t('nav.templates'), href: '/templates', icon: '📄' },
+    { name: t('nav.builder'), href: '/builder', icon: '✏️' },
+    { name: t('nav.myresumes'), href: '/my-resumes', icon: '📁' },
+    { name: t('nav.export'), href: '/export', icon: '📤' },
   ];
 
   const hasAdminAccess = currentUser.role.permissions.includes('admin:read');
@@ -56,7 +58,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser, onLogout }) => {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <span className="nav-icon">⚙️</span>
-                <span className="nav-text">Admin</span>
+                <span className="nav-text">{t('nav.admin')}</span>
               </Link>
             )}
           </div>
@@ -87,7 +89,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser, onLogout }) => {
                 <div className="dropdown-divider"></div>
                 <button className="dropdown-item" onClick={onLogout}>
                   <span className="item-icon">🚪</span>
-                  <span>Logout</span>
+                  <span>{t('nav.logout')}</span>
                 </button>
               </div>
             </div>
