@@ -70,6 +70,23 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
     switch (sectionId) {
       case 'personalInfo':
         return state.resumeData.personalInfo;
+      case 'experience':
+        // For array sections, return empty object for single form
+        return {};
+      case 'education':
+        return {};
+      case 'skills':
+        return {};
+      case 'projects':
+        return {};
+      case 'certifications':
+        return {};
+      case 'languages':
+        return {};
+      case 'references':
+        return {};
+      case 'customSections':
+        return {};
       default:
         return {};
     }
@@ -82,6 +99,8 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
         payload: { [fieldName]: value } 
       });
     }
+    // For now, we'll handle other sections as they are implemented
+    // This allows forms to render and be tested
   };
 
   const handleFormSubmit = (data: Record<string, any>) => {
@@ -91,6 +110,8 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
         payload: data 
       });
     }
+    // For now, we'll handle other sections as they are implemented
+    console.log(`Saving ${selectedSection} data:`, data);
     handleAutoSave();
   };
 
