@@ -27,7 +27,7 @@ jobs:
         cache: 'npm'
         
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --prefer-offline --no-audit
       
     - name: Check for security vulnerabilities
       run: |
@@ -47,8 +47,8 @@ jobs:
         
     - name: Apply security fixes
       run: |
-        # Apply automatic security fixes
-        npm audit fix --force || true
+        # Apply automatic security fixes (without --force to avoid breaking changes)
+        npm audit fix || echo "Manual review needed for some security issues"
         
         # Update package-lock.json
         npm install --package-lock-only
@@ -106,7 +106,7 @@ jobs:
         cache: 'npm'
         
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --prefer-offline --no-audit
       
     - name: Update dependencies
       run: |
