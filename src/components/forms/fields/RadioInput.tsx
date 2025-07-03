@@ -32,15 +32,15 @@ const RadioInput: React.FC<RadioInputProps> = ({
 
   return (
     <div className={`form-field ${className} ${error ? 'error' : ''}`}>
-      <div className="form-label">
+      <div className='form-label'>
         {label}
-        {required && <span className="required">*</span>}
+        {required && <span className='required'>*</span>}
       </div>
-      <div className="radio-group">
+      <div className='radio-group'>
         {options.map((option, index) => (
-          <div key={option} className="form-radio-wrapper">
+          <div key={option} className='form-radio-wrapper'>
             <input
-              type="radio"
+              type='radio'
               id={`${name}-${index}`}
               name={name}
               value={option}
@@ -48,22 +48,21 @@ const RadioInput: React.FC<RadioInputProps> = ({
               onChange={handleChange}
               onBlur={onBlur}
               disabled={disabled}
-              className="form-radio"
+              className='form-radio'
               aria-invalid={error ? 'true' : 'false'}
               aria-describedby={error ? `${name}-error` : undefined}
             />
-            <label htmlFor={`${name}-${index}`} className="radio-label">
+            <label htmlFor={`${name}-${index}`} className='radio-label'>
               {option}
             </label>
           </div>
         ))}
       </div>
       {error && (
-        <div id={`${name}-error`} className="form-error" role="alert">
+        <div id={`${name}-error`} className='form-error' role='alert'>
           {error}
         </div>
       )}
-
     </div>
   );
 };

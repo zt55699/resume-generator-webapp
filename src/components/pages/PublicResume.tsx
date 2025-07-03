@@ -42,14 +42,18 @@ const PublicResume: React.FC = () => {
   const loadResume = async (resumeId: string) => {
     try {
       setLoading(true);
-      
+
       // Load from localStorage (in a real app, this would be an API call)
-      const savedResumes = JSON.parse(localStorage.getItem('published-resumes') || '[]');
-      const foundResume = savedResumes.find((r: PublishedResume) => r.id === resumeId);
-      
+      const savedResumes = JSON.parse(
+        localStorage.getItem('published-resumes') || '[]'
+      );
+      const foundResume = savedResumes.find(
+        (r: PublishedResume) => r.id === resumeId
+      );
+
       if (foundResume) {
         setResume(foundResume);
-        
+
         // Increment view count
         const updatedResumes = savedResumes.map((r: PublishedResume) => {
           if (r.id === resumeId) {
@@ -61,8 +65,11 @@ const PublicResume: React.FC = () => {
           }
           return r;
         });
-        
-        localStorage.setItem('published-resumes', JSON.stringify(updatedResumes));
+
+        localStorage.setItem(
+          'published-resumes',
+          JSON.stringify(updatedResumes)
+        );
       } else {
         setNotFound(true);
       }
@@ -77,8 +84,9 @@ const PublicResume: React.FC = () => {
   const updatePageMetadata = (resume: PublishedResume) => {
     const { firstName, lastName } = resume.data.personalInfo;
     const title = `${firstName} ${lastName} - Professional Resume`;
-    const description = resume.data.personalInfo.summary || 
-                       `Professional resume for ${firstName} ${lastName}. View work experience, education, skills, and contact information.`;
+    const description =
+      resume.data.personalInfo.summary ||
+      `Professional resume for ${firstName} ${lastName}. View work experience, education, skills, and contact information.`;
     const imageUrl = resume.data.personalInfo.profilePhoto || '';
 
     // Update document title
@@ -90,7 +98,7 @@ const PublicResume: React.FC = () => {
     updateMetaTag('og:description', description);
     updateMetaTag('og:type', 'profile');
     updateMetaTag('og:url', window.location.href);
-    
+
     if (imageUrl) {
       updateMetaTag('og:image', imageUrl);
     }
@@ -99,7 +107,7 @@ const PublicResume: React.FC = () => {
     updateMetaTag('twitter:card', 'summary_large_image');
     updateMetaTag('twitter:title', title);
     updateMetaTag('twitter:description', description);
-    
+
     if (imageUrl) {
       updateMetaTag('twitter:image', imageUrl);
     }
@@ -109,9 +117,13 @@ const PublicResume: React.FC = () => {
   };
 
   const updateMetaTag = (property: string, content: string) => {
-    let element = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement;
+    let element = document.querySelector(
+      `meta[property="${property}"]`
+    ) as HTMLMetaElement;
     if (!element) {
-      element = document.querySelector(`meta[name="${property}"]`) as HTMLMetaElement;
+      element = document.querySelector(
+        `meta[name="${property}"]`
+      ) as HTMLMetaElement;
     }
     if (!element) {
       element = document.createElement('meta');
@@ -127,7 +139,7 @@ const PublicResume: React.FC = () => {
 
   const handleExportPDF = async () => {
     if (!resume) return;
-    
+
     setIsExporting(true);
     try {
       const exportOptions = {
@@ -149,10 +161,16 @@ const PublicResume: React.FC = () => {
     }
   };
 
-  const handleShare = async (platform: 'copy' | 'linkedin' | 'twitter' | 'email') => {
+  const handleShare = async (
+    platform: 'copy' | 'linkedin' | 'twitter' | 'email'
+  ) => {
     const url = window.location.href;
-    const title = resume ? `${resume.data.personalInfo.firstName} ${resume.data.personalInfo.lastName} - Professional Resume` : 'Professional Resume';
-    const text = resume ? `Check out ${resume.data.personalInfo.firstName}'s professional resume` : 'Check out this professional resume';
+    const title = resume
+      ? `${resume.data.personalInfo.firstName} ${resume.data.personalInfo.lastName} - Professional Resume`
+      : 'Professional Resume';
+    const text = resume
+      ? `Check out ${resume.data.personalInfo.firstName}'s professional resume`
+      : 'Check out this professional resume';
 
     switch (platform) {
       case 'copy':
@@ -197,9 +215,9 @@ const PublicResume: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="public-resume-loading">
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
+      <div className='public-resume-loading'>
+        <div className='loading-container'>
+          <div className='loading-spinner'></div>
           <h2>Loading Resume...</h2>
           <p>Please wait while we fetch the resume.</p>
         </div>
@@ -209,15 +227,14 @@ const PublicResume: React.FC = () => {
 
   if (notFound || !resume) {
     return (
-      <div className="public-resume-error">
-        <div className="error-container">
-          <div className="error-icon">📄</div>
+      <div className='public-resume-error'>
+        <div className='error-container'>
+          <div className='error-icon'>📄</div>
           <h2>Resume Not Found</h2>
-          <p>The resume you're looking for doesn't exist or has been removed.</p>
-          <button 
-            className="error-action"
-            onClick={() => navigate('/')}
-          >
+          <p>
+            The resume you're looking for doesn't exist or has been removed.
+          </p>
+          <button className='error-action' onClick={() => navigate('/')}>
             Go to Homepage
           </button>
         </div>
@@ -226,54 +243,48 @@ const PublicResume: React.FC = () => {
   }
 
   return (
-    <div className="public-resume">
-      <div className="public-header">
-        <div className="header-content">
-          <div className="header-info">
-            <h1 className="resume-owner">
-              {resume.data.personalInfo.firstName} {resume.data.personalInfo.lastName}
+    <div className='public-resume'>
+      <div className='public-header'>
+        <div className='header-content'>
+          <div className='header-info'>
+            <h1 className='resume-owner'>
+              {resume.data.personalInfo.firstName}{' '}
+              {resume.data.personalInfo.lastName}
             </h1>
-            <p className="resume-subtitle">Professional Resume</p>
-            <div className="resume-meta">
-              <span className="meta-item">
+            <p className='resume-subtitle'>Professional Resume</p>
+            <div className='resume-meta'>
+              <span className='meta-item'>
                 📅 Published {formatDate(resume.publishedAt)}
               </span>
-              <span className="meta-item">
-                👁️ {resume.views || 0} views
-              </span>
-              <span className="meta-item">
+              <span className='meta-item'>👁️ {resume.views || 0} views</span>
+              <span className='meta-item'>
                 🎨 {resume.template.name} template
               </span>
             </div>
           </div>
-          
-          <div className="header-actions">
-            <button 
-              className="action-btn primary"
+
+          <div className='header-actions'>
+            <button
+              className='action-btn primary'
               onClick={handleExportPDF}
               disabled={isExporting}
             >
               {isExporting ? (
                 <>
-                  <div className="action-spinner"></div>
+                  <div className='action-spinner'></div>
                   Exporting...
                 </>
               ) : (
-                <>
-                  📄 Download PDF
-                </>
+                <>📄 Download PDF</>
               )}
             </button>
-            
-            <button 
-              className="action-btn secondary"
-              onClick={handlePrint}
-            >
+
+            <button className='action-btn secondary' onClick={handlePrint}>
               🖨️ Print
             </button>
-            
-            <button 
-              className="action-btn secondary"
+
+            <button
+              className='action-btn secondary'
               onClick={() => setShowShareModal(true)}
             >
               🔗 Share
@@ -282,10 +293,10 @@ const PublicResume: React.FC = () => {
         </div>
       </div>
 
-      <div className="public-content">
-        <div className="resume-container">
-          <div className="resume-wrapper">
-            <ResumeRenderer 
+      <div className='public-content'>
+        <div className='resume-container'>
+          <div className='resume-wrapper'>
+            <ResumeRenderer
               resumeData={resume.data}
               template={resume.template}
             />
@@ -293,19 +304,16 @@ const PublicResume: React.FC = () => {
         </div>
       </div>
 
-      <div className="public-footer">
-        <div className="footer-content">
-          <div className="footer-info">
+      <div className='public-footer'>
+        <div className='footer-content'>
+          <div className='footer-info'>
             <p>
-              This resume was created using our professional resume builder. 
+              This resume was created using our professional resume builder.
               Want to create your own?
             </p>
           </div>
-          <div className="footer-actions">
-            <button 
-              className="footer-cta"
-              onClick={() => navigate('/')}
-            >
+          <div className='footer-actions'>
+            <button className='footer-cta' onClick={() => navigate('/')}>
               Create Your Resume
             </button>
           </div>
@@ -313,64 +321,64 @@ const PublicResume: React.FC = () => {
       </div>
 
       {showShareModal && (
-        <div className="modal-overlay" onClick={() => setShowShareModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
+        <div className='modal-overlay' onClick={() => setShowShareModal(false)}>
+          <div className='modal-content' onClick={e => e.stopPropagation()}>
+            <div className='modal-header'>
               <h3>Share Resume</h3>
-              <button 
-                className="close-modal"
+              <button
+                className='close-modal'
                 onClick={() => setShowShareModal(false)}
               >
                 ✕
               </button>
             </div>
-            
-            <div className="modal-body">
-              <div className="share-url">
+
+            <div className='modal-body'>
+              <div className='share-url'>
                 <label>Resume URL:</label>
-                <div className="url-input-group">
-                  <input 
-                    type="text" 
+                <div className='url-input-group'>
+                  <input
+                    type='text'
                     value={window.location.href}
                     readOnly
-                    className="url-input"
+                    className='url-input'
                   />
-                  <button 
-                    className="copy-btn"
+                  <button
+                    className='copy-btn'
                     onClick={() => handleShare('copy')}
                   >
                     {copySuccess ? '✅' : '📋'}
                   </button>
                 </div>
                 {copySuccess && (
-                  <span className="copy-success">URL copied to clipboard!</span>
+                  <span className='copy-success'>URL copied to clipboard!</span>
                 )}
               </div>
 
-              <div className="share-platforms">
+              <div className='share-platforms'>
                 <h4>Share on:</h4>
-                <div className="platform-buttons">
-                  <button 
-                    className="platform-btn linkedin"
+                <div className='platform-buttons'>
+                  <button
+                    className='platform-btn linkedin'
                     onClick={() => handleShare('linkedin')}
                   >
-                    <span className="platform-icon">💼</span>
+                    <span className='platform-icon'>💼</span>
                     LinkedIn
                   </button>
-                  
-                  <button 
-                    className="platform-btn twitter"
+
+                  <button
+                    className='platform-btn twitter'
                     onClick={() => handleShare('twitter')}
                   >
-                    <span className="platform-icon">🐦</span>
+                    <span className='platform-icon'>🐦</span>
                     Twitter
                   </button>
-                  
-                  <button 
-                    className="platform-btn email"
+
+                  <button
+                    className='platform-btn email'
                     onClick={() => handleShare('email')}
                   >
-                    <span className="platform-icon">📧</span>
+                    <span className='platform-icon'>📧</span>
                     Email
                   </button>
                 </div>

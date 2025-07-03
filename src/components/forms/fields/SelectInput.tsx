@@ -34,9 +34,9 @@ const SelectInput: React.FC<SelectInputProps> = ({
 
   return (
     <div className={`form-field ${className} ${error ? 'error' : ''}`}>
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name} className='form-label'>
         {label}
-        {required && <span className="required">*</span>}
+        {required && <span className='required'>*</span>}
       </label>
       <select
         id={name}
@@ -45,21 +45,21 @@ const SelectInput: React.FC<SelectInputProps> = ({
         onChange={handleChange}
         onBlur={onBlur}
         disabled={disabled}
-        className="form-select"
+        className='form-select'
         aria-invalid={error ? 'true' : 'false'}
         aria-describedby={error ? `${name}-error` : undefined}
       >
-        <option value="" disabled>
+        <option value='' disabled>
           {placeholder}
         </option>
-        {options.map((option) => (
+        {options.map(option => (
           <option key={option} value={option}>
             {option}
           </option>
         ))}
       </select>
       {error && (
-        <div id={`${name}-error`} className="form-error" role="alert">
+        <div id={`${name}-error`} className='form-error' role='alert'>
           {error}
         </div>
       )}

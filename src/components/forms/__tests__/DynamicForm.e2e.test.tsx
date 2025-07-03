@@ -13,9 +13,15 @@ describe('DynamicForm E2E Navigation Tests', () => {
 
   describe('CRITICAL: Complete Navigation Flow', () => {
     test('should handle full section switching workflow without input freezing', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      const experienceFields = defaultFieldConfigs.filter(f => f.section === 'experience');
-      const educationFields = defaultFieldConfigs.filter(f => f.section === 'education');
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+      const experienceFields = defaultFieldConfigs.filter(
+        f => f.section === 'experience'
+      );
+      const educationFields = defaultFieldConfigs.filter(
+        f => f.section === 'education'
+      );
 
       const { rerender } = render(
         <DynamicForm
@@ -57,7 +63,9 @@ describe('DynamicForm E2E Navigation Tests', () => {
       const positionInput = screen.getByLabelText(/job title/i);
 
       fireEvent.change(companyInput, { target: { value: 'Tech Corp' } });
-      fireEvent.change(positionInput, { target: { value: 'Software Engineer' } });
+      fireEvent.change(positionInput, {
+        target: { value: 'Software Engineer' },
+      });
 
       expect(companyInput).toHaveValue('Tech Corp');
       expect(positionInput).toHaveValue('Software Engineer');
@@ -79,7 +87,9 @@ describe('DynamicForm E2E Navigation Tests', () => {
       const institutionInput = screen.getByLabelText(/institution name/i);
       const degreeInput = screen.getByLabelText(/degree/i);
 
-      fireEvent.change(institutionInput, { target: { value: 'University of Tech' } });
+      fireEvent.change(institutionInput, {
+        target: { value: 'University of Tech' },
+      });
       fireEvent.change(degreeInput, { target: { value: 'Computer Science' } });
 
       expect(institutionInput).toHaveValue('University of Tech');
@@ -89,7 +99,11 @@ describe('DynamicForm E2E Navigation Tests', () => {
       rerender(
         <DynamicForm
           fields={personalInfoFields}
-          data={{ firstName: 'John', lastName: 'Doe', email: 'john@example.com' }}
+          data={{
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john@example.com',
+          }}
           onSubmit={mockOnSubmit}
           onFieldChange={mockOnFieldChange}
         />
@@ -112,7 +126,9 @@ describe('DynamicForm E2E Navigation Tests', () => {
       // Step 6: Continue editing
       fireEvent.change(finalFirstNameInput, { target: { value: 'Jane' } });
       fireEvent.change(finalLastNameInput, { target: { value: 'Smith' } });
-      fireEvent.change(finalEmailInput, { target: { value: 'jane@example.com' } });
+      fireEvent.change(finalEmailInput, {
+        target: { value: 'jane@example.com' },
+      });
 
       expect(finalFirstNameInput).toHaveValue('Jane');
       expect(finalLastNameInput).toHaveValue('Smith');
@@ -120,9 +136,13 @@ describe('DynamicForm E2E Navigation Tests', () => {
     });
 
     test('should handle rapid section switching with data persistence', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      const experienceFields = defaultFieldConfigs.filter(f => f.section === 'experience');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+      const experienceFields = defaultFieldConfigs.filter(
+        f => f.section === 'experience'
+      );
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}
@@ -180,8 +200,10 @@ describe('DynamicForm E2E Navigation Tests', () => {
     });
 
     test('should handle typing while data prop changes', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}
@@ -192,7 +214,7 @@ describe('DynamicForm E2E Navigation Tests', () => {
       );
 
       const firstNameInput = screen.getByLabelText(/first name/i);
-      
+
       // Start typing
       fireEvent.change(firstNameInput, { target: { value: 'J' } });
       expect(firstNameInput).toHaveValue('J');
@@ -213,19 +235,23 @@ describe('DynamicForm E2E Navigation Tests', () => {
 
       // Wait for debounced reset - with dirty form, reset should be delayed
       await new Promise(resolve => setTimeout(resolve, 400));
-      
+
       // Input should still be responsive
       expect(firstNameInput).not.toBeDisabled();
-      
+
       // Should be able to continue typing
       fireEvent.change(firstNameInput, { target: { value: 'John Doe' } });
       expect(firstNameInput).toHaveValue('John Doe');
     });
 
     test('should handle complex form state during navigation', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      const experienceFields = defaultFieldConfigs.filter(f => f.section === 'experience');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+      const experienceFields = defaultFieldConfigs.filter(
+        f => f.section === 'experience'
+      );
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}
@@ -249,7 +275,7 @@ describe('DynamicForm E2E Navigation Tests', () => {
         { firstName: 'John', lastName: 'Doe', email: 'john@example.com' },
         { firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com' },
         { firstName: 'Bob', lastName: 'Johnson', email: 'bob@example.com' },
-        {}
+        {},
       ];
 
       for (const dataSet of dataSets) {
@@ -281,7 +307,7 @@ describe('DynamicForm E2E Navigation Tests', () => {
         await waitFor(() => {
           const backToFirstName = screen.getByLabelText(/first name/i);
           expect(backToFirstName).not.toBeDisabled();
-          
+
           // Verify data is loaded correctly
           if (dataSet.firstName) {
             expect(backToFirstName).toHaveValue(dataSet.firstName);
@@ -298,9 +324,13 @@ describe('DynamicForm E2E Navigation Tests', () => {
 
   describe('VERIFICATION: onFieldChange behavior during navigation', () => {
     test('should not trigger unnecessary onFieldChange calls during section switches', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      const experienceFields = defaultFieldConfigs.filter(f => f.section === 'experience');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+      const experienceFields = defaultFieldConfigs.filter(
+        f => f.section === 'experience'
+      );
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}
@@ -337,14 +367,14 @@ describe('DynamicForm E2E Navigation Tests', () => {
 
       // Wait for any potential calls to settle
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       // Clear any form initialization calls
       mockOnFieldChange.mockClear();
 
       // But user input should still trigger it
       const firstNameInput = screen.getByLabelText(/first name/i);
       fireEvent.change(firstNameInput, { target: { value: 'Jane' } });
-      
+
       await waitFor(() => {
         expect(mockOnFieldChange).toHaveBeenCalledWith('firstName', 'Jane');
       });

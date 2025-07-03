@@ -34,7 +34,10 @@ const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
         onBlur?.();
       }
@@ -73,27 +76,29 @@ const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
     }
   };
 
-  const filteredOptions = options.filter(option =>
-    option.toLowerCase().includes(inputValue.toLowerCase()) && !value.includes(option)
+  const filteredOptions = options.filter(
+    option =>
+      option.toLowerCase().includes(inputValue.toLowerCase()) &&
+      !value.includes(option)
   );
 
   return (
     <div className={`form-field ${className} ${error ? 'error' : ''}`}>
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name} className='form-label'>
         {label}
-        {required && <span className="required">*</span>}
+        {required && <span className='required'>*</span>}
       </label>
-      <div className="multiselect-container" ref={containerRef}>
+      <div className='multiselect-container' ref={containerRef}>
         <div
-          className="multiselect-input"
+          className='multiselect-input'
           onClick={() => !disabled && setIsOpen(true)}
         >
-          {value.map((option) => (
-            <div key={option} className="multiselect-tag">
+          {value.map(option => (
+            <div key={option} className='multiselect-tag'>
               {option}
               <span
-                className="multiselect-tag-remove"
-                onClick={(e) => {
+                className='multiselect-tag-remove'
+                onClick={e => {
                   e.stopPropagation();
                   handleRemoveTag(option);
                 }}
@@ -103,7 +108,7 @@ const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
             </div>
           ))}
           <input
-            type="text"
+            type='text'
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleInputKeyDown}
@@ -121,13 +126,13 @@ const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
           />
         </div>
         {isOpen && !disabled && (
-          <div className="multiselect-dropdown">
+          <div className='multiselect-dropdown'>
             {filteredOptions.length === 0 ? (
-              <div className="multiselect-option">
+              <div className='multiselect-option'>
                 {inputValue ? `Add "${inputValue}"` : 'No options available'}
               </div>
             ) : (
-              filteredOptions.map((option) => (
+              filteredOptions.map(option => (
                 <div
                   key={option}
                   className={`multiselect-option ${value.includes(option) ? 'selected' : ''}`}
@@ -141,7 +146,7 @@ const MultiSelectInput: React.FC<MultiSelectInputProps> = ({
         )}
       </div>
       {error && (
-        <div id={`${name}-error`} className="form-error" role="alert">
+        <div id={`${name}-error`} className='form-error' role='alert'>
           {error}
         </div>
       )}

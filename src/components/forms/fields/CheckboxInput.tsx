@@ -32,35 +32,30 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
 
   return (
     <div className={`form-field ${className} ${error ? 'error' : ''}`}>
-      <div className="form-checkbox-wrapper">
+      <div className='form-checkbox-wrapper'>
         <input
-          type="checkbox"
+          type='checkbox'
           id={name}
           name={name}
           checked={checked}
           onChange={handleChange}
           onBlur={onBlur}
           disabled={disabled}
-          className="form-checkbox"
+          className='form-checkbox'
           aria-invalid={error ? 'true' : 'false'}
           aria-describedby={error ? `${name}-error` : undefined}
         />
-        <label htmlFor={name} className="form-label checkbox-label">
+        <label htmlFor={name} className='form-label checkbox-label'>
           {label}
-          {required && <span className="required">*</span>}
+          {required && <span className='required'>*</span>}
         </label>
       </div>
-      {description && (
-        <div className="checkbox-description">
-          {description}
-        </div>
-      )}
+      {description && <div className='checkbox-description'>{description}</div>}
       {error && (
-        <div id={`${name}-error`} className="form-error" role="alert">
+        <div id={`${name}-error`} className='form-error' role='alert'>
           {error}
         </div>
       )}
-
     </div>
   );
 };

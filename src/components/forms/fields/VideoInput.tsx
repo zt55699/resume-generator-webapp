@@ -1,5 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { createFileUpload, formatFileSize, ACCEPTED_VIDEO_TYPES } from '../../../utils/fileUtils';
+import {
+  createFileUpload,
+  formatFileSize,
+  ACCEPTED_VIDEO_TYPES,
+} from '../../../utils/fileUtils';
 import { FileUpload } from '../../../types';
 import './FormField.css';
 
@@ -38,7 +42,7 @@ const VideoInput: React.FC<VideoInputProps> = ({
     if (!files || files.length === 0) return;
 
     const file = files[0];
-    
+
     if (!ACCEPTED_VIDEO_TYPES.includes(file.type)) {
       console.error('Invalid file type');
       return;
@@ -94,32 +98,30 @@ const VideoInput: React.FC<VideoInputProps> = ({
 
   return (
     <div className={`form-field ${className} ${error ? 'error' : ''}`}>
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name} className='form-label'>
         {label}
-        {required && <span className="required">*</span>}
+        {required && <span className='required'>*</span>}
       </label>
-      
+
       <div
         className={`form-drag-drop ${isDragOver ? 'drag-over' : ''}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <div className="form-drag-drop-text">
-          {placeholder}
-        </div>
+        <div className='form-drag-drop-text'>{placeholder}</div>
         <button
-          type="button"
-          className="form-drag-drop-button"
+          type='button'
+          className='form-drag-drop-button'
           onClick={handleButtonClick}
           disabled={disabled || isUploading}
         >
           {isUploading ? 'Uploading...' : 'Browse Videos'}
         </button>
-        
+
         <input
           ref={fileInputRef}
-          type="file"
+          type='file'
           id={name}
           name={name}
           onChange={handleInputChange}
@@ -133,21 +135,23 @@ const VideoInput: React.FC<VideoInputProps> = ({
       </div>
 
       {value && (
-        <div className="form-file-preview">
-          <div className="form-file-item">
+        <div className='form-file-preview'>
+          <div className='form-file-item'>
             <div>
               <video
                 src={value.url}
                 controls
-                className="form-video-preview"
+                className='form-video-preview'
                 style={{ maxWidth: '300px', maxHeight: '200px' }}
               />
-              <div className="form-file-name">{value.file.name}</div>
-              <div className="form-file-size">{formatFileSize(value.file.size)}</div>
+              <div className='form-file-name'>{value.file.name}</div>
+              <div className='form-file-size'>
+                {formatFileSize(value.file.size)}
+              </div>
             </div>
             <button
-              type="button"
-              className="form-file-remove"
+              type='button'
+              className='form-file-remove'
               onClick={handleRemoveVideo}
               disabled={disabled}
             >
@@ -158,7 +162,7 @@ const VideoInput: React.FC<VideoInputProps> = ({
       )}
 
       {error && (
-        <div id={`${name}-error`} className="form-error" role="alert">
+        <div id={`${name}-error`} className='form-error' role='alert'>
           {error}
         </div>
       )}

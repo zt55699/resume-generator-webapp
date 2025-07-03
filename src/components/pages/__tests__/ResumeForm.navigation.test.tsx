@@ -13,8 +13,10 @@ describe('DynamicForm Input Field Issues Tests', () => {
 
   describe('CRITICAL: Form Reset and Data Prop Issues', () => {
     test('should handle rapid data prop changes without input freezing', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}
@@ -33,7 +35,13 @@ describe('DynamicForm Input Field Issues Tests', () => {
       rerender(
         <DynamicForm
           fields={personalInfoFields}
-          data={{ firstName: 'John', lastName: '', email: '', phone: '', summary: '' }}
+          data={{
+            firstName: 'John',
+            lastName: '',
+            email: '',
+            phone: '',
+            summary: '',
+          }}
           onSubmit={mockOnSubmit}
           onFieldChange={mockOnFieldChange}
         />
@@ -49,13 +57,17 @@ describe('DynamicForm Input Field Issues Tests', () => {
       expect(updatedFirstNameInput).not.toBeDisabled();
 
       // Should be able to continue typing
-      fireEvent.change(updatedFirstNameInput, { target: { value: 'John Doe' } });
+      fireEvent.change(updatedFirstNameInput, {
+        target: { value: 'John Doe' },
+      });
       expect(updatedFirstNameInput).toHaveValue('John Doe');
     });
 
     test('should not freeze inputs when reset() is called multiple times', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}
@@ -66,14 +78,14 @@ describe('DynamicForm Input Field Issues Tests', () => {
       );
 
       const firstNameInput = screen.getByLabelText(/first name/i);
-      
+
       // Simulate multiple rapid data changes (like section switching)
       const dataSets = [
         { firstName: 'John' },
         { firstName: 'John', lastName: 'Doe' },
         { firstName: 'John', lastName: 'Doe', email: 'john@example.com' },
         { firstName: 'Jane', lastName: 'Doe', email: 'jane@example.com' },
-        {}
+        {},
       ];
 
       for (let i = 0; i < dataSets.length; i++) {
@@ -100,11 +112,15 @@ describe('DynamicForm Input Field Issues Tests', () => {
     });
 
     test('should handle useForm dependency changes correctly', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+
       // Test with different field configurations to simulate section changes
-      const experienceFields = defaultFieldConfigs.filter(f => f.section === 'experience');
-      
+      const experienceFields = defaultFieldConfigs.filter(
+        f => f.section === 'experience'
+      );
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}
@@ -160,9 +176,11 @@ describe('DynamicForm Input Field Issues Tests', () => {
 
   describe('CRITICAL: useEffect Dependencies Issue', () => {
     test('should not cause infinite reset loops', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
       const initialData = { firstName: 'John' };
-      
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}
@@ -191,8 +209,10 @@ describe('DynamicForm Input Field Issues Tests', () => {
     });
 
     test('should handle watch/setValue conflicts', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+
       render(
         <DynamicForm
           fields={personalInfoFields}
@@ -224,8 +244,10 @@ describe('DynamicForm Input Field Issues Tests', () => {
 
   describe('CRITICAL: Form Validation State Issues', () => {
     test('should not disable inputs due to validation state changes', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+
       render(
         <DynamicForm
           fields={personalInfoFields}
@@ -236,7 +258,7 @@ describe('DynamicForm Input Field Issues Tests', () => {
       );
 
       const emailInput = screen.getByLabelText(/email/i);
-      
+
       // Enter invalid email
       fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
 
@@ -252,8 +274,10 @@ describe('DynamicForm Input Field Issues Tests', () => {
     });
 
     test('should handle form mode changes correctly', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}

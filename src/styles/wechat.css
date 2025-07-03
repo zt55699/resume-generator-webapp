@@ -56,7 +56,9 @@
   }
 
   /* Touch-friendly buttons */
-  .btn, .action-btn, .cta-button {
+  .btn,
+  .action-btn,
+  .cta-button {
     min-height: 44px; /* iOS touch target minimum */
     padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;
@@ -65,7 +67,9 @@
   }
 
   /* Improved form inputs for mobile */
-  .form-input, .search-input, .template-select {
+  .form-input,
+  .search-input,
+  .template-select {
     min-height: 44px;
     font-size: 16px; /* Prevents zoom on iOS */
     border-radius: 0.5rem;
@@ -112,7 +116,9 @@
   }
 
   /* Better tap targets for cards */
-  .template-card, .resume-card, .feature-card {
+  .template-card,
+  .resume-card,
+  .feature-card {
     margin-bottom: 1rem;
     border-radius: 1rem;
     overflow: hidden;
@@ -297,14 +303,18 @@
 
   /* High contrast mode support */
   @media (prefers-contrast: high) {
-    .btn, .action-btn {
+    .btn,
+    .action-btn {
       border: 2px solid currentColor;
     }
   }
 
   /* Reduced motion support */
   @media (prefers-reduced-motion: reduce) {
-    .btn, .action-btn, .template-card, .resume-card {
+    .btn,
+    .action-btn,
+    .template-card,
+    .resume-card {
       transition: none;
     }
   }
@@ -331,8 +341,12 @@
 
 /* Loading animations for mobile */
 @keyframes mobileSpinner {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .mobile-spinner {
@@ -434,7 +448,9 @@
 .page-transition-enter-active {
   opacity: 1;
   transform: translateX(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 .page-transition-exit {
@@ -445,5 +461,7 @@
 .page-transition-exit-active {
   opacity: 0;
   transform: translateX(-100%);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }

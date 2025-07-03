@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { 
-  isWeChat, 
-  isWeChatMiniProgram, 
-  getDeviceInfo, 
+import {
+  isWeChat,
+  isWeChatMiniProgram,
+  getDeviceInfo,
   configureWeChatShare,
   wechatStorage,
-  WeChatShareConfig 
+  WeChatShareConfig,
 } from '../utils/wechatUtils';
 
 interface WeChatHookReturn {
@@ -44,10 +44,10 @@ export const useWeChat = (): WeChatHookReturn => {
     if ('getBattery' in navigator) {
       (navigator as any).getBattery().then((battery: any) => {
         setBatteryLevel(battery.level);
-        
+
         const updateBattery = () => setBatteryLevel(battery.level);
         battery.addEventListener('levelchange', updateBattery);
-        
+
         return () => battery.removeEventListener('levelchange', updateBattery);
       });
     }
@@ -56,7 +56,7 @@ export const useWeChat = (): WeChatHookReturn => {
     if (isWeChat()) {
       document.body.classList.add('wechat-env');
     }
-    
+
     if (isWeChatMiniProgram()) {
       document.body.classList.add('wechat-miniprogram');
     }
@@ -78,11 +78,13 @@ export const useWeChat = (): WeChatHookReturn => {
     } else {
       // Fallback to Web Share API or custom share modal
       if (navigator.share) {
-        navigator.share({
-          title: config.title,
-          text: config.desc,
-          url: config.link
-        }).catch(console.error);
+        navigator
+          .share({
+            title: config.title,
+            text: config.desc,
+            url: config.link,
+          })
+          .catch(console.error);
       } else {
         // Show custom share modal
         showToast('Please copy the link to share', 3000);
@@ -96,7 +98,7 @@ export const useWeChat = (): WeChatHookReturn => {
       (window as any).wx.showToast({
         title: message,
         duration: duration,
-        mask: true
+        mask: true,
       });
       return;
     }
@@ -115,7 +117,7 @@ export const useWeChat = (): WeChatHookReturn => {
       navigator.vibrate(pattern);
     } else if (isWeChatMiniProgram() && (window as any).wx) {
       (window as any).wx.vibrateShort({
-        type: 'medium'
+        type: 'medium',
       });
     }
   }, []);
@@ -123,7 +125,7 @@ export const useWeChat = (): WeChatHookReturn => {
   const storage = {
     getItem: (key: string) => wechatStorage.getItem(key),
     setItem: (key: string, value: any) => wechatStorage.setItem(key, value),
-    removeItem: (key: string) => wechatStorage.removeItem(key)
+    removeItem: (key: string) => wechatStorage.removeItem(key),
   };
 
   // Create toast element if not exists
@@ -161,40 +163,49 @@ export const useWeChat = (): WeChatHookReturn => {
     vibrate,
     isOnline,
     batteryLevel,
-    storage
+    storage,
   };
 };
 
 // Hook for handling mobile gestures
 export const useMobileGestures = () => {
-  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
-  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(
+    null
+  );
+  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(
+    null
+  );
 
   const handleTouchStart = useCallback((e: TouchEvent) => {
     const touch = e.touches[0];
     setTouchStart({ x: touch.clientX, y: touch.clientY });
   }, []);
 
-  const handleTouchEnd = useCallback((e: TouchEvent) => {
-    if (!touchStart) return;
+  const handleTouchEnd = useCallback(
+    (e: TouchEvent) => {
+      if (!touchStart) return;
 
-    const touch = e.changedTouches[0];
-    const deltaX = touch.clientX - touchStart.x;
-    const deltaY = touch.clientY - touchStart.y;
+      const touch = e.changedTouches[0];
+      const deltaX = touch.clientX - touchStart.x;
+      const deltaY = touch.clientY - touchStart.y;
 
-    // Check if horizontal swipe is dominant
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-      setSwipeDirection(deltaX > 0 ? 'right' : 'left');
-      
-      // Reset after a short delay
-      setTimeout(() => setSwipeDirection(null), 100);
-    }
+      // Check if horizontal swipe is dominant
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+        setSwipeDirection(deltaX > 0 ? 'right' : 'left');
 
-    setTouchStart(null);
-  }, [touchStart]);
+        // Reset after a short delay
+        setTimeout(() => setSwipeDirection(null), 100);
+      }
+
+      setTouchStart(null);
+    },
+    [touchStart]
+  );
 
   useEffect(() => {
-    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchstart', handleTouchStart, {
+      passive: true,
+    });
     document.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
@@ -208,8 +219,12 @@ export const useMobileGestures = () => {
 
 // Hook for managing app state in WeChat environment
 export const useWeChatAppState = () => {
-  const [appState, setAppState] = useState<'active' | 'background' | 'inactive'>('active');
-  const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait');
+  const [appState, setAppState] = useState<
+    'active' | 'background' | 'inactive'
+  >('active');
+  const [orientation, setOrientation] = useState<'portrait' | 'landscape'>(
+    'portrait'
+  );
 
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -221,7 +236,9 @@ export const useWeChatAppState = () => {
     };
 
     const handleOrientationChange = () => {
-      setOrientation(window.innerHeight > window.innerWidth ? 'portrait' : 'landscape');
+      setOrientation(
+        window.innerHeight > window.innerWidth ? 'portrait' : 'landscape'
+      );
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);

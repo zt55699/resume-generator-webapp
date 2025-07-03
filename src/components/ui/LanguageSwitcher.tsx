@@ -10,16 +10,14 @@ const LanguageSwitcher: React.FC = () => {
   };
 
   return (
-    <button 
+    <button
       className={`language-switcher ${language}`}
       onClick={toggleLanguage}
       title={`Switch to ${language === 'en' ? '中文' : 'English'}`}
     >
-      <span className="language-icon">🌐</span>
-      <span className="language-text">
-        {language === 'en' ? 'EN' : '中文'}
-      </span>
-      <span className="language-arrow">▼</span>
+      <span className='language-icon'>🌐</span>
+      <span className='language-text'>{language === 'en' ? 'EN' : '中文'}</span>
+      <span className='language-arrow'>▼</span>
     </button>
   );
 };

@@ -1,7 +1,11 @@
 import React, { useState, useRef } from 'react';
 import ReactCrop, { Crop, PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import { createFileUpload, formatFileSize, ACCEPTED_IMAGE_TYPES } from '../../../utils/fileUtils';
+import {
+  createFileUpload,
+  formatFileSize,
+  ACCEPTED_IMAGE_TYPES,
+} from '../../../utils/fileUtils';
 import { FileUpload } from '../../../types';
 import './FormField.css';
 
@@ -55,7 +59,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
     if (!files || files.length === 0) return;
 
     const file = files[0];
-    
+
     if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
       console.error('Invalid file type');
       return;
@@ -140,23 +144,27 @@ const ImageInput: React.FC<ImageInputProps> = ({
       completedCrop.height
     );
 
-    canvas.toBlob(async (blob) => {
-      if (!blob) return;
+    canvas.toBlob(
+      async blob => {
+        if (!blob) return;
 
-      const croppedFile = new File([blob], 'cropped-image.jpg', {
-        type: 'image/jpeg',
-        lastModified: Date.now(),
-      });
+        const croppedFile = new File([blob], 'cropped-image.jpg', {
+          type: 'image/jpeg',
+          lastModified: Date.now(),
+        });
 
-      try {
-        const fileUpload = await createFileUpload(croppedFile, 'image');
-        onChange(fileUpload);
-        setShowCrop(false);
-        setImageSrc('');
-      } catch (error) {
-        console.error('Error processing cropped image:', error);
-      }
-    }, 'image/jpeg', 0.9);
+        try {
+          const fileUpload = await createFileUpload(croppedFile, 'image');
+          onChange(fileUpload);
+          setShowCrop(false);
+          setImageSrc('');
+        } catch (error) {
+          console.error('Error processing cropped image:', error);
+        }
+      },
+      'image/jpeg',
+      0.9
+    );
   };
 
   const handleCropCancel = () => {
@@ -167,11 +175,11 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
   return (
     <div className={`form-field ${className} ${error ? 'error' : ''}`}>
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name} className='form-label'>
         {label}
-        {required && <span className="required">*</span>}
+        {required && <span className='required'>*</span>}
       </label>
-      
+
       {!showCrop && (
         <>
           <div
@@ -180,21 +188,19 @@ const ImageInput: React.FC<ImageInputProps> = ({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            <div className="form-drag-drop-text">
-              {placeholder}
-            </div>
+            <div className='form-drag-drop-text'>{placeholder}</div>
             <button
-              type="button"
-              className="form-drag-drop-button"
+              type='button'
+              className='form-drag-drop-button'
               onClick={handleButtonClick}
               disabled={disabled || isUploading}
             >
               {isUploading ? 'Uploading...' : 'Browse Images'}
             </button>
-            
+
             <input
               ref={fileInputRef}
-              type="file"
+              type='file'
               id={name}
               name={name}
               onChange={handleInputChange}
@@ -208,21 +214,23 @@ const ImageInput: React.FC<ImageInputProps> = ({
           </div>
 
           {value && (
-            <div className="form-file-preview">
-              <div className="form-file-item">
+            <div className='form-file-preview'>
+              <div className='form-file-item'>
                 <div>
                   <img
                     src={value.url}
-                    alt="Preview"
-                    className="form-image-preview"
+                    alt='Preview'
+                    className='form-image-preview'
                     style={{ maxWidth: '200px', maxHeight: '200px' }}
                   />
-                  <div className="form-file-name">{value.file.name}</div>
-                  <div className="form-file-size">{formatFileSize(value.file.size)}</div>
+                  <div className='form-file-name'>{value.file.name}</div>
+                  <div className='form-file-size'>
+                    {formatFileSize(value.file.size)}
+                  </div>
                 </div>
                 <button
-                  type="button"
-                  className="form-file-remove"
+                  type='button'
+                  className='form-file-remove'
                   onClick={handleRemoveImage}
                   disabled={disabled}
                 >
@@ -235,32 +243,29 @@ const ImageInput: React.FC<ImageInputProps> = ({
       )}
 
       {showCrop && (
-        <div className="crop-container">
+        <div className='crop-container'>
           <ReactCrop
             crop={crop}
-            onChange={(c) => setCrop(c)}
-            onComplete={(c) => setCompletedCrop(c)}
+            onChange={c => setCrop(c)}
+            onComplete={c => setCompletedCrop(c)}
             aspect={cropAspectRatio}
           >
             <img
               ref={imageRef}
               src={imageSrc}
-              alt="Crop"
+              alt='Crop'
               style={{ maxWidth: '100%', maxHeight: '400px' }}
             />
           </ReactCrop>
-          <div className="crop-actions">
+          <div className='crop-actions'>
             <button
-              type="button"
+              type='button'
               onClick={handleCropComplete}
               disabled={!completedCrop}
             >
               Apply Crop
             </button>
-            <button
-              type="button"
-              onClick={handleCropCancel}
-            >
+            <button type='button' onClick={handleCropCancel}>
               Cancel
             </button>
           </div>
@@ -268,7 +273,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
       )}
 
       {error && (
-        <div id={`${name}-error`} className="form-error" role="alert">
+        <div id={`${name}-error`} className='form-error' role='alert'>
           {error}
         </div>
       )}

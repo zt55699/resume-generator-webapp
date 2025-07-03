@@ -126,7 +126,22 @@ export interface Template {
 export interface FieldConfig {
   id: string;
   name: string;
-  type: 'text' | 'textarea' | 'email' | 'phone' | 'date' | 'select' | 'multiselect' | 'file' | 'image' | 'video' | 'richtext' | 'number' | 'url' | 'checkbox' | 'radio';
+  type:
+    | 'text'
+    | 'textarea'
+    | 'email'
+    | 'phone'
+    | 'date'
+    | 'select'
+    | 'multiselect'
+    | 'file'
+    | 'image'
+    | 'video'
+    | 'richtext'
+    | 'number'
+    | 'url'
+    | 'checkbox'
+    | 'radio';
   label: string;
   placeholder?: string;
   required: boolean;

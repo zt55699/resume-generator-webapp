@@ -5,7 +5,8 @@ export const resumeTemplates: Template[] = [
     id: 'traditional-1',
     name: 'Classic Professional',
     category: 'Traditional',
-    description: 'A timeless, professional layout perfect for corporate environments and traditional industries.',
+    description:
+      'A timeless, professional layout perfect for corporate environments and traditional industries.',
     preview: '/templates/traditional-1-preview.jpg',
     colors: {
       primary: '#2c3e50',
@@ -27,7 +28,8 @@ export const resumeTemplates: Template[] = [
     id: 'traditional-2',
     name: 'Executive Formal',
     category: 'Traditional',
-    description: 'An elegant, formal design suitable for executive positions and senior management roles.',
+    description:
+      'An elegant, formal design suitable for executive positions and senior management roles.',
     preview: '/templates/traditional-2-preview.jpg',
     colors: {
       primary: '#1a1a1a',
@@ -49,7 +51,8 @@ export const resumeTemplates: Template[] = [
     id: 'modern-1',
     name: 'Contemporary Clean',
     category: 'Modern',
-    description: 'A sleek, modern design with clean lines and contemporary typography.',
+    description:
+      'A sleek, modern design with clean lines and contemporary typography.',
     preview: '/templates/modern-1-preview.jpg',
     colors: {
       primary: '#2c3e50',
@@ -71,7 +74,8 @@ export const resumeTemplates: Template[] = [
     id: 'modern-2',
     name: 'Minimalist Pro',
     category: 'Modern',
-    description: 'A minimalist approach with plenty of white space and modern aesthetics.',
+    description:
+      'A minimalist approach with plenty of white space and modern aesthetics.',
     preview: '/templates/modern-2-preview.jpg',
     colors: {
       primary: '#34495e',
@@ -93,7 +97,8 @@ export const resumeTemplates: Template[] = [
     id: 'creative-1',
     name: 'Design Portfolio',
     category: 'Creative',
-    description: 'A vibrant, creative layout perfect for designers, artists, and creative professionals.',
+    description:
+      'A vibrant, creative layout perfect for designers, artists, and creative professionals.',
     preview: '/templates/creative-1-preview.jpg',
     colors: {
       primary: '#8e44ad',
@@ -115,7 +120,8 @@ export const resumeTemplates: Template[] = [
     id: 'creative-2',
     name: 'Artistic Expression',
     category: 'Creative',
-    description: 'Bold and expressive design for creative industries and portfolio showcases.',
+    description:
+      'Bold and expressive design for creative industries and portfolio showcases.',
     preview: '/templates/creative-2-preview.jpg',
     colors: {
       primary: '#2980b9',
@@ -137,7 +143,8 @@ export const resumeTemplates: Template[] = [
     id: 'technical-1',
     name: 'Developer Focus',
     category: 'Technical',
-    description: 'A technical layout optimized for software developers and IT professionals.',
+    description:
+      'A technical layout optimized for software developers and IT professionals.',
     preview: '/templates/technical-1-preview.jpg',
     colors: {
       primary: '#1e3a8a',
@@ -159,7 +166,8 @@ export const resumeTemplates: Template[] = [
     id: 'technical-2',
     name: 'Engineering Pro',
     category: 'Technical',
-    description: 'Professional layout for engineers, researchers, and technical specialists.',
+    description:
+      'Professional layout for engineers, researchers, and technical specialists.',
     preview: '/templates/technical-2-preview.jpg',
     colors: {
       primary: '#065f46',
@@ -181,7 +189,8 @@ export const resumeTemplates: Template[] = [
     id: 'executive-1',
     name: 'Leadership Elite',
     category: 'Executive',
-    description: 'Premium design for C-level executives and senior leadership positions.',
+    description:
+      'Premium design for C-level executives and senior leadership positions.',
     preview: '/templates/executive-1-preview.jpg',
     colors: {
       primary: '#1f2937',
@@ -203,7 +212,8 @@ export const resumeTemplates: Template[] = [
     id: 'executive-2',
     name: 'Corporate Excellence',
     category: 'Executive',
-    description: 'Sophisticated design emphasizing leadership experience and achievements.',
+    description:
+      'Sophisticated design emphasizing leadership experience and achievements.',
     preview: '/templates/executive-2-preview.jpg',
     colors: {
       primary: '#0f172a',
@@ -227,7 +237,9 @@ export const getTemplateById = (id: string): Template | undefined => {
   return resumeTemplates.find(template => template.id === id);
 };
 
-export const getTemplatesByCategory = (category: Template['category']): Template[] => {
+export const getTemplatesByCategory = (
+  category: Template['category']
+): Template[] => {
   return resumeTemplates.filter(template => template.category === category);
 };
 

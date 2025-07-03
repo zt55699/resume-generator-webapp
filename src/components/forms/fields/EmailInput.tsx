@@ -32,12 +32,12 @@ const EmailInput: React.FC<EmailInputProps> = ({
 
   return (
     <div className={`form-field ${className} ${error ? 'error' : ''}`}>
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name} className='form-label'>
         {label}
-        {required && <span className="required">*</span>}
+        {required && <span className='required'>*</span>}
       </label>
       <input
-        type="email"
+        type='email'
         id={name}
         name={name}
         value={value}
@@ -45,13 +45,13 @@ const EmailInput: React.FC<EmailInputProps> = ({
         onBlur={onBlur}
         placeholder={placeholder}
         disabled={disabled}
-        className="form-input"
+        className='form-input'
         aria-invalid={error ? 'true' : 'false'}
         aria-describedby={error ? `${name}-error` : undefined}
-        autoComplete="email"
+        autoComplete='email'
       />
       {error && (
-        <div id={`${name}-error`} className="form-error" role="alert">
+        <div id={`${name}-error`} className='form-error' role='alert'>
           {error}
         </div>
       )}

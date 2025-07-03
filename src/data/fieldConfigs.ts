@@ -62,7 +62,8 @@ export const defaultFieldConfigs: FieldConfig[] = [
     name: 'summary',
     type: 'textarea',
     label: 'Professional Summary',
-    placeholder: 'Write a brief summary of your professional background and career objectives...',
+    placeholder:
+      'Write a brief summary of your professional background and career objectives...',
     required: false,
     validation: {
       maxLength: 1000,

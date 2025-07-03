@@ -15,17 +15,32 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
   isLoading,
   error,
 }) => {
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
+    null
+  );
   const [isEditing, setIsEditing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState<Template['category'] | 'all'>('all');
+  const [filterCategory, setFilterCategory] = useState<
+    Template['category'] | 'all'
+  >('all');
 
-  const categories: (Template['category'] | 'all')[] = ['all', 'Traditional', 'Modern', 'Creative', 'Technical', 'Executive'];
+  const categories: (Template['category'] | 'all')[] = [
+    'all',
+    'Traditional',
+    'Modern',
+    'Creative',
+    'Technical',
+    'Executive',
+  ];
 
-  const filteredTemplates = (templates.length > 0 ? templates : resumeTemplates).filter(template => {
-    const matchesSearch = template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         template.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || template.category === filterCategory;
+  const filteredTemplates = (
+    templates.length > 0 ? templates : resumeTemplates
+  ).filter(template => {
+    const matchesSearch =
+      template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      template.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      filterCategory === 'all' || template.category === filterCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -37,7 +52,8 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
   const handleSaveTemplate = () => {
     if (!selectedTemplate) return;
 
-    const existingTemplates = templates.length > 0 ? templates : resumeTemplates;
+    const existingTemplates =
+      templates.length > 0 ? templates : resumeTemplates;
     const updatedTemplates = existingTemplates.map(template =>
       template.id === selectedTemplate.id ? selectedTemplate : template
     );
@@ -82,8 +98,11 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
 
   const handleDeleteTemplate = (templateId: string) => {
     if (window.confirm('Are you sure you want to delete this template?')) {
-      const existingTemplates = templates.length > 0 ? templates : resumeTemplates;
-      const updatedTemplates = existingTemplates.filter(template => template.id !== templateId);
+      const existingTemplates =
+        templates.length > 0 ? templates : resumeTemplates;
+      const updatedTemplates = existingTemplates.filter(
+        template => template.id !== templateId
+      );
       onUpdate(updatedTemplates);
     }
   };
@@ -95,12 +114,16 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
       name: `${template.name} (Copy)`,
     };
 
-    const existingTemplates = templates.length > 0 ? templates : resumeTemplates;
+    const existingTemplates =
+      templates.length > 0 ? templates : resumeTemplates;
     const updatedTemplates = [...existingTemplates, duplicatedTemplate];
     onUpdate(updatedTemplates);
   };
 
-  const handleTemplatePropertyChange = (property: keyof Template, value: any) => {
+  const handleTemplatePropertyChange = (
+    property: keyof Template,
+    value: any
+  ) => {
     if (!selectedTemplate) return;
 
     setSelectedTemplate({
@@ -109,7 +132,10 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
     });
   };
 
-  const handleColorChange = (colorKey: keyof Template['colors'], value: string) => {
+  const handleColorChange = (
+    colorKey: keyof Template['colors'],
+    value: string
+  ) => {
     if (!selectedTemplate) return;
 
     setSelectedTemplate({
@@ -121,7 +147,10 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
     });
   };
 
-  const handleFontChange = (fontKey: keyof Template['fonts'], value: string) => {
+  const handleFontChange = (
+    fontKey: keyof Template['fonts'],
+    value: string
+  ) => {
     if (!selectedTemplate) return;
 
     setSelectedTemplate({
@@ -134,36 +163,38 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
   };
 
   return (
-    <div className="template-manager">
-      <div className="template-manager-header">
+    <div className='template-manager'>
+      <div className='template-manager-header'>
         <h3>Template Management</h3>
-        <button className="add-template-button" onClick={handleCreateTemplate}>
+        <button className='add-template-button' onClick={handleCreateTemplate}>
           <span>+</span>
           Create New Template
         </button>
       </div>
 
       {error && (
-        <div className="error-message">
+        <div className='error-message'>
           <p>{error}</p>
         </div>
       )}
 
-      <div className="template-filters">
-        <div className="filter-group">
+      <div className='template-filters'>
+        <div className='filter-group'>
           <input
-            type="text"
-            placeholder="Search templates..."
+            type='text'
+            placeholder='Search templates...'
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
+            onChange={e => setSearchTerm(e.target.value)}
+            className='search-input'
           />
         </div>
-        <div className="filter-group">
+        <div className='filter-group'>
           <select
             value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value as Template['category'] | 'all')}
-            className="category-filter"
+            onChange={e =>
+              setFilterCategory(e.target.value as Template['category'] | 'all')
+            }
+            className='category-filter'
           >
             {categories.map(category => (
               <option key={category} value={category}>
@@ -175,229 +206,289 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
       </div>
 
       {isEditing && selectedTemplate && (
-        <div className="template-editor-modal">
-          <div className="template-editor">
-            <div className="template-editor-header">
+        <div className='template-editor-modal'>
+          <div className='template-editor'>
+            <div className='template-editor-header'>
               <h4>Edit Template: {selectedTemplate.name}</h4>
-              <button className="close-editor-button" onClick={handleCancelEdit}>
+              <button
+                className='close-editor-button'
+                onClick={handleCancelEdit}
+              >
                 ×
               </button>
             </div>
 
-            <div className="template-editor-content">
-              <div className="template-editor-form">
-                <div className="form-section">
+            <div className='template-editor-content'>
+              <div className='template-editor-form'>
+                <div className='form-section'>
                   <h5>Basic Information</h5>
-                  <div className="form-grid">
-                    <div className="form-group">
+                  <div className='form-grid'>
+                    <div className='form-group'>
                       <label>Template Name</label>
                       <input
-                        type="text"
+                        type='text'
                         value={selectedTemplate.name}
-                        onChange={(e) => handleTemplatePropertyChange('name', e.target.value)}
+                        onChange={e =>
+                          handleTemplatePropertyChange('name', e.target.value)
+                        }
                       />
                     </div>
 
-                    <div className="form-group">
+                    <div className='form-group'>
                       <label>Category</label>
                       <select
                         value={selectedTemplate.category}
-                        onChange={(e) => handleTemplatePropertyChange('category', e.target.value)}
+                        onChange={e =>
+                          handleTemplatePropertyChange(
+                            'category',
+                            e.target.value
+                          )
+                        }
                       >
-                        {categories.filter(cat => cat !== 'all').map(category => (
-                          <option key={category} value={category}>{category}</option>
-                        ))}
+                        {categories
+                          .filter(cat => cat !== 'all')
+                          .map(category => (
+                            <option key={category} value={category}>
+                              {category}
+                            </option>
+                          ))}
                       </select>
                     </div>
 
-                    <div className="form-group">
+                    <div className='form-group'>
                       <label>Layout</label>
                       <select
                         value={selectedTemplate.layout}
-                        onChange={(e) => handleTemplatePropertyChange('layout', e.target.value)}
+                        onChange={e =>
+                          handleTemplatePropertyChange('layout', e.target.value)
+                        }
                       >
-                        <option value="single-column">Single Column</option>
-                        <option value="two-column">Two Column</option>
-                        <option value="three-column">Three Column</option>
+                        <option value='single-column'>Single Column</option>
+                        <option value='two-column'>Two Column</option>
+                        <option value='three-column'>Three Column</option>
                       </select>
                     </div>
 
-                    <div className="form-group full-width">
+                    <div className='form-group full-width'>
                       <label>Description</label>
                       <textarea
                         value={selectedTemplate.description}
-                        onChange={(e) => handleTemplatePropertyChange('description', e.target.value)}
+                        onChange={e =>
+                          handleTemplatePropertyChange(
+                            'description',
+                            e.target.value
+                          )
+                        }
                         rows={3}
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="form-section">
+                <div className='form-section'>
                   <h5>Color Scheme</h5>
-                  <div className="color-grid">
-                    <div className="color-group">
+                  <div className='color-grid'>
+                    <div className='color-group'>
                       <label>Primary Color</label>
-                      <div className="color-input-group">
+                      <div className='color-input-group'>
                         <input
-                          type="color"
+                          type='color'
                           value={selectedTemplate.colors.primary}
-                          onChange={(e) => handleColorChange('primary', e.target.value)}
+                          onChange={e =>
+                            handleColorChange('primary', e.target.value)
+                          }
                         />
                         <input
-                          type="text"
+                          type='text'
                           value={selectedTemplate.colors.primary}
-                          onChange={(e) => handleColorChange('primary', e.target.value)}
-                          placeholder="#000000"
+                          onChange={e =>
+                            handleColorChange('primary', e.target.value)
+                          }
+                          placeholder='#000000'
                         />
                       </div>
                     </div>
 
-                    <div className="color-group">
+                    <div className='color-group'>
                       <label>Secondary Color</label>
-                      <div className="color-input-group">
+                      <div className='color-input-group'>
                         <input
-                          type="color"
+                          type='color'
                           value={selectedTemplate.colors.secondary}
-                          onChange={(e) => handleColorChange('secondary', e.target.value)}
+                          onChange={e =>
+                            handleColorChange('secondary', e.target.value)
+                          }
                         />
                         <input
-                          type="text"
+                          type='text'
                           value={selectedTemplate.colors.secondary}
-                          onChange={(e) => handleColorChange('secondary', e.target.value)}
-                          placeholder="#000000"
+                          onChange={e =>
+                            handleColorChange('secondary', e.target.value)
+                          }
+                          placeholder='#000000'
                         />
                       </div>
                     </div>
 
-                    <div className="color-group">
+                    <div className='color-group'>
                       <label>Accent Color</label>
-                      <div className="color-input-group">
+                      <div className='color-input-group'>
                         <input
-                          type="color"
+                          type='color'
                           value={selectedTemplate.colors.accent}
-                          onChange={(e) => handleColorChange('accent', e.target.value)}
+                          onChange={e =>
+                            handleColorChange('accent', e.target.value)
+                          }
                         />
                         <input
-                          type="text"
+                          type='text'
                           value={selectedTemplate.colors.accent}
-                          onChange={(e) => handleColorChange('accent', e.target.value)}
-                          placeholder="#000000"
+                          onChange={e =>
+                            handleColorChange('accent', e.target.value)
+                          }
+                          placeholder='#000000'
                         />
                       </div>
                     </div>
 
-                    <div className="color-group">
+                    <div className='color-group'>
                       <label>Text Color</label>
-                      <div className="color-input-group">
+                      <div className='color-input-group'>
                         <input
-                          type="color"
+                          type='color'
                           value={selectedTemplate.colors.text}
-                          onChange={(e) => handleColorChange('text', e.target.value)}
+                          onChange={e =>
+                            handleColorChange('text', e.target.value)
+                          }
                         />
                         <input
-                          type="text"
+                          type='text'
                           value={selectedTemplate.colors.text}
-                          onChange={(e) => handleColorChange('text', e.target.value)}
-                          placeholder="#000000"
+                          onChange={e =>
+                            handleColorChange('text', e.target.value)
+                          }
+                          placeholder='#000000'
                         />
                       </div>
                     </div>
 
-                    <div className="color-group">
+                    <div className='color-group'>
                       <label>Background Color</label>
-                      <div className="color-input-group">
+                      <div className='color-input-group'>
                         <input
-                          type="color"
+                          type='color'
                           value={selectedTemplate.colors.background}
-                          onChange={(e) => handleColorChange('background', e.target.value)}
+                          onChange={e =>
+                            handleColorChange('background', e.target.value)
+                          }
                         />
                         <input
-                          type="text"
+                          type='text'
                           value={selectedTemplate.colors.background}
-                          onChange={(e) => handleColorChange('background', e.target.value)}
-                          placeholder="#ffffff"
+                          onChange={e =>
+                            handleColorChange('background', e.target.value)
+                          }
+                          placeholder='#ffffff'
                         />
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="form-section">
+                <div className='form-section'>
                   <h5>Typography</h5>
-                  <div className="form-grid">
-                    <div className="form-group">
+                  <div className='form-grid'>
+                    <div className='form-group'>
                       <label>Primary Font</label>
                       <input
-                        type="text"
+                        type='text'
                         value={selectedTemplate.fonts.primary}
-                        onChange={(e) => handleFontChange('primary', e.target.value)}
-                        placeholder="Arial, sans-serif"
+                        onChange={e =>
+                          handleFontChange('primary', e.target.value)
+                        }
+                        placeholder='Arial, sans-serif'
                       />
                     </div>
 
-                    <div className="form-group">
+                    <div className='form-group'>
                       <label>Secondary Font</label>
                       <input
-                        type="text"
+                        type='text'
                         value={selectedTemplate.fonts.secondary}
-                        onChange={(e) => handleFontChange('secondary', e.target.value)}
-                        placeholder="Times New Roman, serif"
+                        onChange={e =>
+                          handleFontChange('secondary', e.target.value)
+                        }
+                        placeholder='Times New Roman, serif'
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="form-section">
+                <div className='form-section'>
                   <h5>Compatibility</h5>
-                  <div className="checkbox-grid">
-                    <div className="checkbox-group">
+                  <div className='checkbox-grid'>
+                    <div className='checkbox-group'>
                       <input
-                        type="checkbox"
-                        id="supportsPrint"
+                        type='checkbox'
+                        id='supportsPrint'
                         checked={selectedTemplate.supportsPrint}
-                        onChange={(e) => handleTemplatePropertyChange('supportsPrint', e.target.checked)}
+                        onChange={e =>
+                          handleTemplatePropertyChange(
+                            'supportsPrint',
+                            e.target.checked
+                          )
+                        }
                       />
-                      <label htmlFor="supportsPrint">Print Support</label>
+                      <label htmlFor='supportsPrint'>Print Support</label>
                     </div>
 
-                    <div className="checkbox-group">
+                    <div className='checkbox-group'>
                       <input
-                        type="checkbox"
-                        id="supportsMobile"
+                        type='checkbox'
+                        id='supportsMobile'
                         checked={selectedTemplate.supportsMobile}
-                        onChange={(e) => handleTemplatePropertyChange('supportsMobile', e.target.checked)}
+                        onChange={e =>
+                          handleTemplatePropertyChange(
+                            'supportsMobile',
+                            e.target.checked
+                          )
+                        }
                       />
-                      <label htmlFor="supportsMobile">Mobile Support</label>
+                      <label htmlFor='supportsMobile'>Mobile Support</label>
                     </div>
 
-                    <div className="checkbox-group">
+                    <div className='checkbox-group'>
                       <input
-                        type="checkbox"
-                        id="supportsWechat"
+                        type='checkbox'
+                        id='supportsWechat'
                         checked={selectedTemplate.supportsWechat}
-                        onChange={(e) => handleTemplatePropertyChange('supportsWechat', e.target.checked)}
+                        onChange={e =>
+                          handleTemplatePropertyChange(
+                            'supportsWechat',
+                            e.target.checked
+                          )
+                        }
                       />
-                      <label htmlFor="supportsWechat">WeChat Support</label>
+                      <label htmlFor='supportsWechat'>WeChat Support</label>
                     </div>
                   </div>
                 </div>
 
-                <div className="template-editor-actions">
-                  <button className="cancel-button" onClick={handleCancelEdit}>
+                <div className='template-editor-actions'>
+                  <button className='cancel-button' onClick={handleCancelEdit}>
                     Cancel
                   </button>
-                  <button className="save-button" onClick={handleSaveTemplate}>
+                  <button className='save-button' onClick={handleSaveTemplate}>
                     Save Template
                   </button>
                 </div>
               </div>
 
-              <div className="template-preview-section">
+              <div className='template-preview-section'>
                 <h5>Live Preview</h5>
-                <div className="template-preview-container">
+                <div className='template-preview-container'>
                   <div
-                    className="template-preview-sample"
+                    className='template-preview-sample'
                     style={{
                       backgroundColor: selectedTemplate.colors.background,
                       color: selectedTemplate.colors.text,
@@ -405,7 +496,7 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
                     }}
                   >
                     <div
-                      className="preview-header"
+                      className='preview-header'
                       style={{
                         backgroundColor: selectedTemplate.colors.primary,
                         color: selectedTemplate.colors.background,
@@ -413,7 +504,12 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
                         marginBottom: '1rem',
                       }}
                     >
-                      <h3 style={{ margin: 0, fontFamily: selectedTemplate.fonts.primary }}>
+                      <h3
+                        style={{
+                          margin: 0,
+                          fontFamily: selectedTemplate.fonts.primary,
+                        }}
+                      >
                         John Doe
                       </h3>
                       <p style={{ margin: '0.5rem 0 0 0', opacity: 0.9 }}>
@@ -432,14 +528,32 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
                         Experience
                       </h4>
                       <div style={{ marginTop: '1rem' }}>
-                        <h5 style={{ color: selectedTemplate.colors.accent, margin: '0 0 0.25rem 0' }}>
+                        <h5
+                          style={{
+                            color: selectedTemplate.colors.accent,
+                            margin: '0 0 0.25rem 0',
+                          }}
+                        >
                           Senior Developer
                         </h5>
-                        <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.9rem', color: selectedTemplate.colors.secondary }}>
+                        <p
+                          style={{
+                            margin: '0 0 0.5rem 0',
+                            fontSize: '0.9rem',
+                            color: selectedTemplate.colors.secondary,
+                          }}
+                        >
                           Tech Company • 2020 - Present
                         </p>
-                        <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: 1.5 }}>
-                          Led development of innovative web applications using modern technologies.
+                        <p
+                          style={{
+                            margin: 0,
+                            fontSize: '0.9rem',
+                            lineHeight: 1.5,
+                          }}
+                        >
+                          Led development of innovative web applications using
+                          modern technologies.
                         </p>
                       </div>
                     </div>
@@ -451,47 +565,54 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
         </div>
       )}
 
-      <div className="template-grid">
+      <div className='template-grid'>
         {filteredTemplates.map(template => (
-          <div key={template.id} className="template-card">
-            <div className="template-preview">
+          <div key={template.id} className='template-card'>
+            <div className='template-preview'>
               <img
                 src={template.preview}
                 alt={template.name}
-                onError={(e) => {
-                  e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzZiNzI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIFByZXZpZXc8L3RleHQ+PC9zdmc+';
+                onError={e => {
+                  e.currentTarget.src =
+                    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzZiNzI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIFByZXZpZXc8L3RleHQ+PC9zdmc+';
                 }}
               />
-              <div className="template-category-badge">{template.category}</div>
+              <div className='template-category-badge'>{template.category}</div>
             </div>
 
-            <div className="template-info">
-              <div className="template-name">{template.name}</div>
-              <div className="template-description">{template.description}</div>
+            <div className='template-info'>
+              <div className='template-name'>{template.name}</div>
+              <div className='template-description'>{template.description}</div>
 
-              <div className="template-features">
-                {template.supportsPrint && <span className="template-feature">Print</span>}
-                {template.supportsMobile && <span className="template-feature">Mobile</span>}
-                {template.supportsWechat && <span className="template-feature">WeChat</span>}
-                <span className="template-feature">{template.layout}</span>
+              <div className='template-features'>
+                {template.supportsPrint && (
+                  <span className='template-feature'>Print</span>
+                )}
+                {template.supportsMobile && (
+                  <span className='template-feature'>Mobile</span>
+                )}
+                {template.supportsWechat && (
+                  <span className='template-feature'>WeChat</span>
+                )}
+                <span className='template-feature'>{template.layout}</span>
               </div>
 
-              <div className="template-actions">
+              <div className='template-actions'>
                 <button
-                  className="template-action-button primary"
+                  className='template-action-button primary'
                   onClick={() => handleEditTemplate(template)}
                 >
                   Edit
                 </button>
                 <button
-                  className="template-action-button secondary"
+                  className='template-action-button secondary'
                   onClick={() => handleDuplicateTemplate(template)}
                 >
                   Duplicate
                 </button>
                 {!resumeTemplates.find(t => t.id === template.id) && (
                   <button
-                    className="template-action-button delete"
+                    className='template-action-button delete'
                     onClick={() => handleDeleteTemplate(template.id)}
                   >
                     Delete
@@ -504,7 +625,7 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
       </div>
 
       {filteredTemplates.length === 0 && !isLoading && (
-        <div className="empty-state">
+        <div className='empty-state'>
           <p>No templates found matching your criteria.</p>
         </div>
       )}

@@ -28,67 +28,68 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser, onLogout }) => {
   const hasAdminAccess = currentUser.role.permissions.includes('admin:read');
 
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <div className="navbar-brand">
-          <Link to="/" className="brand-link">
-            <span className="brand-icon">📄</span>
-            <span className="brand-text">Resume Generator</span>
+    <nav className='navbar'>
+      <div className='navbar-container'>
+        <div className='navbar-brand'>
+          <Link to='/' className='brand-link'>
+            <span className='brand-icon'>📄</span>
+            <span className='brand-text'>Resume Generator</span>
           </Link>
         </div>
 
         <div className={`navbar-menu ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
-          <div className="navbar-nav">
-            {navigation.map((item) => (
+          <div className='navbar-nav'>
+            {navigation.map(item => (
               <Link
                 key={item.name}
                 to={item.href}
                 className={`nav-link ${isActive(item.href) ? 'active' : ''}`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <span className="nav-icon">{item.icon}</span>
-                <span className="nav-text">{item.name}</span>
+                <span className='nav-icon'>{item.icon}</span>
+                <span className='nav-text'>{item.name}</span>
               </Link>
             ))}
-            
+
             {hasAdminAccess && (
               <Link
-                to="/admin"
+                to='/admin'
                 className={`nav-link ${isActive('/admin') ? 'active' : ''}`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <span className="nav-icon">⚙️</span>
-                <span className="nav-text">{t('nav.admin')}</span>
+                <span className='nav-icon'>⚙️</span>
+                <span className='nav-text'>{t('nav.admin')}</span>
               </Link>
             )}
           </div>
 
-          <div className="navbar-user">
+          <div className='navbar-user'>
             <LanguageSwitcher />
-            <div className="user-dropdown">
-              <button className="user-button">
-                <div className="user-avatar">
-                  <span className="avatar-text">
+            <div className='user-dropdown'>
+              <button className='user-button'>
+                <div className='user-avatar'>
+                  <span className='avatar-text'>
                     {currentUser.name.charAt(0).toUpperCase()}
                   </span>
                 </div>
-                <div className="user-info">
-                  <div className="user-name">{currentUser.name}</div>
-                  <div className="user-role">{currentUser.role.name}</div>
+                <div className='user-info'>
+                  <div className='user-name'>{currentUser.name}</div>
+                  <div className='user-role'>{currentUser.role.name}</div>
                 </div>
-                <span className="dropdown-arrow">▼</span>
+                <span className='dropdown-arrow'>▼</span>
               </button>
-              
-              <div className="dropdown-menu">
-                <div className="dropdown-header">
-                  <div className="user-email">{currentUser.email}</div>
-                  <div className="user-last-login">
-                    Last login: {new Date(currentUser.lastLogin).toLocaleDateString()}
+
+              <div className='dropdown-menu'>
+                <div className='dropdown-header'>
+                  <div className='user-email'>{currentUser.email}</div>
+                  <div className='user-last-login'>
+                    Last login:{' '}
+                    {new Date(currentUser.lastLogin).toLocaleDateString()}
                   </div>
                 </div>
-                <div className="dropdown-divider"></div>
-                <button className="dropdown-item" onClick={onLogout}>
-                  <span className="item-icon">🚪</span>
+                <div className='dropdown-divider'></div>
+                <button className='dropdown-item' onClick={onLogout}>
+                  <span className='item-icon'>🚪</span>
                   <span>{t('nav.logout')}</span>
                 </button>
               </div>
@@ -97,10 +98,10 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser, onLogout }) => {
         </div>
 
         <button
-          className="mobile-menu-button"
+          className='mobile-menu-button'
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
-          <span className="hamburger">
+          <span className='hamburger'>
             <span></span>
             <span></span>
             <span></span>

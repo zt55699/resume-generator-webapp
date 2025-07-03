@@ -1,15 +1,38 @@
-import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, WidthType, Table, TableRow, TableCell, ImageRun } from 'docx';
+import {
+  Document,
+  Packer,
+  Paragraph,
+  TextRun,
+  HeadingLevel,
+  AlignmentType,
+  BorderStyle,
+  WidthType,
+  Table,
+  TableRow,
+  TableCell,
+  ImageRun,
+} from 'docx';
 import { ResumeData, Template, ExportOptions } from '../../types';
 import { downloadFile } from '../../utils/fileUtils';
 
 class DocxExporter {
-  static async export(resumeData: ResumeData, template: Template, options: ExportOptions): Promise<boolean> {
+  static async export(
+    resumeData: ResumeData,
+    template: Template,
+    options: ExportOptions
+  ): Promise<boolean> {
     try {
       const doc = await this.createDocument(resumeData, template, options);
       const buffer = await Packer.toBuffer(doc);
-      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      const blob = new Blob([buffer], {
+        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      });
       const filename = this.generateFilename(resumeData);
-      downloadFile(blob, filename, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+      downloadFile(
+        blob,
+        filename,
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      );
       return true;
     } catch (error) {
       console.error('DOCX export failed:', error);
@@ -17,9 +40,13 @@ class DocxExporter {
     }
   }
 
-  private static async createDocument(resumeData: ResumeData, template: Template, options: ExportOptions): Promise<Document> {
+  private static async createDocument(
+    resumeData: ResumeData,
+    template: Template,
+    options: ExportOptions
+  ): Promise<Document> {
     const { personalInfo, experience, education } = resumeData;
-    
+
     const children: any[] = [];
 
     // Header with name and contact info
@@ -46,7 +73,7 @@ class DocxExporter {
       `📞 ${personalInfo.phone}`,
       `📍 ${personalInfo.city}, ${personalInfo.state}`,
     ];
-    
+
     if (personalInfo.website) contactInfo.push(`🌐 ${personalInfo.website}`);
     if (personalInfo.linkedin) contactInfo.push(`💼 ${personalInfo.linkedin}`);
     if (personalInfo.github) contactInfo.push(`💻 ${personalInfo.github}`);
@@ -83,24 +110,30 @@ class DocxExporter {
 
     // Professional Summary
     if (personalInfo.summary) {
-      children.push(...this.createSection('Professional Summary', [
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: personalInfo.summary,
-              size: 22,
+      children.push(
+        ...this.createSection(
+          'Professional Summary',
+          [
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: personalInfo.summary,
+                  size: 22,
+                }),
+              ],
+              spacing: { after: 200 },
+              alignment: AlignmentType.JUSTIFIED,
             }),
           ],
-          spacing: { after: 200 },
-          alignment: AlignmentType.JUSTIFIED,
-        }),
-      ], template));
+          template
+        )
+      );
     }
 
     // Professional Experience
     if (experience.length > 0) {
       const experienceContent: any[] = [];
-      
+
       experience.forEach((exp, index) => {
         // Job title and company
         experienceContent.push(
@@ -168,13 +201,19 @@ class DocxExporter {
         }
       });
 
-      children.push(...this.createSection('Professional Experience', experienceContent, template));
+      children.push(
+        ...this.createSection(
+          'Professional Experience',
+          experienceContent,
+          template
+        )
+      );
     }
 
     // Education
     if (education.length > 0) {
       const educationContent: any[] = [];
-      
+
       education.forEach((edu, index) => {
         educationContent.push(
           new Paragraph({
@@ -204,15 +243,19 @@ class DocxExporter {
                 size: 20,
                 color: this.hexToDocxColor(template.colors.secondary),
               }),
-              ...(edu.gpa ? [
-                new TextRun({
-                  text: ` | GPA: ${edu.gpa}`,
-                  size: 20,
-                  color: this.hexToDocxColor(template.colors.secondary),
-                }),
-              ] : []),
+              ...(edu.gpa
+                ? [
+                    new TextRun({
+                      text: ` | GPA: ${edu.gpa}`,
+                      size: 20,
+                      color: this.hexToDocxColor(template.colors.secondary),
+                    }),
+                  ]
+                : []),
             ],
-            spacing: { after: edu.description || edu.achievements.length > 0 ? 100 : 200 },
+            spacing: {
+              after: edu.description || edu.achievements.length > 0 ? 100 : 200,
+            },
           })
         );
 
@@ -248,10 +291,10 @@ class DocxExporter {
         }
       });
 
-      children.push(...this.createSection('Education', educationContent, template));
+      children.push(
+        ...this.createSection('Education', educationContent, template)
+      );
     }
-
-
 
     return new Document({
       sections: [
@@ -266,8 +309,18 @@ class DocxExporter {
               },
               size: {
                 orientation: 'portrait',
-                width: options.paperSize === 'letter' ? 12240 : options.paperSize === 'legal' ? 12240 : 11906, // twips
-                height: options.paperSize === 'letter' ? 15840 : options.paperSize === 'legal' ? 20160 : 16838, // twips
+                width:
+                  options.paperSize === 'letter'
+                    ? 12240
+                    : options.paperSize === 'legal'
+                      ? 12240
+                      : 11906, // twips
+                height:
+                  options.paperSize === 'letter'
+                    ? 15840
+                    : options.paperSize === 'legal'
+                      ? 20160
+                      : 16838, // twips
               },
             },
           },
@@ -277,7 +330,11 @@ class DocxExporter {
     });
   }
 
-  private static createSection(title: string, content: any[], template: Template): any[] {
+  private static createSection(
+    title: string,
+    content: any[],
+    template: Template
+  ): any[] {
     return [
       new Paragraph({
         children: [
@@ -303,7 +360,6 @@ class DocxExporter {
       ...content,
     ];
   }
-
 
   private static hexToDocxColor(hex: string): string {
     // Remove # if present and convert to uppercase

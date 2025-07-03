@@ -41,8 +41,8 @@ export const configureWeChatShare = (config: WeChatShareConfig): void => {
         'updateAppMessageShareData',
         'updateTimelineShareData',
         'onMenuShareTimeline',
-        'onMenuShareAppMessage'
-      ]
+        'onMenuShareAppMessage',
+      ],
     });
 
     (window as any).wx.ready(() => {
@@ -53,7 +53,7 @@ export const configureWeChatShare = (config: WeChatShareConfig): void => {
         link: config.link,
         imgUrl: config.imgUrl,
         success: () => console.log('WeChat share configured successfully'),
-        cancel: () => console.log('WeChat share cancelled')
+        cancel: () => console.log('WeChat share cancelled'),
       });
 
       // Share to timeline
@@ -61,8 +61,9 @@ export const configureWeChatShare = (config: WeChatShareConfig): void => {
         title: config.title,
         link: config.link,
         imgUrl: config.imgUrl,
-        success: () => console.log('WeChat timeline share configured successfully'),
-        cancel: () => console.log('WeChat timeline share cancelled')
+        success: () =>
+          console.log('WeChat timeline share configured successfully'),
+        cancel: () => console.log('WeChat timeline share cancelled'),
       });
     });
   }
@@ -74,26 +75,35 @@ export const enableMobileOptimizations = (): void => {
 
   // Prevent zoom on double tap
   let lastTouchEnd = 0;
-  document.addEventListener('touchend', (event) => {
-    const now = new Date().getTime();
-    if (now - lastTouchEnd <= 300) {
-      event.preventDefault();
-    }
-    lastTouchEnd = now;
-  }, false);
+  document.addEventListener(
+    'touchend',
+    event => {
+      const now = new Date().getTime();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    },
+    false
+  );
 
   // Prevent pull-to-refresh on iOS
-  document.addEventListener('touchmove', (event) => {
-    if (event.touches.length > 1) {
-      event.preventDefault();
-    }
-  }, { passive: false });
+  document.addEventListener(
+    'touchmove',
+    event => {
+      if (event.touches.length > 1) {
+        event.preventDefault();
+      }
+    },
+    { passive: false }
+  );
 
   // Add mobile viewport meta tag if not present
   if (!document.querySelector('meta[name="viewport"]')) {
     const viewport = document.createElement('meta');
     viewport.name = 'viewport';
-    viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover';
+    viewport.content =
+      'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover';
     document.head.appendChild(viewport);
   }
 };
@@ -102,7 +112,7 @@ export const enableMobileOptimizations = (): void => {
 export const navigateInMiniProgram = (path: string): void => {
   if (isWeChatMiniProgram() && (window as any).wx) {
     (window as any).wx.miniProgram.navigateTo({
-      url: path
+      url: path,
     });
   } else {
     window.location.href = path;
@@ -115,7 +125,7 @@ export const getDeviceInfo = () => {
   const isIOS = /iPad|iPhone|iPod/.test(ua);
   const isAndroid = /Android/.test(ua);
   const isMobile = /Mobi|Android/i.test(ua);
-  
+
   return {
     isIOS,
     isAndroid,
@@ -124,7 +134,7 @@ export const getDeviceInfo = () => {
     isMiniProgram: isWeChatMiniProgram(),
     screenWidth: window.screen.width,
     screenHeight: window.screen.height,
-    pixelRatio: window.devicePixelRatio || 1
+    pixelRatio: window.devicePixelRatio || 1,
   };
 };
 
@@ -133,7 +143,13 @@ export const optimizeForWeChat = (): void => {
   // Preload critical resources
   const preloadLinks = [
     { rel: 'preload', as: 'style', href: '/static/css/wechat.css' },
-    { rel: 'preload', as: 'font', href: '/static/fonts/wechat-icons.woff2', type: 'font/woff2', crossorigin: 'anonymous' }
+    {
+      rel: 'preload',
+      as: 'font',
+      href: '/static/fonts/wechat-icons.woff2',
+      type: 'font/woff2',
+      crossorigin: 'anonymous',
+    },
   ];
 
   preloadLinks.forEach(link => {
@@ -146,7 +162,7 @@ export const optimizeForWeChat = (): void => {
 
   // Lazy load non-critical images
   const images = document.querySelectorAll('img[data-src]');
-  const imageObserver = new IntersectionObserver((entries) => {
+  const imageObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const img = entry.target as HTMLImageElement;
@@ -169,13 +185,17 @@ export const initWeChatPay = (config: any): Promise<any> => {
     }
 
     if ((window as any).WeixinJSBridge) {
-      (window as any).WeixinJSBridge.invoke('getBrandWCPayRequest', config, (res: any) => {
-        if (res.err_msg === 'get_brand_wcpay_request:ok') {
-          resolve(res);
-        } else {
-          reject(new Error(res.err_msg));
+      (window as any).WeixinJSBridge.invoke(
+        'getBrandWCPayRequest',
+        config,
+        (res: any) => {
+          if (res.err_msg === 'get_brand_wcpay_request:ok') {
+            resolve(res);
+          } else {
+            reject(new Error(res.err_msg));
+          }
         }
-      });
+      );
     } else {
       reject(new Error('WeChat Pay not available'));
     }
@@ -220,16 +240,19 @@ export const wechatStorage = {
     } catch (error) {
       console.error('Failed to remove storage:', error);
     }
-  }
+  },
 };
 
 // Network request optimization for WeChat
-export const wechatRequest = async (url: string, options: RequestInit = {}): Promise<Response> => {
+export const wechatRequest = async (
+  url: string,
+  options: RequestInit = {}
+): Promise<Response> => {
   // Add WeChat-specific headers
   const headers = {
     'Content-Type': 'application/json',
     'User-Agent': navigator.userAgent,
-    ...options.headers
+    ...options.headers,
   };
 
   // Add timeout for WeChat environment
@@ -240,7 +263,7 @@ export const wechatRequest = async (url: string, options: RequestInit = {}): Pro
     const response = await fetch(url, {
       ...options,
       headers,
-      signal: controller.signal
+      signal: controller.signal,
     });
 
     clearTimeout(timeoutId);
@@ -252,8 +275,11 @@ export const wechatRequest = async (url: string, options: RequestInit = {}): Pro
 };
 
 // Image compression for WeChat sharing
-export const compressImageForWeChat = (file: File, maxSize: number = 500): Promise<File> => {
-  return new Promise((resolve) => {
+export const compressImageForWeChat = (
+  file: File,
+  maxSize: number = 500
+): Promise<File> => {
+  return new Promise(resolve => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
@@ -274,18 +300,22 @@ export const compressImageForWeChat = (file: File, maxSize: number = 500): Promi
 
       // Draw and compress
       ctx?.drawImage(img, 0, 0, width, height);
-      
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const compressedFile = new File([blob], file.name, {
-            type: 'image/jpeg',
-            lastModified: Date.now()
-          });
-          resolve(compressedFile);
-        } else {
-          resolve(file);
-        }
-      }, 'image/jpeg', 0.8);
+
+      canvas.toBlob(
+        blob => {
+          if (blob) {
+            const compressedFile = new File([blob], file.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            });
+            resolve(compressedFile);
+          } else {
+            resolve(file);
+          }
+        },
+        'image/jpeg',
+        0.8
+      );
     };
 
     img.src = URL.createObjectURL(file);
@@ -303,5 +333,5 @@ export default {
   initWeChatPay,
   wechatStorage,
   wechatRequest,
-  compressImageForWeChat
+  compressImageForWeChat,
 };

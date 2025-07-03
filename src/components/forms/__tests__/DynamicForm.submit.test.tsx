@@ -11,14 +11,16 @@ describe('DynamicForm - Manual Save Functionality', () => {
   });
 
   test('should call onSubmit when Save Section button is clicked', () => {
-    const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-    
+    const personalInfoFields = defaultFieldConfigs.filter(
+      f => f.section === 'personalInfo'
+    );
+
     render(
       <DynamicForm
         fields={personalInfoFields}
         data={{}}
         onSubmit={mockOnSubmit}
-        submitButtonText="Save Section"
+        submitButtonText='Save Section'
       />
     );
 
@@ -35,14 +37,16 @@ describe('DynamicForm - Manual Save Functionality', () => {
   });
 
   test('should pass form data to onSubmit when saved', () => {
-    const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-    
+    const personalInfoFields = defaultFieldConfigs.filter(
+      f => f.section === 'personalInfo'
+    );
+
     render(
       <DynamicForm
         fields={personalInfoFields}
         data={{}}
         onSubmit={mockOnSubmit}
-        submitButtonText="Save Section"
+        submitButtonText='Save Section'
       />
     );
 
@@ -50,7 +54,7 @@ describe('DynamicForm - Manual Save Functionality', () => {
     const firstNameInput = screen.getByLabelText(/first name/i);
     const lastNameInput = screen.getByLabelText(/last name/i);
     const emailInput = screen.getByLabelText(/email/i);
-    
+
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
     fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
     fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
@@ -64,20 +68,22 @@ describe('DynamicForm - Manual Save Functionality', () => {
       expect.objectContaining({
         firstName: 'John',
         lastName: 'Doe',
-        email: 'john@example.com'
+        email: 'john@example.com',
       })
     );
   });
 
   test('should work with different submit button text', () => {
-    const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-    
+    const personalInfoFields = defaultFieldConfigs.filter(
+      f => f.section === 'personalInfo'
+    );
+
     render(
       <DynamicForm
         fields={personalInfoFields}
         data={{}}
         onSubmit={mockOnSubmit}
-        submitButtonText="Save My Info"
+        submitButtonText='Save My Info'
       />
     );
 
@@ -88,21 +94,23 @@ describe('DynamicForm - Manual Save Functionality', () => {
   });
 
   test('should work with experience section data', () => {
-    const experienceFields = defaultFieldConfigs.filter(f => f.section === 'experience');
-    
+    const experienceFields = defaultFieldConfigs.filter(
+      f => f.section === 'experience'
+    );
+
     render(
       <DynamicForm
         fields={experienceFields}
         data={{}}
         onSubmit={mockOnSubmit}
-        submitButtonText="Save Experience"
+        submitButtonText='Save Experience'
       />
     );
 
     // Fill experience data
     const companyInput = screen.getByLabelText(/company name/i);
     const positionInput = screen.getByLabelText(/job title/i);
-    
+
     fireEvent.change(companyInput, { target: { value: 'Tech Corp' } });
     fireEvent.change(positionInput, { target: { value: 'Developer' } });
 
@@ -113,7 +121,7 @@ describe('DynamicForm - Manual Save Functionality', () => {
     expect(mockOnSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
         company: 'Tech Corp',
-        position: 'Developer'
+        position: 'Developer',
       })
     );
   });

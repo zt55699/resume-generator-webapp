@@ -1,4 +1,8 @@
-import { validateChineseName, validateEnglishName, getNameValidationSchema } from '../utils/validationUtils';
+import {
+  validateChineseName,
+  validateEnglishName,
+  getNameValidationSchema,
+} from '../utils/validationUtils';
 
 describe('Name Validation Functions', () => {
   describe('validateChineseName', () => {
@@ -74,49 +78,65 @@ describe('Name Validation Functions', () => {
   describe('getNameValidationSchema', () => {
     test('should return Chinese validation schema for zh language', async () => {
       const schema = getNameValidationSchema('zh', 'firstName');
-      
+
       // Valid Chinese name
       await expect(schema.validate('王')).resolves.toBe('王');
       await expect(schema.validate('王小明')).resolves.toBe('王小明');
-      
+
       // Invalid - English characters
-      await expect(schema.validate('John')).rejects.toThrow('名字必须是1-4个中文字符');
-      
+      await expect(schema.validate('John')).rejects.toThrow(
+        '名字必须是1-4个中文字符'
+      );
+
       // Invalid - too many characters
-      await expect(schema.validate('王小明李四')).rejects.toThrow('名字必须是1-4个中文字符');
-      
+      await expect(schema.validate('王小明李四')).rejects.toThrow(
+        '名字必须是1-4个中文字符'
+      );
+
       // Invalid - empty
       await expect(schema.validate('')).rejects.toThrow('名字是必填的');
     });
 
     test('should return English validation schema for en language', async () => {
       const schema = getNameValidationSchema('en', 'firstName');
-      
+
       // Valid English name
       await expect(schema.validate('John')).resolves.toBe('John');
       await expect(schema.validate('Mary-Jane')).resolves.toBe('Mary-Jane');
-      
+
       // Invalid - single character
-      await expect(schema.validate('J')).rejects.toThrow('First name must be 2-50 letters, spaces, or hyphens');
-      
+      await expect(schema.validate('J')).rejects.toThrow(
+        'First name must be 2-50 letters, spaces, or hyphens'
+      );
+
       // Invalid - Chinese characters
-      await expect(schema.validate('王')).rejects.toThrow('First name must be 2-50 letters, spaces, or hyphens');
-      
+      await expect(schema.validate('王')).rejects.toThrow(
+        'First name must be 2-50 letters, spaces, or hyphens'
+      );
+
       // Invalid - empty
-      await expect(schema.validate('')).rejects.toThrow('First name is required');
+      await expect(schema.validate('')).rejects.toThrow(
+        'First name is required'
+      );
     });
 
     test('should handle lastName field correctly', async () => {
       const chineseSchema = getNameValidationSchema('zh', 'lastName');
       const englishSchema = getNameValidationSchema('en', 'lastName');
-      
+
       // Chinese lastName validation
       await expect(chineseSchema.validate('')).rejects.toThrow('姓氏是必填的');
-      await expect(chineseSchema.validate('John')).rejects.toThrow('姓氏必须是1-4个中文字符');
-      
-      // English lastName validation  
-      await expect(englishSchema.validate('')).rejects.toThrow('Last name is required');
-      await expect(englishSchema.validate('J')).rejects.toThrow('Last name must be 2-50 letters, spaces, or hyphens');
+      await expect(chineseSchema.validate('John')).rejects.toThrow(
+        '姓氏必须是1-4个中文字符'
+      );
+
+      // English lastName validation
+      await expect(englishSchema.validate('')).rejects.toThrow(
+        'Last name is required'
+      );
+      await expect(englishSchema.validate('J')).rejects.toThrow(
+        'Last name must be 2-50 letters, spaces, or hyphens'
+      );
     });
   });
 });

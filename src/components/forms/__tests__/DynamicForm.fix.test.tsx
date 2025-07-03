@@ -13,8 +13,10 @@ describe('DynamicForm Input Field Fix Tests', () => {
 
   describe('CRITICAL: Fixed Input Field Issues', () => {
     test('should not freeze inputs when data prop changes rapidly', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}
@@ -51,8 +53,10 @@ describe('DynamicForm Input Field Fix Tests', () => {
     });
 
     test('should handle multiple rapid field changes without conflicts', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+
       render(
         <DynamicForm
           fields={personalInfoFields}
@@ -79,8 +83,10 @@ describe('DynamicForm Input Field Fix Tests', () => {
     });
 
     test('should not reset form while user is actively typing', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}
@@ -91,11 +97,11 @@ describe('DynamicForm Input Field Fix Tests', () => {
       );
 
       const firstNameInput = screen.getByLabelText(/first name/i);
-      
+
       // Start typing
       fireEvent.change(firstNameInput, { target: { value: 'J' } });
       fireEvent.change(firstNameInput, { target: { value: 'Jo' } });
-      
+
       // Simulate data prop change while typing
       rerender(
         <DynamicForm
@@ -112,9 +118,13 @@ describe('DynamicForm Input Field Fix Tests', () => {
     });
 
     test('should handle section switching without losing input responsiveness', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      const experienceFields = defaultFieldConfigs.filter(f => f.section === 'experience');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+      const experienceFields = defaultFieldConfigs.filter(
+        f => f.section === 'experience'
+      );
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}
@@ -164,15 +174,19 @@ describe('DynamicForm Input Field Fix Tests', () => {
       });
 
       const finalFirstNameInput = screen.getByLabelText(/first name/i);
-      fireEvent.change(finalFirstNameInput, { target: { value: 'John Updated' } });
+      fireEvent.change(finalFirstNameInput, {
+        target: { value: 'John Updated' },
+      });
       expect(finalFirstNameInput).toHaveValue('John Updated');
     });
   });
 
   describe('VERIFICATION: onFieldChange optimization', () => {
     test('should not call onFieldChange unnecessarily', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-      
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
+
       const { rerender } = render(
         <DynamicForm
           fields={personalInfoFields}
@@ -203,7 +217,7 @@ describe('DynamicForm Input Field Fix Tests', () => {
       // But actual user input should still trigger it
       const firstNameInput = screen.getByLabelText(/first name/i);
       fireEvent.change(firstNameInput, { target: { value: 'Jane' } });
-      
+
       await waitFor(() => {
         expect(mockOnFieldChange).toHaveBeenCalledWith('firstName', 'Jane');
       });

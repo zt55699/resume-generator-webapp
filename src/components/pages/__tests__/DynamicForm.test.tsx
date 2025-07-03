@@ -13,13 +13,15 @@ describe('DynamicForm - TDD Tests for Form Input Issues', () => {
 
   describe('CRITICAL TEST 1: Personal Information Section Fields', () => {
     test('should render ALL personal info input fields', () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
       const mockPersonalData = {
         firstName: '',
         lastName: '',
         email: '',
         phone: '',
-        summary: ''
+        summary: '',
       };
 
       render(
@@ -33,28 +35,32 @@ describe('DynamicForm - TDD Tests for Form Input Issues', () => {
 
       // SHOULD FIND: First Name input
       expect(screen.getByLabelText(/first name/i)).toBeInTheDocument();
-      
+
       // SHOULD FIND: Last Name input
       expect(screen.getByLabelText(/last name/i)).toBeInTheDocument();
-      
+
       // SHOULD FIND: Email input
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-      
+
       // SHOULD FIND: Phone input
       expect(screen.getByLabelText(/phone/i)).toBeInTheDocument();
-      
+
       // SHOULD FIND: Professional Summary textarea
-      expect(screen.getByLabelText(/professional summary/i)).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(/professional summary/i)
+      ).toBeInTheDocument();
     });
 
     test('should respond to typing in input fields', async () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
       const mockPersonalData = {
         firstName: '',
         lastName: '',
         email: '',
         phone: '',
-        summary: ''
+        summary: '',
       };
 
       render(
@@ -69,10 +75,10 @@ describe('DynamicForm - TDD Tests for Form Input Issues', () => {
       // Type in first name
       const firstNameInput = screen.getByLabelText(/first name/i);
       fireEvent.change(firstNameInput, { target: { value: 'John' } });
-      
+
       // SHOULD: Display typed text
       expect(firstNameInput).toHaveValue('John');
-      
+
       // SHOULD: Call onFieldChange
       expect(mockOnFieldChange).toHaveBeenCalledWith('firstName', 'John');
     });
@@ -80,8 +86,10 @@ describe('DynamicForm - TDD Tests for Form Input Issues', () => {
 
   describe('CRITICAL TEST 2: Education Section Fields', () => {
     test('should render education input fields', () => {
-      const educationFields = defaultFieldConfigs.filter(f => f.section === 'education');
-      
+      const educationFields = defaultFieldConfigs.filter(
+        f => f.section === 'education'
+      );
+
       render(
         <DynamicForm
           fields={educationFields}
@@ -93,10 +101,10 @@ describe('DynamicForm - TDD Tests for Form Input Issues', () => {
 
       // SHOULD FIND: Institution input
       expect(screen.getByLabelText(/institution/i)).toBeInTheDocument();
-      
+
       // SHOULD FIND: Degree input
       expect(screen.getByLabelText(/degree/i)).toBeInTheDocument();
-      
+
       // SHOULD FIND: Field of Study input
       expect(screen.getByLabelText(/field of study/i)).toBeInTheDocument();
     });
@@ -104,8 +112,10 @@ describe('DynamicForm - TDD Tests for Form Input Issues', () => {
 
   describe('CRITICAL TEST 3: Education Section Fields', () => {
     test('should render education input fields', () => {
-      const educationFields = defaultFieldConfigs.filter(f => f.section === 'education');
-      
+      const educationFields = defaultFieldConfigs.filter(
+        f => f.section === 'education'
+      );
+
       render(
         <DynamicForm
           fields={educationFields}
@@ -117,10 +127,10 @@ describe('DynamicForm - TDD Tests for Form Input Issues', () => {
 
       // SHOULD FIND: Institution Name input
       expect(screen.getByLabelText(/institution name/i)).toBeInTheDocument();
-      
+
       // SHOULD FIND: Degree input
       expect(screen.getByLabelText(/degree/i)).toBeInTheDocument();
-      
+
       // SHOULD FIND: Field of Study input
       expect(screen.getByLabelText(/field of study/i)).toBeInTheDocument();
     });
@@ -128,18 +138,32 @@ describe('DynamicForm - TDD Tests for Form Input Issues', () => {
 
   describe('CRITICAL TEST 4: Field Configuration Coverage', () => {
     test('should have field configurations for all expected sections', () => {
-      const sections = ['personalInfo', 'education', 'skills', 'experience', 'projects', 'certifications', 'languages', 'references', 'customSections'];
-      
+      const sections = [
+        'personalInfo',
+        'education',
+        'skills',
+        'experience',
+        'projects',
+        'certifications',
+        'languages',
+        'references',
+        'customSections',
+      ];
+
       sections.forEach(section => {
-        const sectionFields = defaultFieldConfigs.filter(f => f.section === section);
+        const sectionFields = defaultFieldConfigs.filter(
+          f => f.section === section
+        );
         expect(sectionFields.length).toBeGreaterThan(0);
       });
     });
 
     test('personal info section should have minimum required fields', () => {
-      const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
+      const personalInfoFields = defaultFieldConfigs.filter(
+        f => f.section === 'personalInfo'
+      );
       const fieldNames = personalInfoFields.map(f => f.name);
-      
+
       expect(fieldNames).toContain('firstName');
       expect(fieldNames).toContain('lastName');
       expect(fieldNames).toContain('email');
@@ -159,8 +183,8 @@ describe('DynamicForm - TDD Tests for Form Input Issues', () => {
           required: false,
           section: 'personalInfo' as const,
           order: 1,
-          visible: true
-        }
+          visible: true,
+        },
       ];
 
       render(
@@ -185,8 +209,8 @@ describe('DynamicForm - TDD Tests for Form Input Issues', () => {
           required: false,
           section: 'personalInfo' as const,
           order: 1,
-          visible: false
-        }
+          visible: false,
+        },
       ];
 
       render(

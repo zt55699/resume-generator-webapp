@@ -4,7 +4,9 @@
   padding: 2rem;
   background-color: #ffffff;
   border-radius: 0.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
 .form-fields {
@@ -31,7 +33,9 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.15s ease-in-out, transform 0.15s ease-in-out;
+  transition:
+    background-color 0.15s ease-in-out,
+    transform 0.15s ease-in-out;
 }
 
 .submit-button:hover:not(:disabled) {
@@ -166,7 +170,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

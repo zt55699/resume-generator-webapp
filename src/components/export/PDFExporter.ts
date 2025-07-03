@@ -5,7 +5,11 @@ import { downloadFile } from '../../utils/fileUtils';
 import ResumeRenderer from '../templates/ResumeRenderer';
 
 class PDFExporter {
-  static async export(resumeData: ResumeData, template: Template, options: ExportOptions): Promise<boolean> {
+  static async export(
+    resumeData: ResumeData,
+    template: Template,
+    options: ExportOptions
+  ): Promise<boolean> {
     try {
       // Create a temporary container for rendering
       const container = document.createElement('div');
@@ -18,7 +22,11 @@ class PDFExporter {
       document.body.appendChild(container);
 
       // Render the resume HTML
-      const resumeHTML = await this.generateResumeHTML(resumeData, template, options);
+      const resumeHTML = await this.generateResumeHTML(
+        resumeData,
+        template,
+        options
+      );
       container.innerHTML = resumeHTML;
 
       // Wait for fonts and images to load
@@ -26,7 +34,7 @@ class PDFExporter {
 
       // Generate PDF
       const pdf = await this.createPDF(container, options);
-      
+
       // Clean up
       document.body.removeChild(container);
 
@@ -42,32 +50,39 @@ class PDFExporter {
     }
   }
 
-  private static async generateResumeHTML(resumeData: ResumeData, template: Template, options: ExportOptions): Promise<string> {
+  private static async generateResumeHTML(
+    resumeData: ResumeData,
+    template: Template,
+    options: ExportOptions
+  ): Promise<string> {
     const { personalInfo, experience, education } = resumeData;
-    
+
     // Generate styles for PDF
     const styles = this.generatePDFStyles(template, options);
-    
+
     // Contact information
     const contactItems = [
       `📧 ${personalInfo.email}`,
       `📞 ${personalInfo.phone}`,
       `📍 ${personalInfo.city}, ${personalInfo.state}`,
     ];
-    
+
     if (personalInfo.website) contactItems.push(`🌐 ${personalInfo.website}`);
     if (personalInfo.linkedin) contactItems.push(`💼 LinkedIn`);
     if (personalInfo.github) contactItems.push(`💻 GitHub`);
-
 
     return `
       <style>${styles}</style>
       <div class="pdf-resume ${template.layout}">
         <!-- Header -->
         <div class="pdf-header">
-          ${options.includeProfilePhoto && personalInfo.profilePhoto ? `
+          ${
+            options.includeProfilePhoto && personalInfo.profilePhoto
+              ? `
             <img src="${personalInfo.profilePhoto}" alt="Profile" class="profile-photo" onerror="this.style.display='none'">
-          ` : ''}
+          `
+              : ''
+          }
           <div class="header-info">
             <h1 class="name">${personalInfo.firstName} ${personalInfo.lastName}</h1>
             <div class="contact-info">
@@ -78,17 +93,25 @@ class PDFExporter {
 
         <!-- Body -->
         <div class="pdf-body">
-          ${personalInfo.summary ? `
+          ${
+            personalInfo.summary
+              ? `
             <div class="section">
               <h2 class="section-title">Professional Summary</h2>
               <p class="summary">${personalInfo.summary}</p>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
 
-          ${experience.length > 0 ? `
+          ${
+            experience.length > 0
+              ? `
             <div class="section">
               <h2 class="section-title">Professional Experience</h2>
-              ${experience.map(exp => `
+              ${experience
+                .map(
+                  exp => `
                 <div class="item">
                   <div class="item-header">
                     <div class="item-left">
@@ -101,20 +124,32 @@ class PDFExporter {
                     </div>
                   </div>
                   <p class="item-description">${exp.description}</p>
-                  ${exp.achievements.length > 0 ? `
+                  ${
+                    exp.achievements.length > 0
+                      ? `
                     <ul class="achievements">
                       ${exp.achievements.map(achievement => `<li>${achievement}</li>`).join('')}
                     </ul>
-                  ` : ''}
+                  `
+                      : ''
+                  }
                 </div>
-              `).join('')}
+              `
+                )
+                .join('')}
             </div>
-          ` : ''}
+          `
+              : ''
+          }
 
-          ${education.length > 0 ? `
+          ${
+            education.length > 0
+              ? `
             <div class="section">
               <h2 class="section-title">Education</h2>
-              ${education.map(edu => `
+              ${education
+                .map(
+                  edu => `
                 <div class="item">
                   <div class="item-header">
                     <div class="item-left">
@@ -128,22 +163,33 @@ class PDFExporter {
                     </div>
                   </div>
                   ${edu.description ? `<p class="item-description">${edu.description}</p>` : ''}
-                  ${edu.achievements.length > 0 ? `
+                  ${
+                    edu.achievements.length > 0
+                      ? `
                     <ul class="achievements">
                       ${edu.achievements.map(achievement => `<li>${achievement}</li>`).join('')}
                     </ul>
-                  ` : ''}
+                  `
+                      : ''
+                  }
                 </div>
-              `).join('')}
+              `
+                )
+                .join('')}
             </div>
-          ` : ''}
+          `
+              : ''
+          }
 
         </div>
       </div>
     `;
   }
 
-  private static generatePDFStyles(template: Template, options: ExportOptions): string {
+  private static generatePDFStyles(
+    template: Template,
+    options: ExportOptions
+  ): string {
     return `
       * {
         margin: 0;
@@ -415,12 +461,14 @@ class PDFExporter {
     `;
   }
 
-  private static async waitForContentLoad(container: HTMLElement): Promise<void> {
+  private static async waitForContentLoad(
+    container: HTMLElement
+  ): Promise<void> {
     // Wait for images to load
     const images = container.querySelectorAll('img');
     const imagePromises = Array.from(images).map(img => {
       if (img.complete) return Promise.resolve();
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         img.onload = resolve;
         img.onerror = resolve; // Continue even if image fails to load
         setTimeout(resolve, 3000); // Timeout after 3 seconds
@@ -433,9 +481,13 @@ class PDFExporter {
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
 
-  private static async createPDF(container: HTMLElement, options: ExportOptions): Promise<jsPDF> {
+  private static async createPDF(
+    container: HTMLElement,
+    options: ExportOptions
+  ): Promise<jsPDF> {
     const canvas = await html2canvas(container, {
-      scale: options.quality === 'high' ? 2 : options.quality === 'medium' ? 1.5 : 1,
+      scale:
+        options.quality === 'high' ? 2 : options.quality === 'medium' ? 1.5 : 1,
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
@@ -444,10 +496,10 @@ class PDFExporter {
     });
 
     const imgData = canvas.toDataURL('image/png');
-    
+
     // Calculate PDF dimensions based on paper size
     let pdfWidth: number, pdfHeight: number;
-    
+
     switch (options.paperSize) {
       case 'letter':
         pdfWidth = 216; // 8.5 inches
@@ -473,10 +525,10 @@ class PDFExporter {
     // Calculate image dimensions to fit the page
     const imgAspectRatio = canvas.width / canvas.height;
     const pageAspectRatio = pdfWidth / pdfHeight;
-    
+
     let imgWidth = pdfWidth;
     let imgHeight = pdfHeight;
-    
+
     if (imgAspectRatio > pageAspectRatio) {
       // Image is wider than page ratio
       imgHeight = pdfWidth / imgAspectRatio;
@@ -493,7 +545,6 @@ class PDFExporter {
 
     return pdf;
   }
-
 
   private static generateFilename(resumeData: ResumeData): string {
     const name = `${resumeData.personalInfo.firstName}_${resumeData.personalInfo.lastName}`;

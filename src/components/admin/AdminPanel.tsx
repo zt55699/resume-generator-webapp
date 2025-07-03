@@ -204,7 +204,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         section: 'personalInfo',
         order: 11,
         visible: true,
-        options: ['United States', 'Canada', 'United Kingdom', 'Australia', 'Germany', 'France', 'Other'],
+        options: [
+          'United States',
+          'Canada',
+          'United Kingdom',
+          'Australia',
+          'Germany',
+          'France',
+          'Other',
+        ],
       },
       // Contact Fields
       {
@@ -264,7 +272,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   const hasPermission = (permission: string): boolean => {
-    return currentUser.role.permissions.includes(permission) || currentUser.role.permissions.includes('admin:all');
+    return (
+      currentUser.role.permissions.includes(permission) ||
+      currentUser.role.permissions.includes('admin:all')
+    );
   };
 
   const renderTabContent = () => {
@@ -299,24 +310,24 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         );
       case 'settings':
         return (
-          <div className="admin-settings">
+          <div className='admin-settings'>
             <h3>System Settings</h3>
-            <div className="settings-grid">
-              <div className="setting-item">
+            <div className='settings-grid'>
+              <div className='setting-item'>
                 <label>Auto-save Interval (seconds)</label>
-                <input type="number" defaultValue={30} min={10} max={300} />
+                <input type='number' defaultValue={30} min={10} max={300} />
               </div>
-              <div className="setting-item">
+              <div className='setting-item'>
                 <label>Max File Upload Size (MB)</label>
-                <input type="number" defaultValue={10} min={1} max={50} />
+                <input type='number' defaultValue={10} min={1} max={50} />
               </div>
-              <div className="setting-item">
+              <div className='setting-item'>
                 <label>Enable Analytics</label>
-                <input type="checkbox" defaultChecked />
+                <input type='checkbox' defaultChecked />
               </div>
-              <div className="setting-item">
+              <div className='setting-item'>
                 <label>Enable Debug Mode</label>
-                <input type="checkbox" />
+                <input type='checkbox' />
               </div>
             </div>
           </div>
@@ -328,7 +339,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
   if (!hasPermission('admin:read')) {
     return (
-      <div className="admin-access-denied">
+      <div className='admin-access-denied'>
         <h2>Access Denied</h2>
         <p>You don't have permission to access the admin panel.</p>
       </div>
@@ -336,16 +347,16 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   }
 
   return (
-    <div className="admin-panel">
-      <div className="admin-header">
+    <div className='admin-panel'>
+      <div className='admin-header'>
         <h1>Admin Panel</h1>
-        <div className="admin-user-info">
+        <div className='admin-user-info'>
           <span>Welcome, {currentUser.name}</span>
-          <span className="admin-user-role">({currentUser.role.name})</span>
+          <span className='admin-user-role'>({currentUser.role.name})</span>
         </div>
       </div>
 
-      <div className="admin-tabs">
+      <div className='admin-tabs'>
         <button
           className={`admin-tab ${activeTab === 'fields' ? 'active' : ''}`}
           onClick={() => setActiveTab('fields')}
@@ -376,17 +387,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
         </button>
       </div>
 
-      <div className="admin-content">
+      <div className='admin-content'>
         {isLoading ? (
-          <div className="admin-loading">
-            <div className="loading-spinner"></div>
+          <div className='admin-loading'>
+            <div className='loading-spinner'></div>
             <p>Loading admin data...</p>
           </div>
         ) : error ? (
-          <div className="admin-error">
+          <div className='admin-error'>
             <h3>Error</h3>
             <p>{error}</p>
-            <button onClick={loadInitialData} className="retry-button">
+            <button onClick={loadInitialData} className='retry-button'>
               Retry
             </button>
           </div>

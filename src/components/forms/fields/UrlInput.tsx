@@ -47,13 +47,13 @@ const UrlInput: React.FC<UrlInputProps> = ({
 
   return (
     <div className={`form-field ${className} ${error ? 'error' : ''}`}>
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name} className='form-label'>
         {label}
-        {required && <span className="required">*</span>}
+        {required && <span className='required'>*</span>}
       </label>
-      <div className="url-input-container">
+      <div className='url-input-container'>
         <input
-          type="url"
+          type='url'
           id={name}
           name={name}
           value={value}
@@ -61,16 +61,16 @@ const UrlInput: React.FC<UrlInputProps> = ({
           onBlur={onBlur}
           placeholder={placeholder}
           disabled={disabled}
-          className="form-input url-input"
+          className='form-input url-input'
           aria-invalid={error ? 'true' : 'false'}
           aria-describedby={error ? `${name}-error` : undefined}
         />
         {value && isValidUrl(value) && (
           <button
-            type="button"
+            type='button'
             onClick={handleOpenUrl}
-            className="url-open-button"
-            title="Open link in new tab"
+            className='url-open-button'
+            title='Open link in new tab'
             disabled={disabled}
           >
             ↗
@@ -78,11 +78,10 @@ const UrlInput: React.FC<UrlInputProps> = ({
         )}
       </div>
       {error && (
-        <div id={`${name}-error`} className="form-error" role="alert">
+        <div id={`${name}-error`} className='form-error' role='alert'>
           {error}
         </div>
       )}
-
     </div>
   );
 };

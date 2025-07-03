@@ -1,7 +1,9 @@
 .export-manager {
   background: white;
   border-radius: 0.75rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -143,13 +145,13 @@
   cursor: pointer;
 }
 
-.option-checkbox input[type="checkbox"] {
+.option-checkbox input[type='checkbox'] {
   width: 1.125rem;
   height: 1.125rem;
   accent-color: #3b82f6;
 }
 
-.option-checkbox input[type="checkbox"]:disabled {
+.option-checkbox input[type='checkbox']:disabled {
   opacity: 0.5;
 }
 
@@ -299,8 +301,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .export-preview {
@@ -452,7 +458,12 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.1),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -467,9 +478,15 @@
 }
 
 @keyframes successPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Error state */
@@ -479,7 +496,14 @@
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
 }

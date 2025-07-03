@@ -1,8 +1,11 @@
 import { FieldConfig } from '../types';
 
-export const translateFieldConfig = (field: FieldConfig, t: (key: string) => string): FieldConfig => {
+export const translateFieldConfig = (
+  field: FieldConfig,
+  t: (key: string) => string
+): FieldConfig => {
   const translatedField = { ...field };
-  
+
   // Translate label
   if (field.name === 'firstName') {
     translatedField.label = t('field.firstName');
@@ -74,10 +77,13 @@ export const translateFieldConfig = (field: FieldConfig, t: (key: string) => str
     translatedField.label = t('field.gpa');
     translatedField.placeholder = t('placeholder.gpa');
   }
-  
+
   return translatedField;
 };
 
-export const translateFieldConfigs = (fields: FieldConfig[], t: (key: string) => string): FieldConfig[] => {
+export const translateFieldConfigs = (
+  fields: FieldConfig[],
+  t: (key: string) => string
+): FieldConfig[] => {
   return fields.map(field => translateFieldConfig(field, t));
 };

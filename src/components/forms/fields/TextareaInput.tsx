@@ -34,9 +34,9 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
 
   return (
     <div className={`form-field ${className} ${error ? 'error' : ''}`}>
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name} className='form-label'>
         {label}
-        {required && <span className="required">*</span>}
+        {required && <span className='required'>*</span>}
       </label>
       <textarea
         id={name}
@@ -47,12 +47,12 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
         placeholder={placeholder}
         disabled={disabled}
         rows={rows}
-        className="form-textarea"
+        className='form-textarea'
         aria-invalid={error ? 'true' : 'false'}
         aria-describedby={error ? `${name}-error` : undefined}
       />
       {error && (
-        <div id={`${name}-error`} className="form-error" role="alert">
+        <div id={`${name}-error`} className='form-error' role='alert'>
           {error}
         </div>
       )}

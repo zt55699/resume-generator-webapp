@@ -1,11 +1,23 @@
 import { FileUpload } from '../types';
 
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-export const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+export const ACCEPTED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+];
 export const ACCEPTED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg'];
-export const ACCEPTED_DOCUMENT_TYPES = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+export const ACCEPTED_DOCUMENT_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+];
 
-export const validateFile = (file: File, type: 'image' | 'video' | 'document'): string | null => {
+export const validateFile = (
+  file: File,
+  type: 'image' | 'video' | 'document'
+): string | null => {
   if (file.size > MAX_FILE_SIZE) {
     return 'File size must be less than 10MB';
   }
@@ -30,7 +42,10 @@ export const validateFile = (file: File, type: 'image' | 'video' | 'document'): 
   return null;
 };
 
-export const compressImage = (file: File, quality: number = 0.8): Promise<File> => {
+export const compressImage = (
+  file: File,
+  quality: number = 0.8
+): Promise<File> => {
   return new Promise((resolve, reject) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -60,7 +75,7 @@ export const compressImage = (file: File, quality: number = 0.8): Promise<File> 
       ctx?.drawImage(img, 0, 0, width, height);
 
       canvas.toBlob(
-        (blob) => {
+        blob => {
           if (blob) {
             const compressedFile = new File([blob], file.name, {
               type: file.type,
@@ -81,7 +96,11 @@ export const compressImage = (file: File, quality: number = 0.8): Promise<File> 
   });
 };
 
-export const generateThumbnail = (file: File, maxWidth: number = 200, maxHeight: number = 200): Promise<string> => {
+export const generateThumbnail = (
+  file: File,
+  maxWidth: number = 200,
+  maxHeight: number = 200
+): Promise<string> => {
   return new Promise((resolve, reject) => {
     if (file.type.startsWith('image/')) {
       const canvas = document.createElement('canvas');
@@ -153,7 +172,10 @@ export const generateThumbnail = (file: File, maxWidth: number = 200, maxHeight:
   });
 };
 
-export const createFileUpload = async (file: File, type: 'image' | 'video' | 'document'): Promise<FileUpload> => {
+export const createFileUpload = async (
+  file: File,
+  type: 'image' | 'video' | 'document'
+): Promise<FileUpload> => {
   const validationError = validateFile(file, type);
   if (validationError) {
     throw new Error(validationError);
@@ -181,8 +203,15 @@ export const createFileUpload = async (file: File, type: 'image' | 'video' | 'do
   return fileUpload;
 };
 
-export const downloadFile = (content: string | Blob, filename: string, mimeType: string = 'text/plain') => {
-  const blob = typeof content === 'string' ? new Blob([content], { type: mimeType }) : content;
+export const downloadFile = (
+  content: string | Blob,
+  filename: string,
+  mimeType: string = 'text/plain'
+) => {
+  const blob =
+    typeof content === 'string'
+      ? new Blob([content], { type: mimeType })
+      : content;
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;

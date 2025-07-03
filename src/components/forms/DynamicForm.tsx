@@ -3,7 +3,10 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FieldConfig, FormValidation } from '../../types';
-import { getFieldValidationSchema, getNameValidationSchema } from '../../utils/validationUtils';
+import {
+  getFieldValidationSchema,
+  getNameValidationSchema,
+} from '../../utils/validationUtils';
 import { useLanguage } from '../../contexts/LanguageContext';
 import TextInput from './fields/TextInput';
 import TextareaInput from './fields/TextareaInput';
@@ -44,47 +47,75 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   disabled = false,
 }) => {
   const { language } = useLanguage();
-  const [validationSchema, setValidationSchema] = useState<yup.ObjectSchema<any>>();
+  const [validationSchema, setValidationSchema] =
+    useState<yup.ObjectSchema<any>>();
 
   useEffect(() => {
     const schemaFields: Record<string, yup.AnySchema> = {};
-    
+
     fields.forEach(field => {
       if (!field.visible) return;
-      
+
       // Use language-specific validation for name fields
       let fieldSchema: yup.AnySchema;
       if (field.name === 'firstName' || field.name === 'lastName') {
-        fieldSchema = getNameValidationSchema(language, field.name as 'firstName' | 'lastName');
+        fieldSchema = getNameValidationSchema(
+          language,
+          field.name as 'firstName' | 'lastName'
+        );
       } else {
         fieldSchema = getFieldValidationSchema(field.type);
-        
+
         if (field.required) {
           fieldSchema = fieldSchema.required(`${field.label} is required`);
         }
       }
-      
+
       if (field.validation) {
-        if (field.validation.minLength && ['text', 'textarea', 'email', 'url', 'richtext'].includes(field.type)) {
-          fieldSchema = (fieldSchema as yup.StringSchema).min(field.validation.minLength, `${field.label} must be at least ${field.validation.minLength} characters`);
+        if (
+          field.validation.minLength &&
+          ['text', 'textarea', 'email', 'url', 'richtext'].includes(field.type)
+        ) {
+          fieldSchema = (fieldSchema as yup.StringSchema).min(
+            field.validation.minLength,
+            `${field.label} must be at least ${field.validation.minLength} characters`
+          );
         }
-        if (field.validation.maxLength && ['text', 'textarea', 'email', 'url', 'richtext'].includes(field.type)) {
-          fieldSchema = (fieldSchema as yup.StringSchema).max(field.validation.maxLength, `${field.label} must be less than ${field.validation.maxLength} characters`);
+        if (
+          field.validation.maxLength &&
+          ['text', 'textarea', 'email', 'url', 'richtext'].includes(field.type)
+        ) {
+          fieldSchema = (fieldSchema as yup.StringSchema).max(
+            field.validation.maxLength,
+            `${field.label} must be less than ${field.validation.maxLength} characters`
+          );
         }
-        if (field.validation.pattern && ['text', 'textarea', 'email', 'url', 'richtext'].includes(field.type)) {
-          fieldSchema = (fieldSchema as yup.StringSchema).matches(new RegExp(field.validation.pattern), `${field.label} format is invalid`);
+        if (
+          field.validation.pattern &&
+          ['text', 'textarea', 'email', 'url', 'richtext'].includes(field.type)
+        ) {
+          fieldSchema = (fieldSchema as yup.StringSchema).matches(
+            new RegExp(field.validation.pattern),
+            `${field.label} format is invalid`
+          );
         }
         if (field.validation.min && field.type === 'number') {
-          fieldSchema = (fieldSchema as yup.NumberSchema).min(field.validation.min, `${field.label} must be at least ${field.validation.min}`);
+          fieldSchema = (fieldSchema as yup.NumberSchema).min(
+            field.validation.min,
+            `${field.label} must be at least ${field.validation.min}`
+          );
         }
         if (field.validation.max && field.type === 'number') {
-          fieldSchema = (fieldSchema as yup.NumberSchema).max(field.validation.max, `${field.label} must be at most ${field.validation.max}`);
+          fieldSchema = (fieldSchema as yup.NumberSchema).max(
+            field.validation.max,
+            `${field.label} must be at most ${field.validation.max}`
+          );
         }
       }
-      
+
       schemaFields[field.name] = fieldSchema;
     });
-    
+
     setValidationSchema(yup.object(schemaFields));
   }, [fields, language]);
 
@@ -119,10 +150,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     if (!field.visible) return null;
 
     const fieldError = errors[field.name];
-    const errorMessage = fieldError && typeof fieldError === 'object' && 'message' in fieldError 
-      ? fieldError.message as string 
-      : undefined;
-    
+    const errorMessage =
+      fieldError && typeof fieldError === 'object' && 'message' in fieldError
+        ? (fieldError.message as string)
+        : undefined;
+
     const commonProps = {
       name: field.name,
       label: field.label,
@@ -143,7 +175,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               <TextInput
                 {...commonProps}
                 value={formField.value || ''}
-                onChange={(value) => {
+                onChange={value => {
                   formField.onChange(value);
                   if (onFieldChange) {
                     onFieldChange(field.name, value);
@@ -165,14 +197,18 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               <TextareaInput
                 {...commonProps}
                 value={formField.value || ''}
-                onChange={(value) => {
+                onChange={value => {
                   formField.onChange(value);
                   if (onFieldChange) {
                     onFieldChange(field.name, value);
                   }
                 }}
                 onBlur={formField.onBlur}
-                rows={field.validation?.minLength ? Math.max(3, Math.ceil(field.validation.minLength / 50)) : 3}
+                rows={
+                  field.validation?.minLength
+                    ? Math.max(3, Math.ceil(field.validation.minLength / 50))
+                    : 3
+                }
               />
             )}
           />
@@ -188,7 +224,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               <EmailInput
                 {...commonProps}
                 value={formField.value || ''}
-                onChange={(value) => {
+                onChange={value => {
                   formField.onChange(value);
                   if (onFieldChange) {
                     onFieldChange(field.name, value);
@@ -420,21 +456,15 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   const sortedFields = [...fields].sort((a, b) => a.order - b.order);
 
   return (
-    <form 
+    <form
       className={`dynamic-form ${className}`}
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
-      <div className="form-fields">
-        {sortedFields.map(renderField)}
-      </div>
-      
-      <div className="form-actions">
-        <button
-          type="submit"
-          className="submit-button"
-          disabled={disabled}
-        >
+      <div className='form-fields'>{sortedFields.map(renderField)}</div>
+
+      <div className='form-actions'>
+        <button type='submit' className='submit-button' disabled={disabled}>
           {submitButtonText}
         </button>
       </div>

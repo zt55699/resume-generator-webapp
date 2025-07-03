@@ -2,7 +2,11 @@ import { ResumeData, Template, ExportOptions } from '../../types';
 import { downloadFile, blobToBase64 } from '../../utils/fileUtils';
 
 class HTMLExporter {
-  static async export(resumeData: ResumeData, template: Template, options: ExportOptions): Promise<boolean> {
+  static async export(
+    resumeData: ResumeData,
+    template: Template,
+    options: ExportOptions
+  ): Promise<boolean> {
     try {
       const html = await this.generateHTML(resumeData, template, options);
       const filename = this.generateFilename(resumeData);
@@ -14,10 +18,18 @@ class HTMLExporter {
     }
   }
 
-  private static async generateHTML(resumeData: ResumeData, template: Template, options: ExportOptions): Promise<string> {
+  private static async generateHTML(
+    resumeData: ResumeData,
+    template: Template,
+    options: ExportOptions
+  ): Promise<string> {
     const css = this.generateCSS(template, options);
-    const bodyContent = await this.generateBodyContent(resumeData, template, options);
-    
+    const bodyContent = await this.generateBodyContent(
+      resumeData,
+      template,
+      options
+    );
+
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +61,10 @@ class HTMLExporter {
 </html>`;
   }
 
-  private static generateCSS(template: Template, options: ExportOptions): string {
+  private static generateCSS(
+    template: Template,
+    options: ExportOptions
+  ): string {
     return `
         /* Reset and base styles */
         * {
@@ -547,9 +562,13 @@ class HTMLExporter {
     `;
   }
 
-  private static async generateBodyContent(resumeData: ResumeData, template: Template, options: ExportOptions): Promise<string> {
+  private static async generateBodyContent(
+    resumeData: ResumeData,
+    template: Template,
+    options: ExportOptions
+  ): Promise<string> {
     const { personalInfo, experience, education } = resumeData;
-    
+
     let profilePhotoHTML = '';
     if (options.includeProfilePhoto && personalInfo.profilePhoto) {
       try {
@@ -570,15 +589,20 @@ class HTMLExporter {
     ];
 
     if (personalInfo.website) {
-      contactItems.push(`<span class="contact-item">🌐 <a href="${personalInfo.website}" class="contact-link" target="_blank">${personalInfo.website}</a></span>`);
+      contactItems.push(
+        `<span class="contact-item">🌐 <a href="${personalInfo.website}" class="contact-link" target="_blank">${personalInfo.website}</a></span>`
+      );
     }
     if (personalInfo.linkedin) {
-      contactItems.push(`<span class="contact-item">💼 <a href="${personalInfo.linkedin}" class="contact-link" target="_blank">LinkedIn</a></span>`);
+      contactItems.push(
+        `<span class="contact-item">💼 <a href="${personalInfo.linkedin}" class="contact-link" target="_blank">LinkedIn</a></span>`
+      );
     }
     if (personalInfo.github) {
-      contactItems.push(`<span class="contact-item">💻 <a href="${personalInfo.github}" class="contact-link" target="_blank">GitHub</a></span>`);
+      contactItems.push(
+        `<span class="contact-item">💻 <a href="${personalInfo.github}" class="contact-link" target="_blank">GitHub</a></span>`
+      );
     }
-
 
     return `
       <div class="resume-container layout-${template.layout}">
@@ -599,29 +623,41 @@ class HTMLExporter {
 
   private static generateSingleColumnLayout(resumeData: ResumeData): string {
     const { personalInfo, experience, education } = resumeData;
-    
+
     return `
       <div class="resume-main">
-        ${personalInfo.summary ? `
+        ${
+          personalInfo.summary
+            ? `
           <section class="resume-section">
             <h2 class="section-title">Professional Summary</h2>
             <div class="summary">${personalInfo.summary}</div>
           </section>
-        ` : ''}
+        `
+            : ''
+        }
         
-        ${experience.length > 0 ? `
+        ${
+          experience.length > 0
+            ? `
           <section class="resume-section">
             <h2 class="section-title">Professional Experience</h2>
             ${experience.map(exp => this.generateExperienceHTML(exp)).join('')}
           </section>
-        ` : ''}
+        `
+            : ''
+        }
         
-        ${education.length > 0 ? `
+        ${
+          education.length > 0
+            ? `
           <section class="resume-section">
             <h2 class="section-title">Education</h2>
             ${education.map(edu => this.generateEducationHTML(edu)).join('')}
           </section>
-        ` : ''}
+        `
+            : ''
+        }
         
       </div>
     `;
@@ -629,32 +665,44 @@ class HTMLExporter {
 
   private static generateTwoColumnLayout(resumeData: ResumeData): string {
     const { personalInfo, experience, education } = resumeData;
-    
+
     return `
       <div class="resume-sidebar">
-        ${personalInfo.summary ? `
+        ${
+          personalInfo.summary
+            ? `
           <section class="resume-section">
             <h2 class="section-title">Summary</h2>
             <div class="summary">${personalInfo.summary}</div>
           </section>
-        ` : ''}
+        `
+            : ''
+        }
         
       </div>
       
       <div class="resume-main">
-        ${experience.length > 0 ? `
+        ${
+          experience.length > 0
+            ? `
           <section class="resume-section">
             <h2 class="section-title">Experience</h2>
             ${experience.map(exp => this.generateExperienceHTML(exp)).join('')}
           </section>
-        ` : ''}
+        `
+            : ''
+        }
         
-        ${education.length > 0 ? `
+        ${
+          education.length > 0
+            ? `
           <section class="resume-section">
             <h2 class="section-title">Education</h2>
             ${education.map(edu => this.generateEducationHTML(edu)).join('')}
           </section>
-        ` : ''}
+        `
+            : ''
+        }
         
       </div>
     `;
@@ -674,11 +722,15 @@ class HTMLExporter {
           </div>
         </div>
         <div class="item-description">${exp.description}</div>
-        ${exp.achievements.length > 0 ? `
+        ${
+          exp.achievements.length > 0
+            ? `
           <ul class="achievements">
             ${exp.achievements.map((achievement: string) => `<li class="achievement">${achievement}</li>`).join('')}
           </ul>
-        ` : ''}
+        `
+            : ''
+        }
       </div>
     `;
   }
@@ -698,15 +750,18 @@ class HTMLExporter {
           </div>
         </div>
         ${edu.description ? `<div class="item-description">${edu.description}</div>` : ''}
-        ${edu.achievements.length > 0 ? `
+        ${
+          edu.achievements.length > 0
+            ? `
           <ul class="achievements">
             ${edu.achievements.map((achievement: string) => `<li class="achievement">${achievement}</li>`).join('')}
           </ul>
-        ` : ''}
+        `
+            : ''
+        }
       </div>
     `;
   }
-
 
   private static generateFilename(resumeData: ResumeData): string {
     const name = `${resumeData.personalInfo.firstName}_${resumeData.personalInfo.lastName}`;

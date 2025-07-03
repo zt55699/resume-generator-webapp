@@ -45,7 +45,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
       const end = target.selectionEnd;
       const newValue = value.substring(0, start) + '\t' + value.substring(end);
       onChange(newValue);
-      
+
       // Restore cursor position
       setTimeout(() => {
         target.selectionStart = target.selectionEnd = start + 1;
@@ -60,7 +60,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const selectedText = value.substring(start, end);
-    
+
     let formattedText = selectedText;
     let newValue = value;
 
@@ -97,60 +97,60 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
 
   return (
     <div className={`form-field ${className} ${error ? 'error' : ''}`}>
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name} className='form-label'>
         {label}
-        {required && <span className="required">*</span>}
+        {required && <span className='required'>*</span>}
       </label>
-      
-      <div className="form-rich-text">
-        <div className="rich-text-toolbar">
+
+      <div className='form-rich-text'>
+        <div className='rich-text-toolbar'>
           <button
-            type="button"
+            type='button'
             onClick={() => formatText('bold')}
             disabled={disabled}
-            title="Bold"
-            className="toolbar-button"
+            title='Bold'
+            className='toolbar-button'
           >
             <strong>B</strong>
           </button>
           <button
-            type="button"
+            type='button'
             onClick={() => formatText('italic')}
             disabled={disabled}
-            title="Italic"
-            className="toolbar-button"
+            title='Italic'
+            className='toolbar-button'
           >
             <em>I</em>
           </button>
           <button
-            type="button"
+            type='button'
             onClick={() => formatText('underline')}
             disabled={disabled}
-            title="Underline"
-            className="toolbar-button"
+            title='Underline'
+            className='toolbar-button'
           >
             <u>U</u>
           </button>
           <button
-            type="button"
+            type='button'
             onClick={() => formatText('bullet')}
             disabled={disabled}
-            title="Bullet List"
-            className="toolbar-button"
+            title='Bullet List'
+            className='toolbar-button'
           >
             •
           </button>
           <button
-            type="button"
+            type='button'
             onClick={() => formatText('number')}
             disabled={disabled}
-            title="Numbered List"
-            className="toolbar-button"
+            title='Numbered List'
+            className='toolbar-button'
           >
             1.
           </button>
         </div>
-        
+
         <textarea
           id={name}
           name={name}
@@ -160,7 +160,7 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
-          className="form-textarea rich-text-editor"
+          className='form-textarea rich-text-editor'
           rows={8}
           aria-invalid={error ? 'true' : 'false'}
           aria-describedby={error ? `${name}-error` : undefined}
@@ -168,11 +168,10 @@ const RichTextInput: React.FC<RichTextInputProps> = ({
       </div>
 
       {error && (
-        <div id={`${name}-error`} className="form-error" role="alert">
+        <div id={`${name}-error`} className='form-error' role='alert'>
           {error}
         </div>
       )}
-
     </div>
   );
 };

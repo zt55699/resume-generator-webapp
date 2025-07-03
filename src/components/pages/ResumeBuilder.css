@@ -713,9 +713,21 @@
   animation: slideIn 0.3s ease;
 }
 
-.template-option:nth-child(1) { animation-delay: 0s; }
-.template-option:nth-child(2) { animation-delay: 0.05s; }
-.template-option:nth-child(3) { animation-delay: 0.1s; }
-.template-option:nth-child(4) { animation-delay: 0.15s; }
-.template-option:nth-child(5) { animation-delay: 0.2s; }
-.template-option:nth-child(6) { animation-delay: 0.25s; }
+.template-option:nth-child(1) {
+  animation-delay: 0s;
+}
+.template-option:nth-child(2) {
+  animation-delay: 0.05s;
+}
+.template-option:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.template-option:nth-child(4) {
+  animation-delay: 0.15s;
+}
+.template-option:nth-child(5) {
+  animation-delay: 0.2s;
+}
+.template-option:nth-child(6) {
+  animation-delay: 0.25s;
+}

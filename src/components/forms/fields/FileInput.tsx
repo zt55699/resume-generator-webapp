@@ -47,7 +47,7 @@ const FileInput: React.FC<FileInputProps> = ({
     try {
       for (let i = 0; i < files.length && newFiles.length < maxFiles; i++) {
         const file = files[i];
-        
+
         // Determine file type
         let fileType: 'image' | 'video' | 'document' = 'document';
         if (file.type.startsWith('image/')) {
@@ -104,32 +104,30 @@ const FileInput: React.FC<FileInputProps> = ({
 
   return (
     <div className={`form-field ${className} ${error ? 'error' : ''}`}>
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name} className='form-label'>
         {label}
-        {required && <span className="required">*</span>}
+        {required && <span className='required'>*</span>}
       </label>
-      
+
       <div
         className={`form-drag-drop ${isDragOver ? 'drag-over' : ''}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <div className="form-drag-drop-text">
-          {placeholder}
-        </div>
+        <div className='form-drag-drop-text'>{placeholder}</div>
         <button
-          type="button"
-          className="form-drag-drop-button"
+          type='button'
+          className='form-drag-drop-button'
           onClick={handleButtonClick}
           disabled={disabled || isUploading}
         >
           {isUploading ? 'Uploading...' : 'Browse Files'}
         </button>
-        
+
         <input
           ref={fileInputRef}
-          type="file"
+          type='file'
           id={name}
           name={name}
           onChange={handleInputChange}
@@ -144,17 +142,19 @@ const FileInput: React.FC<FileInputProps> = ({
       </div>
 
       {value.length > 0 && (
-        <div className="form-file-preview">
-          <ul className="form-file-list">
-            {value.map((file) => (
-              <li key={file.id} className="form-file-item">
+        <div className='form-file-preview'>
+          <ul className='form-file-list'>
+            {value.map(file => (
+              <li key={file.id} className='form-file-item'>
                 <div>
-                  <div className="form-file-name">{file.file.name}</div>
-                  <div className="form-file-size">{formatFileSize(file.file.size)}</div>
+                  <div className='form-file-name'>{file.file.name}</div>
+                  <div className='form-file-size'>
+                    {formatFileSize(file.file.size)}
+                  </div>
                 </div>
                 <button
-                  type="button"
-                  className="form-file-remove"
+                  type='button'
+                  className='form-file-remove'
                   onClick={() => handleRemoveFile(file.id)}
                   disabled={disabled}
                 >
@@ -167,7 +167,7 @@ const FileInput: React.FC<FileInputProps> = ({
       )}
 
       {error && (
-        <div id={`${name}-error`} className="form-error" role="alert">
+        <div id={`${name}-error`} className='form-error' role='alert'>
           {error}
         </div>
       )}

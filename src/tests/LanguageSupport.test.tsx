@@ -10,7 +10,7 @@ import { ResumeProvider } from '../contexts/ResumeContext';
 const localStorageMock = {
   getItem: jest.fn(),
   setItem: jest.fn(),
-  clear: jest.fn()
+  clear: jest.fn(),
 };
 global.localStorage = localStorageMock as any;
 
@@ -190,25 +190,33 @@ describe('Name Validation with Language Support', () => {
     // Test 1 character - should show error
     fireEvent.change(firstNameInput, { target: { value: 'J' } });
     await waitFor(() => {
-      expect(screen.getByText(/First name must be 2-50 letters, spaces, or hyphens/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/First name must be 2-50 letters, spaces, or hyphens/)
+      ).toBeInTheDocument();
     });
 
     // Test 2+ characters - should be valid
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
     await waitFor(() => {
-      expect(screen.queryByText(/First name must be 2-50 letters/)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/First name must be 2-50 letters/)
+      ).not.toBeInTheDocument();
     });
 
     // Test with spaces and hyphens - should be valid
     fireEvent.change(firstNameInput, { target: { value: 'Mary-Jane Smith' } });
     await waitFor(() => {
-      expect(screen.queryByText(/First name must be 2-50 letters/)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/First name must be 2-50 letters/)
+      ).not.toBeInTheDocument();
     });
 
     // Test Chinese characters in English mode - should show error
     fireEvent.change(firstNameInput, { target: { value: '王' } });
     await waitFor(() => {
-      expect(screen.getByText(/First name must be 2-50 letters, spaces, or hyphens/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/First name must be 2-50 letters, spaces, or hyphens/)
+      ).toBeInTheDocument();
     });
   });
 
@@ -238,7 +246,9 @@ describe('Name Validation with Language Support', () => {
     // Type single character - error should be in English
     fireEvent.change(firstNameInput, { target: { value: 'J' } });
     await waitFor(() => {
-      expect(screen.getByText(/First name must be 2-50 letters, spaces, or hyphens/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/First name must be 2-50 letters, spaces, or hyphens/)
+      ).toBeInTheDocument();
     });
   });
 
@@ -257,14 +267,16 @@ describe('Name Validation with Language Support', () => {
 
     // Enter valid Chinese name
     fireEvent.change(firstNameInput, { target: { value: '王' } });
-    
+
     // Switch to English
     const languageSwitcher = screen.getByRole('button', { name: /中文|EN/ });
     fireEvent.click(languageSwitcher);
 
     // The Chinese name should now show validation error in English mode
     await waitFor(() => {
-      expect(screen.getByText(/First name must be 2-50 letters, spaces, or hyphens/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/First name must be 2-50 letters, spaces, or hyphens/)
+      ).toBeInTheDocument();
     });
 
     // Enter valid English name

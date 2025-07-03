@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
 
 export type Language = 'en' | 'zh';
 
@@ -8,7 +14,9 @@ interface LanguageContextType {
   t: (key: string) => string;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined
+);
 
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
@@ -31,7 +39,7 @@ const translations = {
     'progress.complete': 'Complete',
     'section.of': 'of',
     'section.number': 'Section',
-    
+
     // Sections
     'section.personalInfo': 'Personal Info',
     'section.experience': 'Experience',
@@ -39,7 +47,7 @@ const translations = {
     'section.personalInfo.desc': 'Basic contact information',
     'section.experience.desc': 'Work history and achievements',
     'section.education.desc': 'Academic background',
-    
+
     // Form Fields - Personal Info
     'field.firstName': 'First Name',
     'field.lastName': 'Last Name',
@@ -54,7 +62,7 @@ const translations = {
     'field.linkedin': 'LinkedIn',
     'field.github': 'GitHub',
     'field.summary': 'Professional Summary',
-    
+
     // Form Fields - Experience
     'field.company': 'Company Name',
     'field.position': 'Job Title',
@@ -63,13 +71,13 @@ const translations = {
     'field.location': 'Location',
     'field.description': 'Job Description',
     'field.isCurrentPosition': 'This is my current position',
-    
+
     // Form Fields - Education
     'field.institution': 'Institution Name',
     'field.degree': 'Degree',
     'field.fieldOfStudy': 'Field of Study',
     'field.gpa': 'GPA',
-    
+
     // Placeholders
     'placeholder.firstName': 'Enter your first name',
     'placeholder.lastName': 'Enter your last name',
@@ -83,7 +91,8 @@ const translations = {
     'placeholder.website': 'https://yourwebsite.com',
     'placeholder.linkedin': 'https://linkedin.com/in/yourprofile',
     'placeholder.github': 'https://github.com/yourusername',
-    'placeholder.summary': 'Write a brief summary of your professional background and career objectives...',
+    'placeholder.summary':
+      'Write a brief summary of your professional background and career objectives...',
     'placeholder.company': 'Enter company name',
     'placeholder.position': 'Enter your job title',
     'placeholder.location': 'City, State',
@@ -92,19 +101,19 @@ const translations = {
     'placeholder.degree': 'Bachelor of Science',
     'placeholder.fieldOfStudy': 'Computer Science',
     'placeholder.gpa': '3.5',
-    
+
     // Buttons & Actions
     'button.save.continue': 'Save & Continue',
     'button.save.preview': 'Save & Go to Preview',
     'button.preview': 'Preview & Templates',
     'button.continue.preview': 'Continue to Preview',
     'button.my.resumes': 'My Resumes',
-    
+
     // Status Messages
     'status.saving': 'Saving...',
     'status.saved': 'Saved',
     'status.unsaved': 'Unsaved changes',
-    
+
     // Tips
     'tips.title': 'Pro Tips',
     'tips.personal': 'Fill out your personal info first',
@@ -112,36 +121,41 @@ const translations = {
     'tips.numbers': 'Quantify achievements with numbers',
     'tips.concise': 'Keep descriptions concise and relevant',
     'tips.save': 'Save frequently to avoid losing work',
-    
+
     // Footer
-    'footer.info': 'Resume Form • Click \'Save & Continue\' to save your changes',
-    
+    'footer.info': "Resume Form • Click 'Save & Continue' to save your changes",
+
     // Language
     'language.en': 'English',
     'language.zh': '中文',
-    
+
     // HomePage
     'home.title': 'Create Professional Resumes in Minutes',
-    'home.subtitle': 'Build your perfect resume with our intelligent form builder and professional templates',
+    'home.subtitle':
+      'Build your perfect resume with our intelligent form builder and professional templates',
     'home.cta.start': 'Start Building Now',
     'home.cta.templates': 'Browse Templates',
     'home.features.title': 'Everything You Need',
     'home.features.forms': 'Dynamic Forms',
-    'home.features.forms.desc': 'Create resumes with intelligent forms that adapt to your needs',
-    'home.features.templates': 'Professional Templates', 
-    'home.features.templates.desc': 'Choose from 10+ carefully designed templates',
+    'home.features.forms.desc':
+      'Create resumes with intelligent forms that adapt to your needs',
+    'home.features.templates': 'Professional Templates',
+    'home.features.templates.desc':
+      'Choose from 10+ carefully designed templates',
     'home.features.export': 'Multiple Export Formats',
     'home.features.export.desc': 'Export your resume to PDF, Word, or HTML',
     'home.features.wechat': 'WeChat Mini App Ready',
     'home.features.wechat.desc': 'Optimized for WeChat Mini App deployment',
     'home.features.admin': 'Admin Panel',
-    'home.features.admin.desc': 'Powerful admin panel for managing configurations',
+    'home.features.admin.desc':
+      'Powerful admin panel for managing configurations',
     'home.features.performance': 'Performance Optimized',
     'home.features.performance.desc': 'Built with modern React and TypeScript',
-    
+
     // TemplateSelector
     'templates.title': 'Choose Your Template',
-    'templates.subtitle': 'Select a professional template that matches your style',
+    'templates.subtitle':
+      'Select a professional template that matches your style',
     'templates.filter.all': 'All',
     'templates.preview': 'Preview',
     'templates.select': 'Select Template',
@@ -150,7 +164,7 @@ const translations = {
     'templates.category.creative': 'Creative',
     'templates.category.technical': 'Technical',
     'templates.category.executive': 'Executive',
-    
+
     // MyResumes
     'myresumes.title': 'My Resumes',
     'myresumes.create': 'Create New Resume',
@@ -167,7 +181,7 @@ const translations = {
     'myresumes.status.draft': 'Draft',
     'myresumes.status.published': 'Published',
     'myresumes.lastupdated': 'Last updated',
-    
+
     // ResumePreview
     'preview.title': 'Resume Preview',
     'preview.backtoform': 'Back to Form',
@@ -177,12 +191,13 @@ const translations = {
     'preview.published': 'Published Successfully!',
     'preview.share': 'Share Resume',
     'preview.exportas': 'Export As',
-    
+
     // ExportPage
     'export.title': 'Export Resume',
     'export.subtitle': 'Download your resume in multiple formats',
     'export.format.pdf': 'PDF Document',
-    'export.format.pdf.desc': 'Universal format, preserves formatting perfectly',
+    'export.format.pdf.desc':
+      'Universal format, preserves formatting perfectly',
     'export.format.word': 'Word Document',
     'export.format.word.desc': 'Editable format for further customization',
     'export.format.html': 'HTML File',
@@ -196,19 +211,20 @@ const translations = {
     'export.tips.html': 'Use HTML for online portfolios',
     'export.history': 'Export History',
     'export.history.empty': 'No exports yet',
-    
+
     // PublicResume
     'public.title': 'Professional Resume',
     'public.loading': 'Loading Resume...',
     'public.notfound': 'Resume Not Found',
-    'public.notfound.desc': 'The resume you are looking for does not exist or has been removed',
+    'public.notfound.desc':
+      'The resume you are looking for does not exist or has been removed',
     'public.backhome': 'Back to Home',
     'public.actions.download': 'Download PDF',
     'public.actions.share': 'Share',
     'public.share.title': 'Share Resume',
     'public.share.copy': 'Copy Link',
     'public.share.copied': 'Link Copied!',
-    
+
     // ResumeBuilder
     'builder.title': 'Resume Builder',
     'builder.progress': 'Progress',
@@ -216,7 +232,7 @@ const translations = {
     'builder.tips': 'Pro Tips',
     'builder.section': 'Section',
     'builder.of': 'of',
-    
+
     // Navigation
     'nav.home': 'Home',
     'nav.templates': 'Templates',
@@ -225,7 +241,7 @@ const translations = {
     'nav.export': 'Export',
     'nav.admin': 'Admin',
     'nav.logout': 'Logout',
-    
+
     // Common
     'common.loading': 'Loading...',
     'common.error': 'Error',
@@ -249,7 +265,7 @@ const translations = {
     'progress.complete': '完成',
     'section.of': '共',
     'section.number': '第',
-    
+
     // Sections
     'section.personalInfo': '个人信息',
     'section.experience': '工作经历',
@@ -257,7 +273,7 @@ const translations = {
     'section.personalInfo.desc': '基本联系信息',
     'section.experience.desc': '工作历史和成就',
     'section.education.desc': '学术背景',
-    
+
     // Form Fields - Personal Info
     'field.firstName': '名',
     'field.lastName': '姓',
@@ -272,7 +288,7 @@ const translations = {
     'field.linkedin': 'LinkedIn',
     'field.github': 'GitHub',
     'field.summary': '专业简介',
-    
+
     // Form Fields - Experience
     'field.company': '公司名称',
     'field.position': '职位',
@@ -281,13 +297,13 @@ const translations = {
     'field.location': '地点',
     'field.description': '工作描述',
     'field.isCurrentPosition': '这是我的当前职位',
-    
+
     // Form Fields - Education
     'field.institution': '学校名称',
     'field.degree': '学位',
     'field.fieldOfStudy': '专业',
     'field.gpa': 'GPA',
-    
+
     // Placeholders
     'placeholder.firstName': '输入您的名字',
     'placeholder.lastName': '输入您的姓氏',
@@ -310,19 +326,19 @@ const translations = {
     'placeholder.degree': '理学学士',
     'placeholder.fieldOfStudy': '计算机科学',
     'placeholder.gpa': '3.5',
-    
+
     // Buttons & Actions
     'button.save.continue': '保存并继续',
     'button.save.preview': '保存并预览',
     'button.preview': '预览和模板',
     'button.continue.preview': '继续预览',
     'button.my.resumes': '我的简历',
-    
+
     // Status Messages
     'status.saving': '保存中...',
     'status.saved': '已保存',
     'status.unsaved': '未保存的更改',
-    
+
     // Tips
     'tips.title': '专业提示',
     'tips.personal': '首先填写您的个人信息',
@@ -330,14 +346,14 @@ const translations = {
     'tips.numbers': '用数字量化成就',
     'tips.concise': '保持描述简洁相关',
     'tips.save': '经常保存以避免丢失工作',
-    
+
     // Footer
     'footer.info': '简历表单 • 点击"保存并继续"保存您的更改',
-    
+
     // Language
     'language.en': 'English',
     'language.zh': '中文',
-    
+
     // HomePage
     'home.title': '几分钟内创建专业简历',
     'home.subtitle': '使用我们的智能表单生成器和专业模板构建您的完美简历',
@@ -356,7 +372,7 @@ const translations = {
     'home.features.admin.desc': '强大的管理面板用于管理配置',
     'home.features.performance': '性能优化',
     'home.features.performance.desc': '使用现代React和TypeScript构建',
-    
+
     // TemplateSelector
     'templates.title': '选择您的模板',
     'templates.subtitle': '选择符合您风格的专业模板',
@@ -368,7 +384,7 @@ const translations = {
     'templates.category.creative': '创意',
     'templates.category.technical': '技术',
     'templates.category.executive': '高管',
-    
+
     // MyResumes
     'myresumes.title': '我的简历',
     'myresumes.create': '创建新简历',
@@ -385,7 +401,7 @@ const translations = {
     'myresumes.status.draft': '草稿',
     'myresumes.status.published': '已发布',
     'myresumes.lastupdated': '最后更新',
-    
+
     // ResumePreview
     'preview.title': '简历预览',
     'preview.backtoform': '返回表单',
@@ -395,7 +411,7 @@ const translations = {
     'preview.published': '发布成功！',
     'preview.share': '分享简历',
     'preview.exportas': '导出为',
-    
+
     // ExportPage
     'export.title': '导出简历',
     'export.subtitle': '以多种格式下载您的简历',
@@ -414,7 +430,7 @@ const translations = {
     'export.tips.html': '在线作品集使用HTML',
     'export.history': '导出历史',
     'export.history.empty': '还没有导出记录',
-    
+
     // PublicResume
     'public.title': '专业简历',
     'public.loading': '加载简历中...',
@@ -426,7 +442,7 @@ const translations = {
     'public.share.title': '分享简历',
     'public.share.copy': '复制链接',
     'public.share.copied': '链接已复制！',
-    
+
     // ResumeBuilder
     'builder.title': '简历构建器',
     'builder.progress': '进度',
@@ -434,7 +450,7 @@ const translations = {
     'builder.tips': '专业提示',
     'builder.section': '部分',
     'builder.of': '共',
-    
+
     // Navigation
     'nav.home': '首页',
     'nav.templates': '模板',
@@ -443,7 +459,7 @@ const translations = {
     'nav.export': '导出',
     'nav.admin': '管理',
     'nav.logout': '退出',
-    
+
     // Common
     'common.loading': '加载中...',
     'common.error': '错误',
@@ -462,7 +478,9 @@ const translations = {
   },
 };
 
-export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
+export const LanguageProvider: React.FC<LanguageProviderProps> = ({
+  children,
+}) => {
   const [language, setLanguageState] = useState<Language>(() => {
     // Load language from localStorage or default to Chinese
     const saved = localStorage.getItem('resume-language');
@@ -479,7 +497,11 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   };
 
   const t = (key: string): string => {
-    return translations[language][key as keyof typeof translations[typeof language]] || key;
+    return (
+      translations[language][
+        key as keyof (typeof translations)[typeof language]
+      ] || key
+    );
   };
 
   const value = {

@@ -11,8 +11,10 @@ describe('DynamicForm - Simplified Functionality Tests', () => {
   });
 
   test('should render text inputs without infinite loops', () => {
-    const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-    
+    const personalInfoFields = defaultFieldConfigs.filter(
+      f => f.section === 'personalInfo'
+    );
+
     render(
       <DynamicForm
         fields={personalInfoFields}
@@ -29,8 +31,10 @@ describe('DynamicForm - Simplified Functionality Tests', () => {
   });
 
   test('should handle basic typing without errors', () => {
-    const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-    
+    const personalInfoFields = defaultFieldConfigs.filter(
+      f => f.section === 'personalInfo'
+    );
+
     render(
       <DynamicForm
         fields={personalInfoFields}
@@ -40,19 +44,21 @@ describe('DynamicForm - Simplified Functionality Tests', () => {
     );
 
     const firstNameInput = screen.getByLabelText(/first name/i);
-    
+
     // Should be able to type without errors
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
     expect(firstNameInput).toHaveValue('John');
-    
+
     // Should be able to continue typing
     fireEvent.change(firstNameInput, { target: { value: 'John Doe' } });
     expect(firstNameInput).toHaveValue('John Doe');
   });
 
   test('should handle multiple field typing', () => {
-    const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-    
+    const personalInfoFields = defaultFieldConfigs.filter(
+      f => f.section === 'personalInfo'
+    );
+
     render(
       <DynamicForm
         fields={personalInfoFields}
@@ -64,12 +70,12 @@ describe('DynamicForm - Simplified Functionality Tests', () => {
     const firstNameInput = screen.getByLabelText(/first name/i);
     const lastNameInput = screen.getByLabelText(/last name/i);
     const emailInput = screen.getByLabelText(/email/i);
-    
+
     // Type in multiple fields
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
     fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
     fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
-    
+
     // All fields should maintain their values
     expect(firstNameInput).toHaveValue('John');
     expect(lastNameInput).toHaveValue('Doe');
@@ -77,8 +83,10 @@ describe('DynamicForm - Simplified Functionality Tests', () => {
   });
 
   test('should handle form submission', () => {
-    const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
-    
+    const personalInfoFields = defaultFieldConfigs.filter(
+      f => f.section === 'personalInfo'
+    );
+
     render(
       <DynamicForm
         fields={personalInfoFields}
@@ -89,23 +97,25 @@ describe('DynamicForm - Simplified Functionality Tests', () => {
 
     const firstNameInput = screen.getByLabelText(/first name/i);
     const submitButton = screen.getByRole('button', { name: /submit/i });
-    
+
     // Fill a field and submit
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
     fireEvent.click(submitButton);
-    
+
     // Should call onSubmit
     expect(mockOnSubmit).toHaveBeenCalled();
   });
 
   test('should work with pre-filled data', () => {
-    const personalInfoFields = defaultFieldConfigs.filter(f => f.section === 'personalInfo');
+    const personalInfoFields = defaultFieldConfigs.filter(
+      f => f.section === 'personalInfo'
+    );
     const initialData = {
       firstName: 'Jane',
       lastName: 'Smith',
-      email: 'jane@example.com'
+      email: 'jane@example.com',
     };
-    
+
     render(
       <DynamicForm
         fields={personalInfoFields}
@@ -118,7 +128,7 @@ describe('DynamicForm - Simplified Functionality Tests', () => {
     expect(screen.getByDisplayValue('Jane')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Smith')).toBeInTheDocument();
     expect(screen.getByDisplayValue('jane@example.com')).toBeInTheDocument();
-    
+
     // Should still be editable
     const firstNameInput = screen.getByLabelText(/first name/i);
     fireEvent.change(firstNameInput, { target: { value: 'Janet' } });

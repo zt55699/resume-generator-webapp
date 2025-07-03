@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  ReactNode,
+} from 'react';
 import { ResumeData, Template, FieldConfig } from '../types';
 
 interface ResumeState {
@@ -12,13 +18,22 @@ interface ResumeState {
 
 type ResumeAction =
   | { type: 'SET_RESUME_DATA'; payload: ResumeData }
-  | { type: 'UPDATE_PERSONAL_INFO'; payload: Partial<ResumeData['personalInfo']> }
+  | {
+      type: 'UPDATE_PERSONAL_INFO';
+      payload: Partial<ResumeData['personalInfo']>;
+    }
   | { type: 'ADD_EXPERIENCE'; payload: ResumeData['experience'][0] }
-  | { type: 'UPDATE_EXPERIENCE'; payload: { id: string; data: Partial<ResumeData['experience'][0]> } }
+  | {
+      type: 'UPDATE_EXPERIENCE';
+      payload: { id: string; data: Partial<ResumeData['experience'][0]> };
+    }
   | { type: 'UPDATE_EXPERIENCE_FORM'; payload: Record<string, any> }
   | { type: 'DELETE_EXPERIENCE'; payload: string }
   | { type: 'ADD_EDUCATION'; payload: ResumeData['education'][0] }
-  | { type: 'UPDATE_EDUCATION'; payload: { id: string; data: Partial<ResumeData['education'][0]> } }
+  | {
+      type: 'UPDATE_EDUCATION';
+      payload: { id: string; data: Partial<ResumeData['education'][0]> };
+    }
   | { type: 'UPDATE_EDUCATION_FORM'; payload: Record<string, any> }
   | { type: 'DELETE_EDUCATION'; payload: string }
   | { type: 'SET_TEMPLATE'; payload: Template }
@@ -98,7 +113,9 @@ function resumeReducer(state: ResumeState, action: ResumeAction): ResumeState {
         resumeData: {
           ...state.resumeData,
           experience: state.resumeData.experience.map(exp =>
-            exp.id === action.payload.id ? { ...exp, ...action.payload.data } : exp
+            exp.id === action.payload.id
+              ? { ...exp, ...action.payload.data }
+              : exp
           ),
         },
         isDirty: true,
@@ -118,12 +135,12 @@ function resumeReducer(state: ResumeState, action: ResumeAction): ResumeState {
         description: action.payload.description || '',
         achievements: existingExperience?.achievements || [],
       };
-      
+
       return {
         ...state,
         resumeData: {
           ...state.resumeData,
-          experience: existingExperience 
+          experience: existingExperience
             ? [experienceData, ...state.resumeData.experience.slice(1)]
             : [experienceData],
         },
@@ -135,7 +152,9 @@ function resumeReducer(state: ResumeState, action: ResumeAction): ResumeState {
         ...state,
         resumeData: {
           ...state.resumeData,
-          experience: state.resumeData.experience.filter(exp => exp.id !== action.payload),
+          experience: state.resumeData.experience.filter(
+            exp => exp.id !== action.payload
+          ),
         },
         isDirty: true,
       };
@@ -156,7 +175,9 @@ function resumeReducer(state: ResumeState, action: ResumeAction): ResumeState {
         resumeData: {
           ...state.resumeData,
           education: state.resumeData.education.map(edu =>
-            edu.id === action.payload.id ? { ...edu, ...action.payload.data } : edu
+            edu.id === action.payload.id
+              ? { ...edu, ...action.payload.data }
+              : edu
           ),
         },
         isDirty: true,
@@ -177,12 +198,12 @@ function resumeReducer(state: ResumeState, action: ResumeAction): ResumeState {
         description: action.payload.description || '',
         achievements: existingEducation?.achievements || [],
       };
-      
+
       return {
         ...state,
         resumeData: {
           ...state.resumeData,
-          education: existingEducation 
+          education: existingEducation
             ? [educationData, ...state.resumeData.education.slice(1)]
             : [educationData],
         },
@@ -194,11 +215,12 @@ function resumeReducer(state: ResumeState, action: ResumeAction): ResumeState {
         ...state,
         resumeData: {
           ...state.resumeData,
-          education: state.resumeData.education.filter(edu => edu.id !== action.payload),
+          education: state.resumeData.education.filter(
+            edu => edu.id !== action.payload
+          ),
         },
         isDirty: true,
       };
-
 
     case 'SET_TEMPLATE':
       return {
@@ -292,7 +314,10 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
       dispatch({ type: 'SET_DIRTY', payload: false });
     } catch (error) {
       console.error('Failed to save resume:', error);
-      dispatch({ type: 'SET_ERROR', payload: { field: 'save', message: 'Failed to save resume' } });
+      dispatch({
+        type: 'SET_ERROR',
+        payload: { field: 'save', message: 'Failed to save resume' },
+      });
     }
   };
 
@@ -306,7 +331,10 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
       }
     } catch (error) {
       console.error('Failed to load resume:', error);
-      dispatch({ type: 'SET_ERROR', payload: { field: 'load', message: 'Failed to load resume' } });
+      dispatch({
+        type: 'SET_ERROR',
+        payload: { field: 'load', message: 'Failed to load resume' },
+      });
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
@@ -337,5 +365,7 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
     loadResume,
   };
 
-  return <ResumeContext.Provider value={value}>{children}</ResumeContext.Provider>;
+  return (
+    <ResumeContext.Provider value={value}>{children}</ResumeContext.Provider>
+  );
 };

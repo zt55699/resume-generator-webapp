@@ -45,8 +45,9 @@ const UserManagement: React.FC<UserManagementProps> = ({
   ];
 
   const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = filterRole === 'all' || user.role.id === filterRole;
     return matchesSearch && matchesRole;
   });
@@ -146,20 +147,26 @@ const UserManagement: React.FC<UserManagementProps> = ({
   };
 
   const canEditUser = (user: User) => {
-    return currentUser.role.permissions.includes('admin:all') || 
-           (currentUser.role.permissions.includes('admin:users') && user.id !== currentUser.id);
+    return (
+      currentUser.role.permissions.includes('admin:all') ||
+      (currentUser.role.permissions.includes('admin:users') &&
+        user.id !== currentUser.id)
+    );
   };
 
   const canDeleteUser = (user: User) => {
-    return currentUser.role.permissions.includes('admin:all') && user.id !== currentUser.id;
+    return (
+      currentUser.role.permissions.includes('admin:all') &&
+      user.id !== currentUser.id
+    );
   };
 
   return (
-    <div className="user-management">
-      <div className="user-management-header">
+    <div className='user-management'>
+      <div className='user-management-header'>
         <h3>User Management</h3>
         {currentUser.role.permissions.includes('admin:users') && (
-          <button className="add-user-button" onClick={handleAddUser}>
+          <button className='add-user-button' onClick={handleAddUser}>
             <span>+</span>
             Add New User
           </button>
@@ -167,103 +174,124 @@ const UserManagement: React.FC<UserManagementProps> = ({
       </div>
 
       {error && (
-        <div className="error-message">
+        <div className='error-message'>
           <p>{error}</p>
         </div>
       )}
 
-      <div className="user-filters">
-        <div className="filter-group">
+      <div className='user-filters'>
+        <div className='filter-group'>
           <input
-            type="text"
-            placeholder="Search users..."
+            type='text'
+            placeholder='Search users...'
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
+            onChange={e => setSearchTerm(e.target.value)}
+            className='search-input'
           />
         </div>
-        <div className="filter-group">
+        <div className='filter-group'>
           <select
             value={filterRole}
-            onChange={(e) => setFilterRole(e.target.value)}
-            className="role-filter"
+            onChange={e => setFilterRole(e.target.value)}
+            className='role-filter'
           >
-            <option value="all">All Roles</option>
+            <option value='all'>All Roles</option>
             {roles.map(role => (
-              <option key={role.id} value={role.id}>{role.name}</option>
+              <option key={role.id} value={role.id}>
+                {role.name}
+              </option>
             ))}
           </select>
         </div>
       </div>
 
       {editingUser && (
-        <div className="user-editor-modal">
-          <div className="user-editor">
-            <div className="user-editor-header">
-              <h4>{isAddingUser ? 'Add New User' : `Edit User: ${editingUser.name}`}</h4>
-              <button className="close-editor-button" onClick={handleCancelEdit}>
+        <div className='user-editor-modal'>
+          <div className='user-editor'>
+            <div className='user-editor-header'>
+              <h4>
+                {isAddingUser
+                  ? 'Add New User'
+                  : `Edit User: ${editingUser.name}`}
+              </h4>
+              <button
+                className='close-editor-button'
+                onClick={handleCancelEdit}
+              >
                 ×
               </button>
             </div>
 
-            <div className="user-editor-content">
-              <div className="user-editor-form">
-                <div className="form-group">
+            <div className='user-editor-content'>
+              <div className='user-editor-form'>
+                <div className='form-group'>
                   <label>Full Name</label>
                   <input
-                    type="text"
+                    type='text'
                     value={editingUser.name}
-                    onChange={(e) => handleUserPropertyChange('name', e.target.value)}
-                    placeholder="Enter full name"
+                    onChange={e =>
+                      handleUserPropertyChange('name', e.target.value)
+                    }
+                    placeholder='Enter full name'
                   />
                 </div>
 
-                <div className="form-group">
+                <div className='form-group'>
                   <label>Email Address</label>
                   <input
-                    type="email"
+                    type='email'
                     value={editingUser.email}
-                    onChange={(e) => handleUserPropertyChange('email', e.target.value)}
-                    placeholder="Enter email address"
+                    onChange={e =>
+                      handleUserPropertyChange('email', e.target.value)
+                    }
+                    placeholder='Enter email address'
                   />
                 </div>
 
-                <div className="form-group">
+                <div className='form-group'>
                   <label>Role</label>
                   <select
                     value={editingUser.role.id}
-                    onChange={(e) => handleUserPropertyChange('role', e.target.value)}
+                    onChange={e =>
+                      handleUserPropertyChange('role', e.target.value)
+                    }
                     disabled={editingUser.id === currentUser.id}
                   >
                     {roles.map(role => (
-                      <option key={role.id} value={role.id}>{role.name}</option>
+                      <option key={role.id} value={role.id}>
+                        {role.name}
+                      </option>
                     ))}
                   </select>
                   {editingUser.id === currentUser.id && (
-                    <small className="form-help">You cannot change your own role</small>
+                    <small className='form-help'>
+                      You cannot change your own role
+                    </small>
                   )}
                 </div>
 
-                <div className="role-permissions">
+                <div className='role-permissions'>
                   <label>Role Permissions</label>
-                  <div className="permissions-list">
+                  <div className='permissions-list'>
                     {editingUser.role.permissions.map(permission => (
-                      <span key={permission} className="permission-badge">
+                      <span key={permission} className='permission-badge'>
                         {permission}
                       </span>
                     ))}
                     {editingUser.role.permissions.length === 0 && (
-                      <span className="no-permissions">No admin permissions</span>
+                      <span className='no-permissions'>
+                        No admin permissions
+                      </span>
                     )}
                   </div>
                 </div>
 
-                <div className="user-editor-actions">
-                  <button className="cancel-button" onClick={handleCancelEdit}>
+                <div className='user-editor-actions'>
+                  <button className='cancel-button' onClick={handleCancelEdit}>
                     Cancel
                   </button>
                   <button
-                    className="save-button"
+                    className='save-button'
                     onClick={handleSaveUser}
                     disabled={!editingUser.name || !editingUser.email}
                   >
@@ -276,8 +304,8 @@ const UserManagement: React.FC<UserManagementProps> = ({
         </div>
       )}
 
-      <div className="users-table-container">
-        <table className="users-table">
+      <div className='users-table-container'>
+        <table className='users-table'>
           <thead>
             <tr>
               <th>User</th>
@@ -293,14 +321,18 @@ const UserManagement: React.FC<UserManagementProps> = ({
             {filteredUsers.map(user => (
               <tr key={user.id}>
                 <td>
-                  <div className="user-info">
-                    <div className="user-avatar">
-                      {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                  <div className='user-info'>
+                    <div className='user-avatar'>
+                      {user.name
+                        .split(' ')
+                        .map(n => n[0])
+                        .join('')
+                        .toUpperCase()}
                     </div>
-                    <div className="user-details">
-                      <div className="user-name">{user.name}</div>
+                    <div className='user-details'>
+                      <div className='user-name'>{user.name}</div>
                       {user.id === currentUser.id && (
-                        <span className="current-user-badge">(You)</span>
+                        <span className='current-user-badge'>(You)</span>
                       )}
                     </div>
                   </div>
@@ -314,24 +346,24 @@ const UserManagement: React.FC<UserManagementProps> = ({
                 <td>{formatDate(user.createdAt)}</td>
                 <td>{formatDate(user.lastLogin)}</td>
                 <td>
-                  <span className="user-status-badge active">Active</span>
+                  <span className='user-status-badge active'>Active</span>
                 </td>
                 <td>
-                  <div className="user-actions">
+                  <div className='user-actions'>
                     {canEditUser(user) && (
                       <button
-                        className="user-action-button edit"
+                        className='user-action-button edit'
                         onClick={() => handleEditUser(user)}
-                        title="Edit user"
+                        title='Edit user'
                       >
                         ✏️
                       </button>
                     )}
                     {canDeleteUser(user) && (
                       <button
-                        className="user-action-button delete"
+                        className='user-action-button delete'
                         onClick={() => handleDeleteUser(user.id)}
-                        title="Delete user"
+                        title='Delete user'
                       >
                         🗑️
                       </button>
@@ -344,7 +376,7 @@ const UserManagement: React.FC<UserManagementProps> = ({
         </table>
 
         {filteredUsers.length === 0 && !isLoading && (
-          <div className="empty-state">
+          <div className='empty-state'>
             <p>No users found matching your criteria.</p>
           </div>
         )}

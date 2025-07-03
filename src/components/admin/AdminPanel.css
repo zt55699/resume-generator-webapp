@@ -12,7 +12,9 @@
   padding: 1.5rem 2rem;
   background: white;
   border-radius: 0.75rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .admin-header h1 {
@@ -46,7 +48,9 @@
   background: white;
   padding: 0.5rem;
   border-radius: 0.75rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .admin-tab {
@@ -81,7 +85,9 @@
 .admin-content {
   background: white;
   border-radius: 0.75rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   min-height: 500px;
   overflow: hidden;
 }
@@ -106,8 +112,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .admin-error {
@@ -185,8 +195,8 @@
   font-size: 0.875rem;
 }
 
-.setting-item input[type="number"],
-.setting-item input[type="text"],
+.setting-item input[type='number'],
+.setting-item input[type='text'],
 .setting-item select {
   padding: 0.75rem;
   border: 1px solid #d1d5db;
@@ -195,15 +205,15 @@
   transition: border-color 0.2s ease;
 }
 
-.setting-item input[type="number"]:focus,
-.setting-item input[type="text"]:focus,
+.setting-item input[type='number']:focus,
+.setting-item input[type='text']:focus,
 .setting-item select:focus {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.setting-item input[type="checkbox"] {
+.setting-item input[type='checkbox'] {
   width: 1.25rem;
   height: 1.25rem;
   accent-color: #3b82f6;
@@ -415,7 +425,7 @@
   gap: 0.5rem;
 }
 
-.checkbox-group input[type="checkbox"] {
+.checkbox-group input[type='checkbox'] {
   width: 1.25rem;
   height: 1.25rem;
   accent-color: #3b82f6;
@@ -528,7 +538,9 @@
   border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .template-card:hover {

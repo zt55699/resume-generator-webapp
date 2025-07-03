@@ -43,12 +43,12 @@ const NumberInput: React.FC<NumberInputProps> = ({
 
   return (
     <div className={`form-field ${className} ${error ? 'error' : ''}`}>
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name} className='form-label'>
         {label}
-        {required && <span className="required">*</span>}
+        {required && <span className='required'>*</span>}
       </label>
       <input
-        type="number"
+        type='number'
         id={name}
         name={name}
         value={value}
@@ -59,12 +59,12 @@ const NumberInput: React.FC<NumberInputProps> = ({
         min={min}
         max={max}
         step={step}
-        className="form-input"
+        className='form-input'
         aria-invalid={error ? 'true' : 'false'}
         aria-describedby={error ? `${name}-error` : undefined}
       />
       {error && (
-        <div id={`${name}-error`} className="form-error" role="alert">
+        <div id={`${name}-error`} className='form-error' role='alert'>
           {error}
         </div>
       )}

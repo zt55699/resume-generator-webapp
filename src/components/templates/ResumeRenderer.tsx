@@ -47,23 +47,23 @@ const ResumeRenderer: React.FC<ResumeRendererProps> = ({
   };
 
   return (
-    <div 
+    <div
       className={`resume-renderer ${className} template-${template.id} ${isPreview ? 'preview' : ''}`}
-      style={{
-        '--primary-color': template.colors.primary,
-        '--secondary-color': template.colors.secondary,
-        '--accent-color': template.colors.accent,
-        '--text-color': template.colors.text,
-        '--background-color': template.colors.background,
-        '--primary-font': template.fonts.primary,
-        '--secondary-font': template.fonts.secondary,
-      } as React.CSSProperties}
+      style={
+        {
+          '--primary-color': template.colors.primary,
+          '--secondary-color': template.colors.secondary,
+          '--accent-color': template.colors.accent,
+          '--text-color': template.colors.text,
+          '--background-color': template.colors.background,
+          '--primary-font': template.fonts.primary,
+          '--secondary-font': template.fonts.secondary,
+        } as React.CSSProperties
+      }
     >
       {renderTemplate()}
       {showWatermark && (
-        <div className="resume-watermark">
-          Resume Generator
-        </div>
+        <div className='resume-watermark'>Resume Generator</div>
       )}
     </div>
   );
