@@ -233,10 +233,15 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({ fieldConfigs, templates }
               <div className="form-content">
                 <DynamicForm
                   fields={fieldConfigs.filter(f => f.section === selectedSection)}
-                  data={state.resumeData}
+                  data={selectedSection === 'personalInfo' ? state.resumeData.personalInfo : {}}
                   onSubmit={(data) => {
                     // Handle form submission
-                    dispatch({ type: 'SET_RESUME_DATA', payload: data as ResumeData });
+                    if (selectedSection === 'personalInfo') {
+                      dispatch({ 
+                        type: 'UPDATE_PERSONAL_INFO', 
+                        payload: data 
+                      });
+                    }
                   }}
                   onFieldChange={(fieldName, value) => {
                     // Handle field changes
@@ -247,6 +252,7 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({ fieldConfigs, templates }
                       });
                     }
                   }}
+                  submitButtonText="Save Section"
                 />
               </div>
             </div>

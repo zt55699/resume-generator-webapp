@@ -476,6 +476,17 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
     loadResume();
   }, []);
 
+  // Auto-save on data changes
+  useEffect(() => {
+    if (state.isDirty) {
+      const saveTimer = setTimeout(() => {
+        saveResume();
+      }, 2000); // Auto-save after 2 seconds of inactivity
+
+      return () => clearTimeout(saveTimer);
+    }
+  }, [state.isDirty, state.resumeData]);
+
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (state.isDirty) {

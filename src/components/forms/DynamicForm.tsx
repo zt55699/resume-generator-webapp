@@ -87,11 +87,17 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     watch,
     setValue,
     trigger,
+    reset,
   } = useForm({
     resolver: validationSchema ? yupResolver(validationSchema) : undefined,
     defaultValues: data,
     mode: 'onChange',
   });
+
+  // Update form when data prop changes
+  useEffect(() => {
+    reset(data);
+  }, [data, reset]);
 
   const watchedValues = watch();
 
@@ -112,12 +118,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     if (onFieldChange) {
       Object.keys(watchedValues).forEach(key => {
         const value = watchedValues[key];
-        if (value !== undefined) {
+        if (value !== undefined && value !== data[key]) {
           onFieldChange(key, value);
         }
       });
     }
-  }, [watchedValues, onFieldChange]);
+  }, [watchedValues, onFieldChange, data]);
 
   const renderField = (field: FieldConfig) => {
     if (!field.visible) return null;

@@ -3,9 +3,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ResumeProvider } from './contexts/ResumeContext';
 import { FieldConfig, Template, User, UserRole } from './types';
 import { resumeTemplates } from './data/templates';
+import { defaultFieldConfigs } from './data/fieldConfigs';
 import Navbar from './components/common/Navbar';
 import HomePage from './components/pages/HomePage';
 import ResumeBuilder from './components/pages/ResumeBuilder';
+import ResumeForm from './components/pages/ResumeForm';
+import ResumePreview from './components/pages/ResumePreview';
 import TemplateSelector from './components/pages/TemplateSelector';
 import ExportPage from './components/pages/ExportPage';
 import MyResumes from './components/pages/MyResumes';
@@ -17,7 +20,7 @@ import './App.css';
 import './styles/wechat.css';
 
 const App: React.FC = () => {
-  const [fieldConfigs, setFieldConfigs] = useState<FieldConfig[]>([]);
+  const [fieldConfigs, setFieldConfigs] = useState<FieldConfig[]>(defaultFieldConfigs);
   const [templates, setTemplates] = useState<Template[]>(resumeTemplates);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -172,8 +175,15 @@ const App: React.FC = () => {
               <Route 
                 path="/builder" 
                 element={
-                  <ResumeBuilder 
+                  <ResumeForm 
                     fieldConfigs={fieldConfigs}
+                  />
+                } 
+              />
+              <Route 
+                path="/preview" 
+                element={
+                  <ResumePreview 
                     templates={templates}
                   />
                 } 
