@@ -1,0 +1,161 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    # Run weekly on Mondays at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # Allow manual trigger
+  
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  security-updates:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Check for security vulnerabilities
+      run: |
+        # Run security audit
+        npm audit --audit-level=moderate || true
+        
+        # Generate audit report
+        npm audit --json > security-audit.json || true
+        
+        # Check if there are fixable vulnerabilities
+        if npm audit fix --dry-run > audit-fix.txt 2>&1; then
+          echo "Security fixes available"
+          cat audit-fix.txt
+        else
+          echo "No automatic security fixes available"
+        fi
+        
+    - name: Apply security fixes
+      run: |
+        # Apply automatic security fixes
+        npm audit fix --force || true
+        
+        # Update package-lock.json
+        npm install --package-lock-only
+        
+    - name: Check for changes
+      id: check-changes
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "changes=true" >> $GITHUB_OUTPUT
+          echo "Security updates applied"
+        else
+          echo "changes=false" >> $GITHUB_OUTPUT
+          echo "No security updates needed"
+        fi
+        
+    - name: Create Pull Request for security updates
+      if: steps.check-changes.outputs.changes == 'true'
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 'chore: apply security updates'
+        title: 'Security Updates - Automated Dependency Fixes'
+        body: |
+          ## 🔒 Security Updates
+          
+          This PR contains automated security fixes for npm dependencies.
+          
+          ### Changes
+          - Applied `npm audit fix` to resolve security vulnerabilities
+          - Updated package-lock.json with latest dependency versions
+          
+          ### Review Instructions
+          1. Review the changes to package-lock.json
+          2. Verify that the application still builds and tests pass
+          3. Merge if all checks are green
+          
+          **Note**: This PR was automatically created by GitHub Actions.
+        branch: security-updates
+        delete-branch: true
+        
+  update-dependencies:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Update dependencies
+      run: |
+        # Update all dependencies to latest compatible versions
+        npx npm-check-updates -u --target minor
+        
+        # Install updated dependencies
+        npm install
+        
+    - name: Run tests with updated dependencies
+      run: |
+        npm run type-check
+        npm test -- --watchAll=false
+        npm run build
+        
+    - name: Check for changes
+      id: check-updates
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "updates=true" >> $GITHUB_OUTPUT
+          echo "Dependencies updated"
+        else
+          echo "updates=false" >> $GITHUB_OUTPUT
+          echo "No dependency updates available"
+        fi
+        
+    - name: Create Pull Request for dependency updates
+      if: steps.check-updates.outputs.updates == 'true'
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 'chore: update dependencies to latest minor versions'
+        title: 'Dependency Updates - Latest Minor Versions'
+        body: |
+          ## 📦 Dependency Updates
+          
+          This PR updates dependencies to their latest minor versions.
+          
+          ### Changes
+          - Updated package.json with latest compatible versions
+          - Updated package-lock.json
+          - All tests pass with updated dependencies
+          
+          ### Review Instructions
+          1. Review the dependency changes
+          2. Verify that all tests pass
+          3. Check for any breaking changes in the updated packages
+          4. Merge if everything looks good
+          
+          **Note**: This PR was automatically created by GitHub Actions.
+        branch: dependency-updates
+        delete-branch: true

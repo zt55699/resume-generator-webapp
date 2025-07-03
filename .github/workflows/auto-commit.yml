@@ -1,65 +1,64 @@
 name: Auto Commit
 
 on:
-  schedule:
-    # Run every hour during development (can be adjusted)
-    - cron: '0 * * * *'
-  workflow_dispatch:  # Allow manual triggering
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+
+permissions:
+  contents: write
+  actions: write
 
 jobs:
-  auto-commit:
+  format-and-commit:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, 'chore: auto-format')"
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
         
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '18.x'
+        node-version: '20.x'
         cache: 'npm'
         
     - name: Install dependencies
       run: npm ci
       
-    - name: Run tests
-      run: npm test -- --passWithNoTests
-      
-    - name: Build project
-      run: npm run build
-      
-    - name: Configure Git
+    - name: Run code formatting
+      run: |
+        # Format TypeScript/JavaScript files
+        npm run format --if-present || npx prettier --write "src/**/*.{ts,tsx,js,jsx,css,md}" --ignore-unknown
+        
+        # Fix linting issues automatically
+        npm run lint -- --fix --if-present || true
+        
+    - name: Check for changes
+      id: verify-changed-files
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "Files were changed by formatting"
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+          echo "No files were changed by formatting"
+        fi
+        
+    - name: Commit formatted files
+      if: steps.verify-changed-files.outputs.changed == 'true'
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        
-    - name: Check for changes
-      id: changes
-      run: |
-        git add -A
-        if git diff --staged --quiet; then
-          echo "No changes to commit"
-          echo "::set-output name=changes::false"
-        else
-          echo "Changes detected"
-          echo "::set-output name=changes::true"
-        fi
-        
-    - name: Commit changes
-      if: steps.changes.outputs.changes == 'true'
-      run: |
-        git commit -m "chore: automated commit with build artifacts
-        
-        - Updated build artifacts
-        - Automated commit from GitHub Actions
-        - Timestamp: $(date -u)"
-        
-    - name: Push changes
-      if: steps.changes.outputs.changes == 'true'
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
+        git add .
+        git commit -m "chore: auto-format code [skip ci]"
+        git push
