@@ -98,12 +98,6 @@ export interface ResumeData {
   personalInfo: PersonalInfo;
   experience: Experience[];
   education: Education[];
-  skills: Skill[];
-  projects: Project[];
-  certifications: Certification[];
-  languages: Language[];
-  references: Reference[];
-  customSections: CustomSection[];
 }
 
 export interface Template {
@@ -144,7 +138,7 @@ export interface FieldConfig {
     max?: number;
   };
   options?: string[];
-  section: 'personalInfo' | 'experience' | 'education' | 'skills' | 'projects' | 'certifications' | 'languages' | 'references' | 'customSections';
+  section: 'personalInfo' | 'experience' | 'education';
   order: number;
   visible: boolean;
   fileConfig?: {

@@ -13,30 +13,8 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({
   template,
   isPreview = false,
 }) => {
-  const { personalInfo, experience, education, skills, projects, certifications, languages, references, customSections } = resumeData;
+  const { personalInfo, experience, education } = resumeData;
 
-  const renderSkillsByCategory = () => {
-    const skillsByCategory: Record<string, typeof skills> = {};
-    skills.forEach(skill => {
-      if (!skillsByCategory[skill.category]) {
-        skillsByCategory[skill.category] = [];
-      }
-      skillsByCategory[skill.category].push(skill);
-    });
-
-    return Object.entries(skillsByCategory).map(([category, categorySkills]) => (
-      <div key={category} className="resume-skill-category">
-        <div className="resume-skill-category-title">{category}</div>
-        <div className="resume-skills-list">
-          {categorySkills.map(skill => (
-            <span key={skill.id} className="resume-skill-tag modern-skill-tag">
-              {skill.name}
-            </span>
-          ))}
-        </div>
-      </div>
-    ));
-  };
 
   return (
     <div className={`modern-template layout-${template.layout}`}>
@@ -105,60 +83,6 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({
           <>
             {/* Left Column */}
             <div className="resume-sidebar modern-sidebar">
-              {/* Skills */}
-              {skills.length > 0 && (
-                <section className="resume-section">
-                  <h2 className="modern-section-title">Expertise</h2>
-                  <div className="modern-skills-container">
-                    {renderSkillsByCategory()}
-                  </div>
-                </section>
-              )}
-
-              {/* Languages */}
-              {languages.length > 0 && (
-                <section className="resume-section">
-                  <h2 className="modern-section-title">Languages</h2>
-                  <div className="modern-languages">
-                    {languages.map(language => (
-                      <div key={language.id} className="modern-language">
-                        <div className="modern-language-header">
-                          <span className="resume-language-name">{language.name}</span>
-                          <span className="modern-language-level">{language.proficiency}</span>
-                        </div>
-                        <div className="modern-progress-bar">
-                          <div 
-                            className="modern-progress-fill"
-                            style={{
-                              width: language.proficiency === 'Native' ? '100%' : 
-                                     language.proficiency === 'Professional' ? '85%' :
-                                     language.proficiency === 'Conversational' ? '70%' : '50%'
-                            }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {/* Certifications */}
-              {certifications.length > 0 && (
-                <section className="resume-section">
-                  <h2 className="modern-section-title">Certifications</h2>
-                  <div className="modern-certifications">
-                    {certifications.map(cert => (
-                      <div key={cert.id} className="modern-certification">
-                        <div className="modern-cert-badge">
-                          <div className="resume-certification-name">{cert.name}</div>
-                          <div className="resume-certification-issuer">{cert.issuer}</div>
-                          <div className="resume-certification-date">{cert.dateIssued}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
             </div>
 
             {/* Right Column */}
@@ -289,57 +213,6 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({
               </section>
             )}
 
-            {/* Skills */}
-            {skills.length > 0 && (
-              <section className="resume-section">
-                <h2 className="modern-section-title">Expertise</h2>
-                <div className="modern-skills-container">
-                  {renderSkillsByCategory()}
-                </div>
-              </section>
-            )}
-
-            {/* Projects */}
-            {projects.length > 0 && (
-              <section className="resume-section">
-                <h2 className="modern-section-title">Featured Projects</h2>
-                <div className="modern-projects-grid">
-                  {projects.map(project => (
-                    <div key={project.id} className="modern-project-card">
-                      <div className="modern-project-header">
-                        <div className="resume-project-title modern-project-title">{project.name}</div>
-                        <div className="resume-project-links">
-                          {project.url && (
-                            <a href={project.url} className="modern-project-link" target="_blank" rel="noopener noreferrer">
-                              Live Demo
-                            </a>
-                          )}
-                          {project.githubUrl && (
-                            <a href={project.githubUrl} className="modern-project-link" target="_blank" rel="noopener noreferrer">
-                              GitHub
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                      <div className="resume-item-description">{project.description}</div>
-                      <div className="modern-project-tech">
-                        {project.technologies.map((tech, index) => (
-                          <span key={index} className="modern-tech-tag">{tech}</span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Custom Sections */}
-            {customSections.map(section => (
-              <section key={section.id} className="resume-section">
-                <h2 className="modern-section-title">{section.title}</h2>
-                <div className="resume-item-description">{section.content}</div>
-              </section>
-            ))}
           </div>
         )}
       </div>

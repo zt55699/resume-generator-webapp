@@ -15,28 +15,12 @@ type ResumeAction =
   | { type: 'UPDATE_PERSONAL_INFO'; payload: Partial<ResumeData['personalInfo']> }
   | { type: 'ADD_EXPERIENCE'; payload: ResumeData['experience'][0] }
   | { type: 'UPDATE_EXPERIENCE'; payload: { id: string; data: Partial<ResumeData['experience'][0]> } }
+  | { type: 'UPDATE_EXPERIENCE_FORM'; payload: Record<string, any> }
   | { type: 'DELETE_EXPERIENCE'; payload: string }
   | { type: 'ADD_EDUCATION'; payload: ResumeData['education'][0] }
   | { type: 'UPDATE_EDUCATION'; payload: { id: string; data: Partial<ResumeData['education'][0]> } }
+  | { type: 'UPDATE_EDUCATION_FORM'; payload: Record<string, any> }
   | { type: 'DELETE_EDUCATION'; payload: string }
-  | { type: 'ADD_SKILL'; payload: ResumeData['skills'][0] }
-  | { type: 'UPDATE_SKILL'; payload: { id: string; data: Partial<ResumeData['skills'][0]> } }
-  | { type: 'DELETE_SKILL'; payload: string }
-  | { type: 'ADD_PROJECT'; payload: ResumeData['projects'][0] }
-  | { type: 'UPDATE_PROJECT'; payload: { id: string; data: Partial<ResumeData['projects'][0]> } }
-  | { type: 'DELETE_PROJECT'; payload: string }
-  | { type: 'ADD_CERTIFICATION'; payload: ResumeData['certifications'][0] }
-  | { type: 'UPDATE_CERTIFICATION'; payload: { id: string; data: Partial<ResumeData['certifications'][0]> } }
-  | { type: 'DELETE_CERTIFICATION'; payload: string }
-  | { type: 'ADD_LANGUAGE'; payload: ResumeData['languages'][0] }
-  | { type: 'UPDATE_LANGUAGE'; payload: { id: string; data: Partial<ResumeData['languages'][0]> } }
-  | { type: 'DELETE_LANGUAGE'; payload: string }
-  | { type: 'ADD_REFERENCE'; payload: ResumeData['references'][0] }
-  | { type: 'UPDATE_REFERENCE'; payload: { id: string; data: Partial<ResumeData['references'][0]> } }
-  | { type: 'DELETE_REFERENCE'; payload: string }
-  | { type: 'ADD_CUSTOM_SECTION'; payload: ResumeData['customSections'][0] }
-  | { type: 'UPDATE_CUSTOM_SECTION'; payload: { id: string; data: Partial<ResumeData['customSections'][0]> } }
-  | { type: 'DELETE_CUSTOM_SECTION'; payload: string }
   | { type: 'SET_TEMPLATE'; payload: Template }
   | { type: 'SET_FIELD_CONFIGS'; payload: FieldConfig[] }
   | { type: 'SET_LOADING'; payload: boolean }
@@ -65,12 +49,6 @@ const initialResumeData: ResumeData = {
   },
   experience: [],
   education: [],
-  skills: [],
-  projects: [],
-  certifications: [],
-  languages: [],
-  references: [],
-  customSections: [],
 };
 
 const initialState: ResumeState = {
@@ -126,6 +104,32 @@ function resumeReducer(state: ResumeState, action: ResumeAction): ResumeState {
         isDirty: true,
       };
 
+    case 'UPDATE_EXPERIENCE_FORM':
+      // For simplified single-form approach, either update first existing or create new
+      const existingExperience = state.resumeData.experience[0];
+      const experienceData = {
+        id: existingExperience?.id || 'exp-1',
+        company: action.payload.company || '',
+        position: action.payload.position || '',
+        startDate: action.payload.startDate || '',
+        endDate: action.payload.endDate || '',
+        isCurrentPosition: action.payload.isCurrentPosition || false,
+        location: action.payload.location || '',
+        description: action.payload.description || '',
+        achievements: existingExperience?.achievements || [],
+      };
+      
+      return {
+        ...state,
+        resumeData: {
+          ...state.resumeData,
+          experience: existingExperience 
+            ? [experienceData, ...state.resumeData.experience.slice(1)]
+            : [experienceData],
+        },
+        isDirty: true,
+      };
+
     case 'DELETE_EXPERIENCE':
       return {
         ...state,
@@ -158,6 +162,33 @@ function resumeReducer(state: ResumeState, action: ResumeAction): ResumeState {
         isDirty: true,
       };
 
+    case 'UPDATE_EDUCATION_FORM':
+      // For simplified single-form approach, either update first existing or create new
+      const existingEducation = state.resumeData.education[0];
+      const educationData = {
+        id: existingEducation?.id || 'edu-1',
+        institution: action.payload.institution || '',
+        degree: action.payload.degree || '',
+        fieldOfStudy: action.payload.fieldOfStudy || '',
+        startDate: action.payload.startDate || '',
+        endDate: action.payload.endDate || '',
+        gpa: action.payload.gpa || '',
+        location: action.payload.location || '',
+        description: action.payload.description || '',
+        achievements: existingEducation?.achievements || [],
+      };
+      
+      return {
+        ...state,
+        resumeData: {
+          ...state.resumeData,
+          education: existingEducation 
+            ? [educationData, ...state.resumeData.education.slice(1)]
+            : [educationData],
+        },
+        isDirty: true,
+      };
+
     case 'DELETE_EDUCATION':
       return {
         ...state,
@@ -168,197 +199,6 @@ function resumeReducer(state: ResumeState, action: ResumeAction): ResumeState {
         isDirty: true,
       };
 
-    case 'ADD_SKILL':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          skills: [...state.resumeData.skills, action.payload],
-        },
-        isDirty: true,
-      };
-
-    case 'UPDATE_SKILL':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          skills: state.resumeData.skills.map(skill =>
-            skill.id === action.payload.id ? { ...skill, ...action.payload.data } : skill
-          ),
-        },
-        isDirty: true,
-      };
-
-    case 'DELETE_SKILL':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          skills: state.resumeData.skills.filter(skill => skill.id !== action.payload),
-        },
-        isDirty: true,
-      };
-
-    case 'ADD_PROJECT':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          projects: [...state.resumeData.projects, action.payload],
-        },
-        isDirty: true,
-      };
-
-    case 'UPDATE_PROJECT':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          projects: state.resumeData.projects.map(project =>
-            project.id === action.payload.id ? { ...project, ...action.payload.data } : project
-          ),
-        },
-        isDirty: true,
-      };
-
-    case 'DELETE_PROJECT':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          projects: state.resumeData.projects.filter(project => project.id !== action.payload),
-        },
-        isDirty: true,
-      };
-
-    case 'ADD_CERTIFICATION':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          certifications: [...state.resumeData.certifications, action.payload],
-        },
-        isDirty: true,
-      };
-
-    case 'UPDATE_CERTIFICATION':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          certifications: state.resumeData.certifications.map(cert =>
-            cert.id === action.payload.id ? { ...cert, ...action.payload.data } : cert
-          ),
-        },
-        isDirty: true,
-      };
-
-    case 'DELETE_CERTIFICATION':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          certifications: state.resumeData.certifications.filter(cert => cert.id !== action.payload),
-        },
-        isDirty: true,
-      };
-
-    case 'ADD_LANGUAGE':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          languages: [...state.resumeData.languages, action.payload],
-        },
-        isDirty: true,
-      };
-
-    case 'UPDATE_LANGUAGE':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          languages: state.resumeData.languages.map(lang =>
-            lang.id === action.payload.id ? { ...lang, ...action.payload.data } : lang
-          ),
-        },
-        isDirty: true,
-      };
-
-    case 'DELETE_LANGUAGE':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          languages: state.resumeData.languages.filter(lang => lang.id !== action.payload),
-        },
-        isDirty: true,
-      };
-
-    case 'ADD_REFERENCE':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          references: [...state.resumeData.references, action.payload],
-        },
-        isDirty: true,
-      };
-
-    case 'UPDATE_REFERENCE':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          references: state.resumeData.references.map(ref =>
-            ref.id === action.payload.id ? { ...ref, ...action.payload.data } : ref
-          ),
-        },
-        isDirty: true,
-      };
-
-    case 'DELETE_REFERENCE':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          references: state.resumeData.references.filter(ref => ref.id !== action.payload),
-        },
-        isDirty: true,
-      };
-
-    case 'ADD_CUSTOM_SECTION':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          customSections: [...state.resumeData.customSections, action.payload],
-        },
-        isDirty: true,
-      };
-
-    case 'UPDATE_CUSTOM_SECTION':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          customSections: state.resumeData.customSections.map(section =>
-            section.id === action.payload.id ? { ...section, ...action.payload.data } : section
-          ),
-        },
-        isDirty: true,
-      };
-
-    case 'DELETE_CUSTOM_SECTION':
-      return {
-        ...state,
-        resumeData: {
-          ...state.resumeData,
-          customSections: state.resumeData.customSections.filter(section => section.id !== action.payload),
-        },
-        isDirty: true,
-      };
 
     case 'SET_TEMPLATE':
       return {
@@ -476,16 +316,7 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
     loadResume();
   }, []);
 
-  // Auto-save on data changes
-  useEffect(() => {
-    if (state.isDirty) {
-      const saveTimer = setTimeout(() => {
-        saveResume();
-      }, 2000); // Auto-save after 2 seconds of inactivity
-
-      return () => clearTimeout(saveTimer);
-    }
-  }, [state.isDirty, state.resumeData]);
+  // Auto-save removed to prevent infinite loops
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {

@@ -102,27 +102,27 @@ describe('DynamicForm - TDD Tests for Form Input Issues', () => {
     });
   });
 
-  describe('CRITICAL TEST 3: Skills Section Fields', () => {
-    test('should render skills input fields', () => {
-      const skillsFields = defaultFieldConfigs.filter(f => f.section === 'skills');
+  describe('CRITICAL TEST 3: Education Section Fields', () => {
+    test('should render education input fields', () => {
+      const educationFields = defaultFieldConfigs.filter(f => f.section === 'education');
       
       render(
         <DynamicForm
-          fields={skillsFields}
+          fields={educationFields}
           data={{}}
           onSubmit={mockOnSubmit}
           onFieldChange={mockOnFieldChange}
         />
       );
 
-      // SHOULD FIND: Skill Name input
-      expect(screen.getByLabelText(/skill name/i)).toBeInTheDocument();
+      // SHOULD FIND: Institution Name input
+      expect(screen.getByLabelText(/institution name/i)).toBeInTheDocument();
       
-      // SHOULD FIND: Proficiency Level select
-      expect(screen.getByLabelText(/proficiency level/i)).toBeInTheDocument();
+      // SHOULD FIND: Degree input
+      expect(screen.getByLabelText(/degree/i)).toBeInTheDocument();
       
-      // SHOULD FIND: Category input
-      expect(screen.getByLabelText(/category/i)).toBeInTheDocument();
+      // SHOULD FIND: Field of Study input
+      expect(screen.getByLabelText(/field of study/i)).toBeInTheDocument();
     });
   });
 

@@ -43,7 +43,7 @@ class PDFExporter {
   }
 
   private static async generateResumeHTML(resumeData: ResumeData, template: Template, options: ExportOptions): Promise<string> {
-    const { personalInfo, experience, education, skills, projects, certifications, languages, references, customSections } = resumeData;
+    const { personalInfo, experience, education } = resumeData;
     
     // Generate styles for PDF
     const styles = this.generatePDFStyles(template, options);
@@ -59,16 +59,6 @@ class PDFExporter {
     if (personalInfo.linkedin) contactItems.push(`💼 LinkedIn`);
     if (personalInfo.github) contactItems.push(`💻 GitHub`);
 
-    // Skills grouped by category
-    const skillsByCategory = this.groupSkillsByCategory(skills);
-    const skillsHTML = Object.entries(skillsByCategory).map(([category, categorySkills]) => `
-      <div class="skill-category">
-        <div class="skill-category-title">${category}</div>
-        <div class="skills-list">
-          ${categorySkills.map(skill => `<span class="skill-tag">${skill.name}</span>`).join('')}
-        </div>
-      </div>
-    `).join('');
 
     return `
       <style>${styles}</style>
@@ -148,77 +138,6 @@ class PDFExporter {
             </div>
           ` : ''}
 
-          ${skillsHTML ? `
-            <div class="section">
-              <h2 class="section-title">Skills</h2>
-              <div class="skills-container">${skillsHTML}</div>
-            </div>
-          ` : ''}
-
-          ${projects.length > 0 ? `
-            <div class="section">
-              <h2 class="section-title">Projects</h2>
-              ${projects.map(project => `
-                <div class="item">
-                  <div class="item-header">
-                    <div class="item-left">
-                      <h3 class="item-title">${project.name}</h3>
-                    </div>
-                    <div class="item-right">
-                      <div class="item-date">${project.startDate} - ${project.endDate}</div>
-                    </div>
-                  </div>
-                  <p class="item-description">${project.description}</p>
-                  <div class="technologies">
-                    <strong>Technologies:</strong> ${project.technologies.join(', ')}
-                  </div>
-                  ${project.url ? `<div class="project-link"><strong>URL:</strong> ${project.url}</div>` : ''}
-                  ${project.githubUrl ? `<div class="project-link"><strong>GitHub:</strong> ${project.githubUrl}</div>` : ''}
-                </div>
-              `).join('')}
-            </div>
-          ` : ''}
-
-          ${certifications.length > 0 ? `
-            <div class="section">
-              <h2 class="section-title">Certifications</h2>
-              ${certifications.map(cert => `
-                <div class="certification">
-                  <div class="cert-name">${cert.name}</div>
-                  <div class="cert-details">${cert.issuer} • ${cert.dateIssued}</div>
-                </div>
-              `).join('')}
-            </div>
-          ` : ''}
-
-          ${languages.length > 0 ? `
-            <div class="section">
-              <h2 class="section-title">Languages</h2>
-              <div class="languages">
-                ${languages.map(lang => `<span class="language">${lang.name} (${lang.proficiency})</span>`).join('')}
-              </div>
-            </div>
-          ` : ''}
-
-          ${customSections.map(section => `
-            <div class="section">
-              <h2 class="section-title">${section.title}</h2>
-              <p class="summary">${section.content}</p>
-            </div>
-          `).join('')}
-
-          ${references.length > 0 ? `
-            <div class="section">
-              <h2 class="section-title">References</h2>
-              ${references.map(ref => `
-                <div class="reference">
-                  <div class="ref-name">${ref.name}</div>
-                  <div class="ref-title">${ref.position}, ${ref.company}</div>
-                  <div class="ref-contact">${ref.email} • ${ref.phone}</div>
-                </div>
-              `).join('')}
-            </div>
-          ` : ''}
         </div>
       </div>
     `;
@@ -575,16 +494,6 @@ class PDFExporter {
     return pdf;
   }
 
-  private static groupSkillsByCategory(skills: any[]): Record<string, any[]> {
-    const grouped: Record<string, any[]> = {};
-    skills.forEach(skill => {
-      if (!grouped[skill.category]) {
-        grouped[skill.category] = [];
-      }
-      grouped[skill.category].push(skill);
-    });
-    return grouped;
-  }
 
   private static generateFilename(resumeData: ResumeData): string {
     const name = `${resumeData.personalInfo.firstName}_${resumeData.personalInfo.lastName}`;

@@ -102,9 +102,7 @@ const ExportManager: React.FC<ExportManagerProps> = ({
   };
 
   const getFileSizeEstimate = () => {
-    const hasImages = resumeData.personalInfo.profilePhoto || 
-                     resumeData.projects.some(p => p.images.length > 0) ||
-                     resumeData.experience.some(e => e.companyLogo);
+    const hasImages = resumeData.personalInfo.profilePhoto;
     
     switch (exportFormat) {
       case 'html':

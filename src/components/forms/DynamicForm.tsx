@@ -84,22 +84,13 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     control,
     handleSubmit,
     formState: { errors, isValid },
-    watch,
-    setValue,
-    trigger,
-    reset,
   } = useForm({
     resolver: validationSchema ? yupResolver(validationSchema) : undefined,
     defaultValues: data,
     mode: 'onChange',
   });
 
-  // Update form when data prop changes
-  useEffect(() => {
-    reset(data);
-  }, [data, reset]);
-
-  const watchedValues = watch();
+  // Removed automatic form reset functionality to prevent infinite loops
 
   useEffect(() => {
     if (onValidation) {
@@ -114,16 +105,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     }
   }, [errors, isValid, onValidation]);
 
-  useEffect(() => {
-    if (onFieldChange) {
-      Object.keys(watchedValues).forEach(key => {
-        const value = watchedValues[key];
-        if (value !== undefined && value !== data[key]) {
-          onFieldChange(key, value);
-        }
-      });
-    }
-  }, [watchedValues, onFieldChange, data]);
+  // Simplified field change handling - removed complex watching to prevent loops
 
   const renderField = (field: FieldConfig) => {
     if (!field.visible) return null;
@@ -153,7 +135,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               <TextInput
                 {...commonProps}
                 value={formField.value || ''}
-                onChange={formField.onChange}
+                onChange={(value) => {
+                  formField.onChange(value);
+                  if (onFieldChange) {
+                    onFieldChange(field.name, value);
+                  }
+                }}
                 onBlur={formField.onBlur}
               />
             )}
@@ -170,7 +157,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               <TextareaInput
                 {...commonProps}
                 value={formField.value || ''}
-                onChange={formField.onChange}
+                onChange={(value) => {
+                  formField.onChange(value);
+                  if (onFieldChange) {
+                    onFieldChange(field.name, value);
+                  }
+                }}
                 onBlur={formField.onBlur}
                 rows={field.validation?.minLength ? Math.max(3, Math.ceil(field.validation.minLength / 50)) : 3}
               />
@@ -188,7 +180,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               <EmailInput
                 {...commonProps}
                 value={formField.value || ''}
-                onChange={formField.onChange}
+                onChange={(value) => {
+                  formField.onChange(value);
+                  if (onFieldChange) {
+                    onFieldChange(field.name, value);
+                  }
+                }}
                 onBlur={formField.onBlur}
               />
             )}
@@ -428,7 +425,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         <button
           type="submit"
           className="submit-button"
-          disabled={disabled || !isValid}
+          disabled={disabled}
         >
           {submitButtonText}
         </button>

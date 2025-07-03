@@ -20,34 +20,26 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
     { id: 'personalInfo', name: 'Personal Info', icon: '👤', description: 'Basic contact information' },
     { id: 'experience', name: 'Experience', icon: '💼', description: 'Work history and achievements' },
     { id: 'education', name: 'Education', icon: '🎓', description: 'Academic background' },
-    { id: 'skills', name: 'Skills', icon: '🛠️', description: 'Technical and soft skills' },
-    { id: 'projects', name: 'Projects', icon: '🚀', description: 'Portfolio and projects' },
-    { id: 'certifications', name: 'Certifications', icon: '📜', description: 'Professional certifications' },
-    { id: 'languages', name: 'Languages', icon: '🌍', description: 'Language proficiencies' },
-    { id: 'references', name: 'References', icon: '👥', description: 'Professional references' },
-    { id: 'customSections', name: 'Custom', icon: '➕', description: 'Additional sections' },
   ];
 
-  const handleAutoSave = async () => {
-    if (state.isDirty) {
-      setIsSaving(true);
+  const handleManualSave = async () => {
+    setIsSaving(true);
+    
+    try {
+      // Simulate save operation
+      await new Promise(resolve => setTimeout(resolve, 500));
       
-      try {
-        // Simulate save operation
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        dispatch({ type: 'SAVE_RESUME' });
-        setLastSaved(new Date());
-      } catch (error) {
-        console.error('Auto-save failed:', error);
-      } finally {
-        setIsSaving(false);
-      }
+      dispatch({ type: 'SAVE_RESUME' });
+      setLastSaved(new Date());
+    } catch (error) {
+      console.error('Save failed:', error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const handleContinueToPreview = () => {
-    handleAutoSave();
+    handleManualSave();
     navigate('/preview');
   };
 
@@ -71,37 +63,18 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
       case 'personalInfo':
         return state.resumeData.personalInfo;
       case 'experience':
-        // For array sections, return empty object for single form
-        return {};
+        // Return first experience item or empty object
+        return state.resumeData.experience[0] || {};
       case 'education':
-        return {};
-      case 'skills':
-        return {};
-      case 'projects':
-        return {};
-      case 'certifications':
-        return {};
-      case 'languages':
-        return {};
-      case 'references':
-        return {};
-      case 'customSections':
-        return {};
+        // Return first education item or empty object
+        return state.resumeData.education[0] || {};
       default:
         return {};
     }
   };
 
-  const handleFieldChange = (fieldName: string, value: any) => {
-    if (selectedSection === 'personalInfo') {
-      dispatch({ 
-        type: 'UPDATE_PERSONAL_INFO', 
-        payload: { [fieldName]: value } 
-      });
-    }
-    // For now, we'll handle other sections as they are implemented
-    // This allows forms to render and be tested
-  };
+  // Remove field-level auto-updating to prevent infinite loops
+  // Data will only be saved when user clicks "Save Section"
 
   const handleFormSubmit = (data: Record<string, any>) => {
     if (selectedSection === 'personalInfo') {
@@ -109,10 +82,19 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
         type: 'UPDATE_PERSONAL_INFO', 
         payload: data 
       });
+    } else if (selectedSection === 'experience') {
+      dispatch({ 
+        type: 'UPDATE_EXPERIENCE_FORM', 
+        payload: data 
+      });
+    } else if (selectedSection === 'education') {
+      dispatch({ 
+        type: 'UPDATE_EDUCATION_FORM', 
+        payload: data 
+      });
     }
-    // For now, we'll handle other sections as they are implemented
     console.log(`Saving ${selectedSection} data:`, data);
-    handleAutoSave();
+    handleManualSave();
   };
 
   return (
@@ -209,7 +191,6 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
                 fields={fieldConfigs.filter(f => f.section === selectedSection)}
                 data={getSectionData(selectedSection)}
                 onSubmit={handleFormSubmit}
-                onFieldChange={handleFieldChange}
                 submitButtonText="Save Section"
               />
             </div>
@@ -219,7 +200,7 @@ const ResumeForm: React.FC<ResumeFormProps> = ({ fieldConfigs }) => {
 
       <div className="form-footer">
         <div className="footer-info">
-          <span>Resume Form • Auto-saves every change</span>
+          <span>Resume Form • Click 'Save Section' to save your changes</span>
         </div>
         <div className="footer-actions">
           <button onClick={() => navigate('/my-resumes')} className="my-resumes-link">

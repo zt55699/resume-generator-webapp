@@ -548,7 +548,7 @@ class HTMLExporter {
   }
 
   private static async generateBodyContent(resumeData: ResumeData, template: Template, options: ExportOptions): Promise<string> {
-    const { personalInfo, experience, education, skills, projects, certifications, languages, references, customSections } = resumeData;
+    const { personalInfo, experience, education } = resumeData;
     
     let profilePhotoHTML = '';
     if (options.includeProfilePhoto && personalInfo.profilePhoto) {
@@ -579,17 +579,6 @@ class HTMLExporter {
       contactItems.push(`<span class="contact-item">💻 <a href="${personalInfo.github}" class="contact-link" target="_blank">GitHub</a></span>`);
     }
 
-    const skillsByCategory = this.groupSkillsByCategory(skills);
-    const skillsHTML = Object.entries(skillsByCategory).map(([category, categorySkills]) => `
-      <div class="skill-category">
-        <div class="skill-category-title">${category}</div>
-        <div class="skills-list">
-          ${categorySkills.map(skill => `<span class="skill-tag">${skill.name}</span>`).join('')}
-        </div>
-      </div>
-    `).join('');
-
-    const projectsHTML = await this.generateProjectsHTML(projects, options);
 
     return `
       <div class="resume-container layout-${template.layout}">
@@ -602,14 +591,14 @@ class HTMLExporter {
         </header>
         
         <div class="resume-body">
-          ${template.layout === 'two-column' ? this.generateTwoColumnLayout(resumeData, skillsHTML, projectsHTML) : this.generateSingleColumnLayout(resumeData, skillsHTML, projectsHTML)}
+          ${template.layout === 'two-column' ? this.generateTwoColumnLayout(resumeData) : this.generateSingleColumnLayout(resumeData)}
         </div>
       </div>
     `;
   }
 
-  private static generateSingleColumnLayout(resumeData: ResumeData, skillsHTML: string, projectsHTML: string): string {
-    const { personalInfo, experience, education, certifications, languages, references, customSections } = resumeData;
+  private static generateSingleColumnLayout(resumeData: ResumeData): string {
+    const { personalInfo, experience, education } = resumeData;
     
     return `
       <div class="resume-main">
@@ -634,80 +623,12 @@ class HTMLExporter {
           </section>
         ` : ''}
         
-        ${skillsHTML ? `
-          <section class="resume-section">
-            <h2 class="section-title">Skills</h2>
-            <div class="skills-grid">${skillsHTML}</div>
-          </section>
-        ` : ''}
-        
-        ${projectsHTML ? `
-          <section class="resume-section">
-            <h2 class="section-title">Projects</h2>
-            <div class="projects-grid">${projectsHTML}</div>
-          </section>
-        ` : ''}
-        
-        ${languages.length > 0 ? `
-          <section class="resume-section">
-            <h2 class="section-title">Languages</h2>
-            <div class="languages-grid">
-              ${languages.map(lang => `
-                <div class="language">
-                  <span class="language-name">${lang.name}</span>
-                  <span class="language-level">${lang.proficiency}</span>
-                </div>
-              `).join('')}
-            </div>
-          </section>
-        ` : ''}
-        
-        ${certifications.length > 0 ? `
-          <section class="resume-section">
-            <h2 class="section-title">Certifications</h2>
-            <div class="certifications-grid">
-              ${certifications.map(cert => `
-                <div class="certification">
-                  <div class="certification-name">${cert.name}</div>
-                  <div class="certification-issuer">${cert.issuer}</div>
-                  <div class="certification-date">${cert.dateIssued}</div>
-                </div>
-              `).join('')}
-            </div>
-          </section>
-        ` : ''}
-        
-        ${customSections.map(section => `
-          <section class="resume-section">
-            <h2 class="section-title">${section.title}</h2>
-            <div class="summary">${section.content}</div>
-          </section>
-        `).join('')}
-        
-        ${references.length > 0 ? `
-          <section class="resume-section">
-            <h2 class="section-title">References</h2>
-            <div class="references-grid">
-              ${references.map(ref => `
-                <div class="reference">
-                  <div class="reference-name">${ref.name}</div>
-                  <div class="reference-title">${ref.position} at ${ref.company}</div>
-                  <div class="reference-contact">
-                    <div>${ref.email}</div>
-                    <div>${ref.phone}</div>
-                    <div>Relationship: ${ref.relationship}</div>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          </section>
-        ` : ''}
       </div>
     `;
   }
 
-  private static generateTwoColumnLayout(resumeData: ResumeData, skillsHTML: string, projectsHTML: string): string {
-    const { personalInfo, experience, education, certifications, languages } = resumeData;
+  private static generateTwoColumnLayout(resumeData: ResumeData): string {
+    const { personalInfo, experience, education } = resumeData;
     
     return `
       <div class="resume-sidebar">
@@ -718,41 +639,6 @@ class HTMLExporter {
           </section>
         ` : ''}
         
-        ${skillsHTML ? `
-          <section class="resume-section">
-            <h2 class="section-title">Skills</h2>
-            <div class="skills-grid">${skillsHTML}</div>
-          </section>
-        ` : ''}
-        
-        ${languages.length > 0 ? `
-          <section class="resume-section">
-            <h2 class="section-title">Languages</h2>
-            <div class="languages-grid">
-              ${languages.map(lang => `
-                <div class="language">
-                  <span class="language-name">${lang.name}</span>
-                  <span class="language-level">${lang.proficiency}</span>
-                </div>
-              `).join('')}
-            </div>
-          </section>
-        ` : ''}
-        
-        ${certifications.length > 0 ? `
-          <section class="resume-section">
-            <h2 class="section-title">Certifications</h2>
-            <div class="certifications-grid">
-              ${certifications.map(cert => `
-                <div class="certification">
-                  <div class="certification-name">${cert.name}</div>
-                  <div class="certification-issuer">${cert.issuer}</div>
-                  <div class="certification-date">${cert.dateIssued}</div>
-                </div>
-              `).join('')}
-            </div>
-          </section>
-        ` : ''}
       </div>
       
       <div class="resume-main">
@@ -770,12 +656,6 @@ class HTMLExporter {
           </section>
         ` : ''}
         
-        ${projectsHTML ? `
-          <section class="resume-section">
-            <h2 class="section-title">Projects</h2>
-            <div class="projects-grid">${projectsHTML}</div>
-          </section>
-        ` : ''}
       </div>
     `;
   }
@@ -827,60 +707,6 @@ class HTMLExporter {
     `;
   }
 
-  private static async generateProjectsHTML(projects: any[], options: ExportOptions): Promise<string> {
-    const projectsHTML = await Promise.all(projects.map(async project => {
-      let mediaHTML = '';
-      
-      if (options.includePortfolioImages && project.images.length > 0) {
-        for (const imageUrl of project.images) {
-          try {
-            const response = await fetch(imageUrl);
-            const blob = await response.blob();
-            const base64 = await blobToBase64(blob);
-            mediaHTML += `<img src="${base64}" alt="${project.name}" class="project-image">`;
-          } catch (error) {
-            console.warn('Failed to embed project image:', error);
-          }
-        }
-      }
-      
-      if (options.includePortfolioVideos && project.videos.length > 0) {
-        for (const videoUrl of project.videos) {
-          mediaHTML += `<video src="${videoUrl}" controls class="project-video"></video>`;
-        }
-      }
-      
-      return `
-        <div class="project">
-          <div class="project-header">
-            <div class="project-title">${project.name}</div>
-            <div class="project-links">
-              ${project.url ? `<a href="${project.url}" class="project-link" target="_blank">Live Demo</a>` : ''}
-              ${project.githubUrl ? `<a href="${project.githubUrl}" class="project-link" target="_blank">GitHub</a>` : ''}
-            </div>
-          </div>
-          <div class="item-description">${project.description}</div>
-          <div class="project-technologies">
-            ${project.technologies.map((tech: string) => `<span class="technology-tag">${tech}</span>`).join('')}
-          </div>
-          ${mediaHTML}
-        </div>
-      `;
-    }));
-    
-    return projectsHTML.join('');
-  }
-
-  private static groupSkillsByCategory(skills: any[]): Record<string, any[]> {
-    const grouped: Record<string, any[]> = {};
-    skills.forEach(skill => {
-      if (!grouped[skill.category]) {
-        grouped[skill.category] = [];
-      }
-      grouped[skill.category].push(skill);
-    });
-    return grouped;
-  }
 
   private static generateFilename(resumeData: ResumeData): string {
     const name = `${resumeData.personalInfo.firstName}_${resumeData.personalInfo.lastName}`;

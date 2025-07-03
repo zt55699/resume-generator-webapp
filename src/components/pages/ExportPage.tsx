@@ -127,9 +127,9 @@ const ExportPage: React.FC<ExportPageProps> = ({ templates }) => {
   };
 
   const isDataComplete = () => {
-    const { personalInfo, experience, education, skills } = state.resumeData;
+    const { personalInfo, experience, education } = state.resumeData;
     return personalInfo.firstName && personalInfo.lastName && personalInfo.email &&
-           (experience.length > 0 || education.length > 0 || skills.length > 0);
+           (experience.length > 0 || education.length > 0);
   };
 
   return (
