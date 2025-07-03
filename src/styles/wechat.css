@@ -1,0 +1,449 @@
+/* WeChat Mini App and Mobile Optimizations */
+
+/* WeChat-specific variables */
+:root {
+  --wechat-primary: #07c160;
+  --wechat-secondary: #576b95;
+  --wechat-bg: #f7f7f7;
+  --wechat-text: #191919;
+  --wechat-border: #e5e5e5;
+  --wechat-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
+  --safe-area-inset-right: env(safe-area-inset-right);
+}
+
+/* WeChat detection class */
+.wechat-env {
+  /* Applied when running in WeChat */
+}
+
+.wechat-miniprogram {
+  /* Applied when running in WeChat Mini Program */
+}
+
+/* Safe area support for iOS */
+.safe-area-support {
+  padding-top: var(--safe-area-inset-top);
+  padding-bottom: var(--safe-area-inset-bottom);
+  padding-left: var(--safe-area-inset-left);
+  padding-right: var(--safe-area-inset-right);
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  /* Enhanced mobile navigation */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--wechat-primary);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .navbar-container {
+    padding: var(--safe-area-inset-top) 1rem 0;
+    min-height: 44px; /* iOS standard navigation height */
+  }
+
+  /* Content spacing for fixed navbar */
+  .app-main {
+    margin-top: calc(44px + var(--safe-area-inset-top));
+  }
+
+  /* Touch-friendly buttons */
+  .btn, .action-btn, .cta-button {
+    min-height: 44px; /* iOS touch target minimum */
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    touch-action: manipulation; /* Prevents zoom on double-tap */
+  }
+
+  /* Improved form inputs for mobile */
+  .form-input, .search-input, .template-select {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Better scroll behavior */
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Template gallery mobile optimization */
+  .template-gallery {
+    padding: 1rem;
+    max-height: 70vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .templates-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  /* Resume preview mobile optimization */
+  .resume-preview {
+    transform: scale(0.8);
+    transform-origin: top center;
+    margin-bottom: -10%;
+  }
+
+  /* Mobile modal optimization */
+  .modal-overlay {
+    padding: 1rem;
+    align-items: flex-end; /* Bottom sheet style */
+  }
+
+  .modal-content {
+    width: 100%;
+    max-height: 80vh;
+    border-radius: 1rem 1rem 0 0;
+    margin-bottom: var(--safe-area-inset-bottom);
+  }
+
+  /* Better tap targets for cards */
+  .template-card, .resume-card, .feature-card {
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: var(--wechat-shadow);
+  }
+
+  /* Swipe gestures support */
+  .swipeable {
+    touch-action: pan-x;
+  }
+
+  /* Loading states for mobile */
+  .mobile-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: var(--wechat-text);
+  }
+
+  /* WeChat sharing optimization */
+  .share-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .share-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: white;
+    border: 1px solid var(--wechat-border);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .share-button:active {
+    background: #f0f0f0;
+    transform: scale(0.95);
+  }
+
+  /* Pull-to-refresh indicator */
+  .pull-to-refresh {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--wechat-primary);
+    font-size: 0.875rem;
+    transition: top 0.3s ease;
+  }
+
+  .pull-to-refresh.active {
+    top: 20px;
+  }
+}
+
+/* WeChat Mini Program specific styles */
+.wechat-miniprogram {
+  /* Hide elements not suitable for mini program */
+  .app-footer {
+    display: none;
+  }
+
+  /* Adjust navigation for mini program */
+  .navbar {
+    background: transparent;
+    position: relative;
+  }
+
+  .app-main {
+    margin-top: 0;
+  }
+
+  /* Mini program tab bar spacing */
+  .page-content {
+    padding-bottom: calc(80px + var(--safe-area-inset-bottom));
+  }
+
+  /* Mini program navigation buttons */
+  .mini-program-nav {
+    position: fixed;
+    bottom: var(--safe-area-inset-bottom);
+    left: 0;
+    right: 0;
+    display: flex;
+    background: white;
+    border-top: 1px solid var(--wechat-border);
+    z-index: 1000;
+  }
+
+  .mini-program-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .mini-program-nav-item.active {
+    color: var(--wechat-primary);
+  }
+
+  .mini-program-nav-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+}
+
+/* High DPI display optimization */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .template-preview,
+  .resume-preview {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Landscape mode optimization */
+@media (orientation: landscape) and (max-height: 500px) {
+  .mobile-landscape {
+    padding: 0.5rem;
+  }
+
+  .modal-content {
+    max-height: 90vh;
+  }
+
+  .template-gallery {
+    max-height: 60vh;
+  }
+}
+
+/* Dark mode support for WeChat */
+@media (prefers-color-scheme: dark) {
+  .wechat-env {
+    --wechat-bg: #1a1a1a;
+    --wechat-text: #ffffff;
+    --wechat-border: #333333;
+  }
+
+  .dark-mode {
+    background: var(--wechat-bg);
+    color: var(--wechat-text);
+  }
+
+  .dark-mode .modal-content,
+  .dark-mode .template-card,
+  .dark-mode .resume-card {
+    background: #2a2a2a;
+    border-color: var(--wechat-border);
+  }
+}
+
+/* Accessibility improvements for mobile */
+@media (max-width: 768px) {
+  /* Larger touch targets for accessibility */
+  .accessible-touch {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  /* Better focus indicators */
+  .btn:focus,
+  .form-input:focus,
+  .action-btn:focus {
+    outline: 2px solid var(--wechat-primary);
+    outline-offset: 2px;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .btn, .action-btn {
+      border: 2px solid currentColor;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .btn, .action-btn, .template-card, .resume-card {
+      transition: none;
+    }
+  }
+}
+
+/* Performance optimizations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.optimize-scrolling {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* WeChat share image optimization */
+.wechat-share-image {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+/* Loading animations for mobile */
+@keyframes mobileSpinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.mobile-spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid var(--wechat-primary);
+  border-radius: 50%;
+  animation: mobileSpinner 1s linear infinite;
+}
+
+/* Toast notifications for mobile */
+.mobile-toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-toast.show {
+  opacity: 1;
+}
+
+/* Bottom sheet for mobile actions */
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 1rem 1rem 0 0;
+  padding: 1rem;
+  padding-bottom: calc(1rem + var(--safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.bottom-sheet.open {
+  transform: translateY(0);
+}
+
+.bottom-sheet-handle {
+  width: 2rem;
+  height: 0.25rem;
+  background: #ccc;
+  border-radius: 0.125rem;
+  margin: 0 auto 1rem;
+}
+
+/* Haptic feedback simulation */
+.haptic-feedback:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+}
+
+/* WeChat status bar accommodation */
+.wechat-status-bar {
+  height: var(--safe-area-inset-top);
+  background: var(--wechat-primary);
+}
+
+/* Network status indicator */
+.network-status {
+  position: fixed;
+  top: calc(var(--safe-area-inset-top) + 44px);
+  left: 1rem;
+  right: 1rem;
+  background: #ff6b6b;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  text-align: center;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+  z-index: 1001;
+}
+
+.network-status.offline {
+  transform: translateY(0);
+}
+
+/* WeChat Mini Program page transitions */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
